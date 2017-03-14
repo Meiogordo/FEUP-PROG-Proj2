@@ -85,6 +85,10 @@ vector<Menu::option> Menu::FindAllOptionsStartingWithID(string id) {
 	return output;
 }
 
+//TODO
+//Exact ID only returns one option.
+//Fix that. Maybe this can be a selector iterated when called (call with 1.1, 1.2, 1.3)
+
 vector<Menu::option> Menu::FindExactOptionByID(string id) {
 	vector<option> output;
 
