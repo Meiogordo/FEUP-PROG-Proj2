@@ -5,13 +5,14 @@
 #include <fstream>
 using namespace std;
 
-class Menu
-{
+class Menu {
 public:
 	//Constructor. Takes the path to the txt representing the menu and populates 
 	Menu(string path);
 	//Displays the whole menu
 	void DisplayWholeMenu();
+	//Displays options based on ID, return all depths (1 returns 1, 1.1, 1.2, etc)
+	void DisplayByID(string id);
 	~Menu();
 private:
 	//A struct must be created for each option
@@ -26,5 +27,10 @@ private:
 	option createOptionFromString(string rawline);
 	//vector containing all the options in the menu
 	vector<option> menuOptions;
+
+	//TODO: Define how to get to the options and cleanup unnecessary stuff
+	//Finds options based on parameters
+	vector<option> FindAllOptionsStartingWithID(string id);
+	vector<option> FindExactOptionByID(string id);
 };
 

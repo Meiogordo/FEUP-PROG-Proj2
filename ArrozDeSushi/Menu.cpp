@@ -3,6 +3,17 @@
 #include <vector>
 using namespace std;
 
+int countCharInString(string input, char searchchar) {
+	int counter = 0;
+	for (int i = 0; i < input.size(); i++) {
+		if (input[i] == searchchar) {
+			counter++;
+		}
+	}
+
+	return counter;
+}
+
 vector<string> Menu::ReadFile(string path) {
 
 	vector<string> inputstuff;
@@ -28,10 +39,10 @@ vector<string> Menu::ReadFile(string path) {
 
 Menu::option Menu::createOptionFromString(string rawline) {
 	option newOption;
+
 	string id = rawline.substr(0, rawline.find_first_of(" "));
 	string optiontext = rawline.substr(rawline.find_first_of(" ") + 1);
-	// TODO: Implement counter of dots in id, that + 1 is the depth_level
-	int depth_level = 420;
+	int depth_level = countCharInString(id, '.');
 
 	newOption.id = id;
 	newOption.option_text = optiontext;
@@ -49,8 +60,42 @@ Menu::Menu(string path) {
 
 void Menu::DisplayWholeMenu() {
 	for (int i = 0; i < menuOptions.size(); i++) {
-		cout << i << ": " << menuOptions[i].id << " " << menuOptions[i].option_text << endl;
+		cout << i << ": " << menuOptions[i].id << " " << menuOptions[i].option_text << "\t depth: " << menuOptions[i].depth_level << endl;
 	}
+}
+
+void Menu::DisplayByID(string id) {
+	vector<option> display = FindAllOptionsStartingWithID(id);
+
+	for (int i = 0; i < display.size(); i++) {
+		cout << display[i].id << " " << display[i].option_text << endl;
+	}
+}
+
+vector<Menu::option> Menu::FindAllOptionsStartingWithID(string id) {
+	vector<option> output;
+
+	for (int i = 0; i < menuOptions.size(); i++) {
+		//ugly code, maybe use temp var to store ID and treat it like that
+		if (menuOptions[i].id.substr(0, menuOptions[i].id.find_first_of('.')) == id) {
+			output.push_back(menuOptions[i]);
+		}
+	}
+
+	return output;
+}
+
+vector<Menu::option> Menu::FindExactOptionByID(string id) {
+	vector<option> output;
+
+	for (int i = 0; i < menuOptions.size(); i++) {
+		//ugly code, maybe use temp var to store ID and treat it like that
+		if (menuOptions[i].id == id) {
+			output.push_back(menuOptions[i]);
+		}
+	}
+
+	return output;
 }
 
 Menu::~Menu() {}

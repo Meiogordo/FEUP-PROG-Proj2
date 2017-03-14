@@ -6,7 +6,8 @@ int main() {
 
 	Menu test("Menu.txt");
 
-	test.DisplayWholeMenu();
+	//test.DisplayWholeMenu();
+	test.DisplayByID("1");
 
 	return 0;
 }
