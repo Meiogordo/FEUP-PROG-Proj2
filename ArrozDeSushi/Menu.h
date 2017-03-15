@@ -12,7 +12,7 @@ public:
 	//Displays the whole menu
 	void DisplayWholeMenu();
 	//Displays options based on ID, return all depths (1 returns 1, 1.1, 1.2, etc)
-	void DisplayByID(string id);
+	void DisplayByID(string &id);
 	void ClearScreen();
 	~Menu();
 private:

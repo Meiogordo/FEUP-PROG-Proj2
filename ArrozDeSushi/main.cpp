@@ -5,6 +5,7 @@ using namespace std;
 int main() {
 
 	//TODO: Implement calling functions through currentselection id here in main
+	//Also TODO: Node endings always register as invalid options because there are no child options, deal with that
 
 	Menu menumaozinhas("Menu.txt");
 	string currentselection = "", tempinput;
@@ -32,6 +33,8 @@ int main() {
 					currentselection += "." + tempinput;
 				}
 			}
+
+			menumaozinhas.ClearScreen();
 	}
 
 	return 0;
