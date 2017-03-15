@@ -3,7 +3,30 @@
 #include <vector>
 using namespace std;
 
-int countCharInString(string input, char searchchar) {
+bool Menu::compareDiffSizeStrings(string a, string b) {
+	bool output = true;
+
+	if (a.size() < b.size()) {
+		for (int i = 0; i < a.size(); i++) {
+			if (a[i] != b[i]) {
+				output = false;
+				break;
+			}
+		}
+	}
+	else {
+		for (int i = 0; i < b.size(); i++) {
+			if (b[i] != a[i]) {
+				output = false;
+				break;
+			}
+		}
+	}
+
+	return output;
+}
+
+int Menu::countCharInString(string input, char searchchar) {
 	int counter = 0;
 	for (int i = 0; i < input.size(); i++) {
 		if (input[i] == searchchar) {
@@ -65,12 +88,21 @@ void Menu::DisplayWholeMenu() {
 }
 
 void Menu::DisplayByID(string id) {
-	vector<option> display = FindAllOptionsStartingWithID(id);
+	vector<option> display = FindOptionByID(id);
 
 	for (int i = 0; i < display.size(); i++) {
 		cout << display[i].id << " " << display[i].option_text << endl;
 	}
+	//Exit option and 
+	cout << "0 Exit" << endl;
+	cout << "\n>>> ";
 }
+
+void Menu::ClearScreen() {
+	cout << "\n\n\n";
+}
+
+//Probably will be unused now
 
 vector<Menu::option> Menu::FindAllOptionsStartingWithID(string id) {
 	vector<option> output;
@@ -85,17 +117,25 @@ vector<Menu::option> Menu::FindAllOptionsStartingWithID(string id) {
 	return output;
 }
 
-//TODO
-//Exact ID only returns one option.
-//Fix that. Maybe this can be a selector iterated when called (call with 1.1, 1.2, 1.3)
-
-vector<Menu::option> Menu::FindExactOptionByID(string id) {
+vector<Menu::option> Menu::FindOptionByID(string id) {
 	vector<option> output;
 
-	for (int i = 0; i < menuOptions.size(); i++) {
-		//ugly code, maybe use temp var to store ID and treat it like that
-		if (menuOptions[i].id == id) {
-			output.push_back(menuOptions[i]);
+	if (id == "") {
+		//find all options with depth_level 0
+		for (int i = 0; i < menuOptions.size(); i++) {
+			if (menuOptions[i].depth_level == 0)
+				output.push_back(menuOptions[i]);
+		}
+	}
+	else {
+		//Hardcoded dot at end to avoid printing parent options
+		//Inside else because the string would never be empty otherwise
+		id += ".";
+
+		for (int i = 0; i < menuOptions.size(); i++) {
+			if (compareDiffSizeStrings(menuOptions[i].id, id)) {
+				output.push_back(menuOptions[i]);
+			}
 		}
 	}
 

@@ -4,10 +4,35 @@ using namespace std;
 
 int main() {
 
-	Menu test("Menu.txt");
+	//TODO: Implement calling functions through currentselection id here in main
 
-	//test.DisplayWholeMenu();
-	test.DisplayByID("1");
+	Menu menumaozinhas("Menu.txt");
+	string currentselection = "", tempinput;
+
+	//Menu loop
+	while (true) {
+		menumaozinhas.DisplayByID(currentselection);
+		cin >> tempinput;
+
+		if (currentselection.empty() && tempinput == "0") {
+			//This means we are at the main menu and the exit option was selected
+			break;
+		}
+		else
+			if (!currentselection.empty() && tempinput == "0") {
+				//This means we are in a submen and want to go back to the main menu
+				currentselection = "";
+			}
+			else {
+				//in order to not append a dot to an empty string and get ".1" which wouldn't work
+				if (currentselection.empty()) {
+					currentselection = tempinput;
+				}
+				else {
+					currentselection += "." + tempinput;
+				}
+			}
+	}
 
 	return 0;
 }
