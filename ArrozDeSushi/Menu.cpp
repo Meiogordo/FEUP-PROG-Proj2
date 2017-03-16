@@ -110,7 +110,13 @@ void Menu::DisplayByID(string &id) {
 			cout << display[i].id << " " << display[i].option_text << endl;
 		}
 		//Exit option and fancy last line for input
-		cout << "0 Exit" << endl;
+		if (id == "") {
+			//If in main menu (string empty) show exit instead of back
+			cout << "0 Exit" << endl;
+		}
+		else {
+			cout << "0 Back" << endl;
+		}
 		cout << "\n>>> ";
 	}
 

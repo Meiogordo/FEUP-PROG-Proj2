@@ -10,3 +10,6 @@
 2.5 opcao valida
 1.2.1 asd
 1.2.2 929412
+3.1 subteste
+3.2 so mais uma
+3.4 gosto de opcoes
