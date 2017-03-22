@@ -123,8 +123,11 @@ void Menu::DisplayByID(string &id) {
 }
 
 void Menu::ClearScreen() {
+	/*
 	//Inserting line breaks for now for debugging but afterwards it will be a true screen clearer
 	cout << "\n\n\n";
+	*/
+	system("cls"); //temporary - will move to windows.h functions later on
 }
 
 //Probably will be unused now

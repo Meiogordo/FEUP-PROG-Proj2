@@ -3,13 +3,13 @@
 3 Cenas
 1.1 Opt 1 of 1
 1.2 Opt 2 of 1
-2.1 asdafaf
-2.2 23124124asfasg2
-2.3 128ryfhdf
+2.1 chamada de funcao de teste que imprime "Esta funcao correu"
+2.2 test
+2.3 teste
 2.4 legit option
 2.5 opcao valida
-1.2.1 asd
-1.2.2 929412
+1.2.1 mais opcoes aleatorias
+1.2.2 outro teste
 3.1 subteste
-3.2 so mais uma
-3.4 gosto de opcoes
+3.2 so mais uma opcao
+3.4 inserir opcoes aqui
