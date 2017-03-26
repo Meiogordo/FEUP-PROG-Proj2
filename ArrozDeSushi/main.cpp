@@ -12,6 +12,10 @@ int menuRunner();
 
 int main() {
 
+	//Init
+
+
+	//Main menu running
 	int menureturn = menuRunner();
 
 	if (menureturn == 0)
@@ -67,7 +71,6 @@ int menuRunner() {
 	//Menu execution exited successfully
 	return 0;
 }
-
 
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
 bool callFunctions(string &id) {
