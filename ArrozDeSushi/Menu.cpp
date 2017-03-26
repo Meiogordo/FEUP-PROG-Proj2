@@ -1,71 +1,15 @@
 #include "Menu.h"
+#include "Utilities.h"
 #include <string>
 #include <vector>
 using namespace std;
-
-bool Menu::compareDiffSizeStrings(string a, string b) {
-	bool output = true;
-
-	if (a.size() < b.size()) {
-		for (int i = 0; i < a.size(); i++) {
-			if (a[i] != b[i]) {
-				output = false;
-				break;
-			}
-		}
-	}
-	else {
-		for (int i = 0; i < b.size(); i++) {
-			if (b[i] != a[i]) {
-				output = false;
-				break;
-			}
-		}
-	}
-
-	return output;
-}
-
-int Menu::countCharInString(string input, char searchchar) {
-	int counter = 0;
-	for (int i = 0; i < input.size(); i++) {
-		if (input[i] == searchchar) {
-			counter++;
-		}
-	}
-
-	return counter;
-}
-
-vector<string> Menu::ReadFile(string path) {
-
-	vector<string> inputstuff;
-
-	//infile is path
-
-	ifstream myfile;
-	string line;
-
-	myfile.open(path);
-
-	//int counterRead = 0;
-	while (getline(myfile, line)) {
-		inputstuff.push_back(line);
-		//counterRead++;
-		//cout << "\na ler linha" << counterRead;
-	}
-
-	myfile.close();
-
-	return inputstuff;
-}
 
 Menu::option Menu::createOptionFromString(string rawline) {
 	option newOption;
 
 	string id = rawline.substr(0, rawline.find_first_of(" "));
 	string optiontext = rawline.substr(rawline.find_first_of(" ") + 1);
-	int depth_level = countCharInString(id, '.');
+	int depth_level = Utilities::countCharInString(id, '.');
 
 	newOption.id = id;
 	newOption.option_text = optiontext;
@@ -75,7 +19,7 @@ Menu::option Menu::createOptionFromString(string rawline) {
 }
 
 Menu::Menu(string path) {
-	vector<string> rawfile = ReadFile(path);
+	vector<string> rawfile = Utilities::ReadFile(path);
 	for (int i = 0; i < rawfile.size(); i++) {
 		menuOptions.push_back(createOptionFromString(rawfile[i]));
 	}
@@ -123,25 +67,7 @@ void Menu::DisplayByID(string &id) {
 }
 
 void Menu::ClearScreen() {
-	/*
-	//Inserting line breaks for now for debugging but afterwards it will be a true screen clearer
-	cout << "\n\n\n";
-	*/
 	system("cls"); //temporary - will move to windows.h functions later on
-}
-
-//Probably will be unused now
-vector<Menu::option> Menu::FindAllOptionsStartingWithID(string id) {
-	vector<option> output;
-
-	for (int i = 0; i < menuOptions.size(); i++) {
-		//ugly code, maybe use temp var to store ID and treat it like that
-		if (menuOptions[i].id.substr(0, menuOptions[i].id.find_first_of('.')) == id) {
-			output.push_back(menuOptions[i]);
-		}
-	}
-
-	return output;
 }
 
 //returns a vector of options based on the provided ID. If ID is empty, returns all options with 0 depth, otherwise with a matching ID and depth level
@@ -162,10 +88,10 @@ vector<Menu::option> Menu::FindOptionByID(string id) {
 
 		//finds depth level and also uses it as comparison to avoid "1.1" from getting "1" too, etc
 		//another solution would be changing compareDiffSizeStrings to look at the size of either the first or second string, I guess
-		int wanteddepth = countCharInString(id, '.');
+		int wanteddepth = Utilities::countCharInString(id, '.');
 
 		for (int i = 0; i < menuOptions.size(); i++) {
-			if (compareDiffSizeStrings(menuOptions[i].id, id) && menuOptions[i].depth_level == wanteddepth) {
+			if (Utilities::compareDiffSizeStrings(menuOptions[i].id, id) && menuOptions[i].depth_level == wanteddepth) {
 				output.push_back(menuOptions[i]);
 			}
 		}

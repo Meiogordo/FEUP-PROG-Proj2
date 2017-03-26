@@ -2,20 +2,39 @@
 #include "Menu.h"
 using namespace std;
 
+//TODO:
+//- Decide if menuRunner really needs to be an int - How can menu execution go wrong?
+//- Maybe create menu object inside menu? If file not found then there is your error
+
+
 bool callFunctions(string &id);
 void funcao2_1();
+int menuRunner();
 
 int main() {
 
-	//Also TODO: Node endings always register as invalid options because there are no child options, deal with that
-	//-> Can only be dealt with by calling functions from the ID because there being no ending nodes in fact means the option is incorrect
-	//This will have to be done by calling functions by comparing the ID with a hardcoded list, then afterwards remove the last option ID
+	int menureturn = menuRunner();
 
+	if (menureturn == 0)
+		// menu exited successfully with no errors
+		return 0;
+	else
+		//maybe errors? don't know how menu can have error
+		return 1;
+}
+
+//Most menu stuff
+int menuRunner() {
+
+	//Generating menu object with constructor pointing to menu txt file
 	Menu menumaozinhas("Menu.txt");
-	string currentselection = "", tempinput;
 
 	//Menu loop
 	while (true) {
+
+		string currentselection = ""; //current selection holds the menu state
+		string tempinput; //temporary input holder
+
 		menumaozinhas.DisplayByID(currentselection);
 		cin >> tempinput;
 
@@ -45,11 +64,14 @@ int main() {
 			menumaozinhas.ClearScreen();
 	}
 
+	//Menu execution exited successfully
 	return 0;
 }
 
-//Function to call functions based on hardcoded ID, returns true if function found, false if not found
+
+//Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
 bool callFunctions(string &id) {
+
 	if (id == "2.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
