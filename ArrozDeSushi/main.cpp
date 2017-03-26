@@ -19,7 +19,7 @@ int main() {
 		// menu exited successfully with no errors
 		return 0;
 	else
-		//maybe errors? don't know how menu can have error
+		//maybe errors? don't know how menu can have error - read error
 		return 1;
 }
 
