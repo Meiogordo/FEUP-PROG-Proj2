@@ -8,7 +8,6 @@ using namespace std;
 
 
 bool callFunctions(string &id);
-void funcao2_1();
 int menuRunner();
 
 int main() {
@@ -26,14 +25,14 @@ int main() {
 //Most menu stuff
 int menuRunner() {
 
+	string currentselection = ""; //current selection holds the menu state
+	string tempinput; //temporary input holder
+
 	//Generating menu object with constructor pointing to menu txt file
 	Menu menumaozinhas("Menu.txt");
 
 	//Menu loop
 	while (true) {
-
-		string currentselection = ""; //current selection holds the menu state
-		string tempinput; //temporary input holder
 
 		menumaozinhas.DisplayByID(currentselection);
 		cin >> tempinput;
@@ -58,9 +57,10 @@ int menuRunner() {
 			}
 
 			if (callFunctions(currentselection)) {
-				//if the function ran, clear the screen afterwards
+				//if the function ran, clear the screen afterwards - isn't this useless? We clear the screen anyway
 				menumaozinhas.ClearScreen();
 			}
+
 			menumaozinhas.ClearScreen();
 	}
 
@@ -72,17 +72,16 @@ int menuRunner() {
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
 bool callFunctions(string &id) {
 
-	if (id == "2.1") {
+	if (id == "specify id here") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
-		funcao2_1();
+		//calls function based on hardcoded id
+		//testfunction();
+		//pause to see output
 		system("pause");
+		//function was found, return true
 		return true;
 	}
 
 	return false;
-}
-
-void funcao2_1() {
-	cout << "\nEsta funcao correu\n";
 }

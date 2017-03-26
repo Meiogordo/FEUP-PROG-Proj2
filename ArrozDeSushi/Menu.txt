@@ -1,15 +1,20 @@
-1 Opt 1
-2 Another opt, 2
-3 Cenas
-1.1 Opt 1 of 1
-1.2 Opt 2 of 1
-2.1 chamada de funcao de teste que imprime "Esta funcao correu"
-2.2 test
-2.3 teste
-2.4 legit option
-2.5 opcao valida
-1.2.1 mais opcoes aleatorias
-1.2.2 outro teste
-3.1 subteste
-3.2 so mais uma opcao
-3.4 inserir opcoes aqui
+1 Visualizar
+2 Gerir
+3 Ler e Guardar em ficheiros
+1.1 Horarios de uma paragem
+1.2 Horario de uma linha
+1.3 Trabalho atribuido a um condutor
+1.4 Que linhas passam numa determinada paragem
+1.5 Lista de condutores disponiveis
+1.6 Calcular e visualizar percurso entre duas paragens
+1.7 Numero de condutores necessarios para uma certa linha
+2.1 Linhas
+2.1.1 Criar
+2.1.2 Alterar
+2.1.3 Remover
+2.2 Condutores
+2.2.1 Criar
+2.2.2 Alterar
+2.2.3 Remover
+2.3 Gerir tabelas com horarios de uma paragem (?)
+2.4 Gerir horario de uma linha (?)
