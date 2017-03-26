@@ -19,7 +19,11 @@ int main() {
 		// menu exited successfully with no errors
 		return 0;
 	else
+<<<<<<< HEAD
 		//maybe errors? don't know how menu can have error
+=======
+		//maybe errors? don't know how menu can have error - read error
+>>>>>>> Restructured the menu class by adding the Utilities namespace. Put menu execution outside of main to deal with potential errors
 		return 1;
 }
 
