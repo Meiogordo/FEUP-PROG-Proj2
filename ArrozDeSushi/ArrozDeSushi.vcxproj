@@ -155,6 +155,8 @@
     <ClInclude Include="Utilities.h" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="condutores_test.txt" />
+    <Text Include="linhas_test.txt" />
     <Text Include="Menu.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

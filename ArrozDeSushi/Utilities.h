@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <string>
 
 using namespace std;
 
@@ -13,4 +14,6 @@ namespace Utilities {
 	//Compares two strings with different sizes by going through the smaller one until it ends,
 	//if all the characters match until then, returns true
 	bool compareDiffSizeStrings(string a, string b);
+	//Remove whitespace surrounding text  - "   aa  " -> "aa"
+	void trimString(string &s);
 }
