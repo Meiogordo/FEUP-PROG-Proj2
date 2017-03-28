@@ -25,6 +25,12 @@ Menu::Menu(string path) {
 	}
 }
 
+Menu::Menu(vector<string> rawlines) {
+	for (int i = 0; i < rawlines.size(); i++) {
+		menuOptions.push_back(createOptionFromString(rawlines[i]));
+	}
+}
+
 void Menu::DisplayWholeMenu() {
 	for (int i = 0; i < menuOptions.size(); i++) {
 		cout << i << ": " << menuOptions[i].id << " " << menuOptions[i].option_text << "\t depth: " << menuOptions[i].depth_level << endl;

@@ -9,6 +9,8 @@ class Menu {
 public:
 	//Constructor. Takes the path to the txt representing the menu and populates the options from it.
 	Menu(string path);
+	//Overload for the constructor to enable inputting the menu text directly
+	Menu(vector<string> rawlines);
 	//Displays the whole menu - useful for testing
 	void DisplayWholeMenu();
 	//Displays options based on ID, return all adjacent depths downwards (1 returns 1, 1.1, 1.2, etc)
