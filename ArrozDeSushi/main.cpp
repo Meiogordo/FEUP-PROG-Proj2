@@ -1,5 +1,6 @@
 #include <iostream>
 #include "Menu.h"
+#include "BusManager.h"
 using namespace std;
 
 //TODO:
@@ -13,7 +14,7 @@ int menuRunner();
 int main() {
 
 	//Init
-
+	BusManager bm;
 
 	//Main menu running
 	int menureturn = menuRunner();

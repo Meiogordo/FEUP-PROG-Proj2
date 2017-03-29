@@ -3,11 +3,12 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include "Utilities.h"
 using namespace std;
 
-class BusManager
-{
+class BusManager {
 public:
+	//Constructor manages file input while also checking if the file path is valid
 	BusManager();
 	~BusManager();
 private:
@@ -26,5 +27,9 @@ private:
 		vector<string> stops; //list of stop names
 		vector<int> delaybetweenstops; //times (int minutes) of travel between stops (TODO: Add note about indexes)
 	};
+
+	//Internal class data
+	vector<driver> drivers;
+	vector<line> lines;
 };
 
