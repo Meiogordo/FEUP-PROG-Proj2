@@ -19,6 +19,17 @@ namespace Utilities {
 		return inputstuff;
 	}
 
+	vector<string> ReadFile(ifstream &input) {
+		vector<string> inputstuff;
+		string line;
+
+		while (getline(input, line)) {
+			inputstuff.push_back(line);
+		}
+
+		return inputstuff;
+	}
+
 	int countCharInString(string input, char searchchar) {
 		int counter = 0;
 		for (int i = 0; i < input.size(); i++) {
