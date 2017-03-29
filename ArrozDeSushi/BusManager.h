@@ -31,5 +31,11 @@ private:
 	//Internal class data
 	vector<driver> drivers;
 	vector<line> lines;
+
+	//Input data treatment
+	//Generate driver from a line of text
+	driver createDriverFromString(string rawline);
+	//Generate line from a line of text
+	line createLineFromString(string rawline);
 };
 
