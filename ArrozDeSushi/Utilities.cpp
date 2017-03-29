@@ -64,9 +64,9 @@ namespace Utilities {
 		return output;
 	}
 
-	void trimString(string &s){
+	void trimString(string &s) {
 		s = s.substr(s.find_first_not_of(' ')); // Cut spaces to the left
-		s = s.substr(0, s.find_last_not_of(' ')); // Cut spaces to the right
+		s = s.substr(0, s.find_last_not_of(' ') + 1); // Cut spaces to the right
 	}
 
 	vector<string> splitString(string input, string splitter) {
