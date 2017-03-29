@@ -63,8 +63,24 @@ namespace Utilities {
 
 		return output;
 	}
+
 	void trimString(string &s){
 		s = s.substr(s.find_first_not_of(' ')); // Cut spaces to the left
 		s = s.substr(0, s.find_last_not_of(' ')); // Cut spaces to the right
+	}
+
+	vector<string> splitString(string input, string splitter) {
+		vector<string> output;
+
+		//while the splitter sequence exists in input
+		while (input.find(splitter) != string::npos) {
+			output.push_back(input.substr(0, input.find(splitter)));
+			input = input.substr(input.find(splitter) + splitter.length() + 1);
+		}
+
+		//Push back the remainder, or the whole string if no ocurrence of splitter exists
+		output.push_back(input);
+
+		return output;
 	}
 }

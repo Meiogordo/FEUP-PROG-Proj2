@@ -25,4 +25,7 @@ namespace Utilities {
 			cout << i << ": " << v[i] << endl;
 		}
 	}
+
+	//Split a string into a string vector on each ocurrence of another string
+	vector<string> splitString(string input, string splitter);
 }
