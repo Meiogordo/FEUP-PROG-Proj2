@@ -63,18 +63,36 @@ BusManager::BusManager() {
 		drivers.push_back(createDriverFromString(RawDrivers[i]));
 	}
 
-	//Debug testing if populated correctly
+	/*
+	//Debug testing if drivers populated correctly
 	cout << "Finished populating drivers, now printing" << endl;
 	for (int i = 0; i < drivers.size(); i++) {
 		cout << "ID: " << drivers[i].ID << "\tName: " << drivers[i].name;
 		cout << "\tShift size: " << drivers[i].shiftsize << "\tWeekly hour limit: " << drivers[i].weeklyhourlimit;
 		cout << "\tMin rest time: " << drivers[i].minresttime << endl;
 	}
+	*/
 
 	//Populating lines vector ( TODO )
+	for (int i = 0; i < RawLines.size(); i++) {
+		lines.push_back(createLineFromString(RawLines[i]));
+	}
 
+	/*
+	//Debug testing if lines populated correctly
+	cout << "Finished populating lines, now printing" << endl;
+	for (int i = 0; i < lines.size(); i++) {
+		cout << "ID: " << lines[i].ID << "\tFrequency: " << lines[i].frequency;
+		cout << "Stops for this line:\n";
+		Utilities::printVector(lines[i].stops);
+		cout << "Delays between these stops:\n";
+		Utilities::printVector(lines[i].delaybetweenstops);
+	}
+	*/
+
+	//Sorting drivers into lines
+	
 }
-
 
 BusManager::~BusManager() {
 
@@ -112,4 +130,56 @@ BusManager::driver BusManager::createDriverFromString(string rawline) {
 	newDriver.minresttime = minresttime;
 
 	return newDriver;
+}
+
+BusManager::line BusManager::createLineFromString(string rawline) {
+	line newLine;
+
+	//Splitting the information by ";" - which is the information splitter
+	vector<string> info = Utilities::splitString(rawline, ";");
+
+	//Trimming the info to remove excess spaces
+	for (int i = 0; i < info.size(); i++) {
+		Utilities::trimString(info[i]);
+	}
+
+	//vector organization
+	// 0 - ID
+	// 1 - Frequency of bus stops for each stop in the line (minutes)
+	// 2 - List of stop names
+	// 3 - times (int minutes) of travel between stops
+
+	int ID = stoi(info[0]); //line ID
+	int frequency = stoi(info[1]); //frequency of buses in the line (minutes)
+	vector<string> stops; //list of stop names
+	vector<int> delaybetweenstops; //Times (in minutes) of travel between stops
+
+	//Filling in the data vectors
+
+	//Stops vector
+	stops = Utilities::splitString(info[2], ","); //each stop is separated by a comma
+	for (int i = 0; i < stops.size(); i++) {
+		//Trimming the extra whitespace
+		Utilities::trimString(stops[i]);
+	}
+
+	//Temporary string vector because we need the string to be trimmed to be able to "stoi" it
+	vector<string> tempintodelays = Utilities::splitString(info[3], ",");
+	for (int i = 0; i < tempintodelays.size(); i++) {
+		//Trimming the string for stoi
+		Utilities::trimString(tempintodelays[i]);
+	}
+
+	for (int i = 0; i < tempintodelays.size(); i++)	{
+		//Filling in the delay vector with stoi
+		delaybetweenstops.push_back(stoi(tempintodelays[i]));
+	}
+
+	//Assigning values to line
+	newLine.ID = ID;
+	newLine.frequency = frequency;
+	newLine.stops = stops;
+	newLine.delaybetweenstops = delaybetweenstops;
+
+	return newLine;
 }

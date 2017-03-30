@@ -25,7 +25,7 @@ private:
 		int ID; //line ID
 		int frequency; //frequency of buses in the line (minutes)
 		vector<string> stops; //list of stop names
-		vector<int> delaybetweenstops; //times (int minutes) of travel between stops (TODO: Add note about indexes)
+		vector<int> delaybetweenstops; //times (in minutes) of travel between stops (TODO: Add note about indexes)
 	};
 
 	//Internal class data
