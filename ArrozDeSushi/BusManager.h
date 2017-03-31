@@ -11,6 +11,16 @@ public:
 	//Constructor manages file input while also checking if the file path is valid
 	BusManager();
 	~BusManager();
+
+	//Data alteration - public so that the functions can be called from outside the class
+	//Adds a new line, returns false if the line already exists (same ID)
+	bool createNewLine();
+	//Adds a new driver, returns false if the line already exists (same ID)
+	bool createNewDriver();
+
+	//Data display - public so that the functions can be called from outside the class
+	void displayDrivers();
+	void displayLines();
 private:
 	//Describing a driver
 	struct driver {
