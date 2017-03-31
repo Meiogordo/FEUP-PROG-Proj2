@@ -91,11 +91,33 @@ BusManager::BusManager() {
 	*/
 
 	//Sorting drivers into lines
-	
+
 }
 
 BusManager::~BusManager() {
 
+}
+
+bool BusManager::createNewLine() {
+	int newID;
+
+	cout << "Introduza o ID da nova linha: ";
+
+	while (true) {
+		cin >> newID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(10000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Continue this for the remaining input
 }
 
 BusManager::driver BusManager::createDriverFromString(string rawline) {
@@ -170,7 +192,7 @@ BusManager::line BusManager::createLineFromString(string rawline) {
 		Utilities::trimString(tempintodelays[i]);
 	}
 
-	for (int i = 0; i < tempintodelays.size(); i++)	{
+	for (int i = 0; i < tempintodelays.size(); i++) {
 		//Filling in the delay vector with stoi
 		delaybetweenstops.push_back(stoi(tempintodelays[i]));
 	}
