@@ -83,4 +83,7 @@ namespace Utilities {
 
 		return output;
 	}
+	vector<string> splitString(string input, char splitter)	{
+		return splitString(input, to_string(splitter));
+	}
 }

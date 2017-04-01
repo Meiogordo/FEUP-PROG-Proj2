@@ -28,4 +28,6 @@ namespace Utilities {
 
 	//Split a string into a string vector on each ocurrence of another string
 	vector<string> splitString(string input, string splitter);
+	//Overload for a single char - calls the string version
+	vector<string> splitString(string input, char splitter);
 }
