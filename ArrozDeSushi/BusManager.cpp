@@ -13,8 +13,7 @@ BusManager::BusManager() {
 
 	//Testing if the path was invalid
 	while (!inputDrivers.is_open()) {
-		cout << "Nome do ficheiro inválido!" << endl;
-		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
+		cout << "Nome do ficheiro invï¿½lido!" << endl		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
 		getline(cin, inputpath);
 		inputDrivers.open(inputpath);
 	}
@@ -31,8 +30,7 @@ BusManager::BusManager() {
 
 	//Testing if the path was invalid
 	while (!inputLines.is_open()) {
-		cout << "Nome do ficheiro inválido!" << endl;
-		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
+		cout << "Nome do ficheiro invï¿½lido!" << endl		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
 		getline(cin, inputpath);
 		inputLines.open(inputpath);
 	}
@@ -50,10 +48,8 @@ BusManager::BusManager() {
 
 	//Debugging printing raw file vector
 	/*
-	cout << "Conteúdo do ficheiro dos condutores:" << endl;
-	Utilities::printVector(RawDrivers);
-	cout << "Conteúdo do ficheiro das linhas:" << endl;
-	Utilities::printVector(RawLines);
+	cout << "Conteï¿½do do ficheiro dos condutores:" << endl	Utilities::printVector(RawDrivers);
+	cout << "Conteï¿½do do ficheiro das linhas:" << endl	Utilities::printVector(RawLines);
 	*/
 
 	//Populating data structures
@@ -106,8 +102,7 @@ bool BusManager::createNewLine() {
 	while (true) {
 		cin >> newID;
 		if (cin.fail()) {
-			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
-			//Clearing error flag and cin buffer
+			cout << "ID invï¿½lido, por favor introduza um ID vï¿½lido (nï¿½mero inteiro)." << 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(10000, '\n');
 		}
@@ -204,4 +199,14 @@ BusManager::line BusManager::createLineFromString(string rawline) {
 	newLine.delaybetweenstops = delaybetweenstops;
 
 	return newLine;
+}
+
+int BusManager::findLineByID(int lineID) {
+	for (int i = 0; i < lines.size(); i++) {
+		if (lines[i].ID == lineID) {
+			return i;
+		}
+	}
+
+	return -1;
 }
