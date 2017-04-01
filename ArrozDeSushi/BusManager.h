@@ -19,8 +19,20 @@ public:
 	bool createNewDriver();
 
 	//Data display - public so that the functions can be called from outside the class
+	//Displays all the drivers
 	void displayDrivers();
+	//Displays drivers - if bool true, then only the available, if false, then only the occupied
+	void displayDrivers(bool available);
+	//Displays all the lines
 	void displayLines();
+
+	//Data ouput - public so that the functions can be called from outside the class
+	//Saves the updated list of drivers to the given file path. If the file exists it will be overwritten, if it does not it will be created
+	void saveDriverstoFile(string filepath);
+	//Saves the updated list of lines to the given file path. If the file exists it will be overwritten, if it does not it will be created
+	void saveLinestoFile(string filepath);
+	//Saves the list of schedules to the given file path. If the file exists it will be overwritten, if it does not it will be created
+	void saveSchedulestoFile(string filepath);
 private:
 	//Describing a driver
 	struct driver {
@@ -41,11 +53,29 @@ private:
 	//Internal class data
 	vector<driver> drivers;
 	vector<line> lines;
+	//vector<schedule?> stopSchedules;
 
 	//Input data treatment
 	//Generate driver from a line of text
 	driver createDriverFromString(string rawline);
 	//Generate line from a line of text
 	line createLineFromString(string rawline);
+
+	//Generating schedules and distributing drivers
+	void generateSchedule();
+	void generateSchedule(int stopID);
+	void distributeDrivers();
+
+	//Internal class data handling - searches for ID and whatnot
+	//Searches for a certain stop, by name. Returns the vector of all the lines it belongs to
+	vector<line> findStopinLines(string stopname);
+	//Searches for a line by its ID, returns the index of the line in the "lines" vector. If not found returns -1
+	int findLineByID(int lineID);
+
+	//Other (TODO: Later on sort these into other categories if possible)
+	//Prints the given driver onto the screen
+	void printDriver(driver d);
+	//Prints the given line onto the screen
+	void printLine(line l);
 };
 
