@@ -13,7 +13,8 @@ BusManager::BusManager() {
 
 	//Testing if the path was invalid
 	while (!inputDrivers.is_open()) {
-		cout << "Nome do ficheiro invï¿½lido!" << endl		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
+		cout << "Nome do ficheiro inválido!" << endl;
+		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
 		getline(cin, inputpath);
 		inputDrivers.open(inputpath);
 	}
@@ -30,7 +31,8 @@ BusManager::BusManager() {
 
 	//Testing if the path was invalid
 	while (!inputLines.is_open()) {
-		cout << "Nome do ficheiro invï¿½lido!" << endl		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
+		cout << "Nome do ficheiro inválido!" << endl;
+		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
 		getline(cin, inputpath);
 		inputLines.open(inputpath);
 	}
@@ -48,8 +50,10 @@ BusManager::BusManager() {
 
 	//Debugging printing raw file vector
 	/*
-	cout << "Conteï¿½do do ficheiro dos condutores:" << endl	Utilities::printVector(RawDrivers);
-	cout << "Conteï¿½do do ficheiro das linhas:" << endl	Utilities::printVector(RawLines);
+	cout << "Conteúdo do ficheiro dos condutores:" << endl;
+	Utilities::printVector(RawDrivers);
+	cout << "Conteúdo do ficheiro das linhas:" << endl;
+	Utilities::printVector(RawLines);
 	*/
 
 	//Populating data structures
@@ -102,9 +106,10 @@ bool BusManager::createNewLine() {
 	while (true) {
 		cin >> newID;
 		if (cin.fail()) {
-			cout << "ID invï¿½lido, por favor introduza um ID vï¿½lido (nï¿½mero inteiro)." << 			//Clearing error flag and cin buffer
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
 			cin.clear();
-			cin.ignore(10000, '\n');
+			cin.ignore(100000, '\n');
 		}
 		else {
 			//if cin didn't fail we have a good input so we break the loop
@@ -112,7 +117,83 @@ bool BusManager::createNewLine() {
 		}
 	}
 
-	//Continue this for the remaining input
+	//If the given line ID results in a match from the line vector by searching by ID, then that 
+	if (findLineByID(newID) != -1) {
+		cout << "O ID dado já existe. Duas linhas diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de linha..." << endl;
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		return false;
+	}
+
+	//Creating the line we will add
+	line newLine;
+
+	//Getting input from user about the line
+
+	int frequency; //frequency of buses in the line (minutes)
+	cout << "Qual a frequência de passagem de autocarros na linha (em minutos)?" << endl;
+	while (true) {
+		cin >> frequency;
+		if (cin.fail()) {
+			cout << "Frequência inválida, por favor introduza um número válido (inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	vector<string> stops; //list of stop names
+	string rawstops;
+	cout << "Qual a sequência de paragens da linha? (Introduzir os nomes separados por vírgulas, exemplo \"Paragem1, Paragem2, Paragem3\")" << endl;
+	getline(cin, rawstops); //Receiving whole line and not only the text until the next space
+
+	//the stops vector is populated by splitting the line when a ',' is found
+	stops = Utilities::splitString(rawstops, ",");
+
+	//trimmming unnecessary whitespace from the stop name
+	for (int i = 0; i < stops.size(); i++) {
+		Utilities::trimString(stops[i]);
+	}
+
+	vector<int> delaybetweenstops; //times (in minutes) of travel between stops
+	int tempdelay; //Temporary variable to hold the input to later on push back
+	cout << "Introduza os tempos de viagem entre as paragens (em minutos):";
+	//We are going to go through the stops vector because the delaybetweenstops vector can only, at most, have its size-1
+	//This loop is also useful to display the information request
+	for (int i = 0; i < stops.size() - 1; i++) {
+		cout << "Tempo " << i + 1 << " de " << stops.size() - 1 << ", qual o tempo de viagem entre " << stops[i] << " e " << stops[i + 1] << "?" << endl;
+		while (true) {
+			cin >> tempdelay;
+			if (cin.fail()) {
+				cout << "Tempo de viagem inválido, por favor introduza um número válido (inteiro)." << endl;
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
+		//when input is an int, input is successful and is now pushed back into the vector
+		delaybetweenstops.push_back(tempdelay);
+	}
+
+	//Assingning values to the line
+	newLine.ID = newID;
+	newLine.frequency = frequency;
+	newLine.stops = stops;
+	newLine.delaybetweenstops;
+
+	//Pushing the newly created line into the lines vector
+	lines.push_back(newLine);
+
+	//returning true since the line was successfully added
+	return true;
 }
 
 BusManager::driver BusManager::createDriverFromString(string rawline) {
@@ -164,7 +245,7 @@ BusManager::line BusManager::createLineFromString(string rawline) {
 	// 0 - ID
 	// 1 - Frequency of bus stops for each stop in the line (minutes)
 	// 2 - List of stop names
-	// 3 - times (int minutes) of travel between stops
+	// 3 - Times (in minutes) of travel between stops
 
 	int ID = stoi(info[0]); //line ID
 	int frequency = stoi(info[1]); //frequency of buses in the line (minutes)
