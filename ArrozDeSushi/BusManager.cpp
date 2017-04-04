@@ -13,7 +13,7 @@ BusManager::BusManager() {
 
 	//Testing if the path was invalid
 	while (!inputDrivers.is_open()) {
-		cout << "Nome do ficheiro inválido!" << endl;
+		cout << "Nome do ficheiro invï¿½lido!" << endl;
 		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
 		getline(cin, inputpath);
 		inputDrivers.open(inputpath);
@@ -31,7 +31,7 @@ BusManager::BusManager() {
 
 	//Testing if the path was invalid
 	while (!inputLines.is_open()) {
-		cout << "Nome do ficheiro inválido!" << endl;
+		cout << "Nome do ficheiro invï¿½lido!" << endl;
 		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
 		getline(cin, inputpath);
 		inputLines.open(inputpath);
@@ -50,9 +50,9 @@ BusManager::BusManager() {
 
 	//Debugging printing raw file vector
 	/*
-	cout << "Conteúdo do ficheiro dos condutores:" << endl;
+	cout << "Conteï¿½do do ficheiro dos condutores:" << endl;
 	Utilities::printVector(RawDrivers);
-	cout << "Conteúdo do ficheiro das linhas:" << endl;
+	cout << "Conteï¿½do do ficheiro das linhas:" << endl;
 	Utilities::printVector(RawLines);
 	*/
 
@@ -106,7 +106,7 @@ bool BusManager::createNewLine() {
 	while (true) {
 		cin >> newID;
 		if (cin.fail()) {
-			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			cout << "ID invï¿½lido, por favor introduza um ID vï¿½lido (nï¿½mero inteiro)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -119,7 +119,7 @@ bool BusManager::createNewLine() {
 
 	//If the given line ID results in a match from the line vector by searching by ID, then that 
 	if (findLineByID(newID) != -1) {
-		cout << "O ID dado já existe. Duas linhas diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de linha..." << endl;
+		cout << "O ID dado jï¿½ existe. Duas linhas diferentes nï¿½o podem ter o mesmo ID.\nAbortando o processo de adiï¿½ï¿½o de linha..." << endl;
 		cout << "Pressione enter para continuar...";
 		cin.get();
 		return false;
@@ -131,11 +131,11 @@ bool BusManager::createNewLine() {
 	//Getting input from user about the line
 
 	int frequency; //frequency of buses in the line (minutes)
-	cout << "Qual a frequência de passagem de autocarros na linha (em minutos)?" << endl;
+	cout << "Qual a frequï¿½ncia de passagem de autocarros na linha (em minutos)?" << endl;
 	while (true) {
 		cin >> frequency;
 		if (cin.fail()) {
-			cout << "Frequência inválida, por favor introduza um número válido (inteiro)." << endl;
+			cout << "Frequï¿½ncia invï¿½lida, por favor introduza um nï¿½mero vï¿½lido (inteiro)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -148,7 +148,7 @@ bool BusManager::createNewLine() {
 
 	vector<string> stops; //list of stop names
 	string rawstops;
-	cout << "Qual a sequência de paragens da linha? (Introduzir os nomes separados por vírgulas, exemplo \"Paragem1, Paragem2, Paragem3\")" << endl;
+	cout << "Qual a sequï¿½ncia de paragens da linha? (Introduzir os nomes separados por vï¿½rgulas, exemplo \"Paragem1, Paragem2, Paragem3\")" << endl;
 	getline(cin, rawstops); //Receiving whole line and not only the text until the next space
 
 	//the stops vector is populated by splitting the line when a ',' is found
@@ -169,7 +169,7 @@ bool BusManager::createNewLine() {
 		while (true) {
 			cin >> tempdelay;
 			if (cin.fail()) {
-				cout << "Tempo de viagem inválido, por favor introduza um número válido (inteiro)." << endl;
+				cout << "Tempo de viagem invï¿½lido, por favor introduza um nï¿½mero vï¿½lido (inteiro)." << endl;
 				//Clearing error flag and cin buffer
 				cin.clear();
 				cin.ignore(100000, '\n');
@@ -218,6 +218,7 @@ BusManager::driver BusManager::createDriverFromString(string rawline) {
 	string name = info[1]; //the driver's name
 	int shiftsize = stoi(info[2]); //shift size - number of hours the driver can work per day
 	int weeklyhourlimit = stoi(info[3]); //number of hours the driver can work per day
+	int weeklyhourlimit = stoi(info[3]); //number of hours the driver can work per week
 	int minresttime = stoi(info[4]); //minimum rest time between shifts (hours)
 
 	//Assigning values to driver
