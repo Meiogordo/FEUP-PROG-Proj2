@@ -117,7 +117,8 @@ bool BusManager::createNewLine() {
 		}
 	}
 
-	//If the given line ID results in a match from the line vector by searching by ID, then that 
+	//If the given line ID results in a match from the line vector by searching by ID, then that line already exists
+	//There are no duplicate IDs so we stop the line creation
 	if (findLineByID(newID) != -1) {
 		cout << "O ID dado j� existe. Duas linhas diferentes n�o podem ter o mesmo ID.\nAbortando o processo de adi��o de linha..." << endl;
 		cout << "Pressione enter para continuar...";
@@ -193,6 +194,78 @@ bool BusManager::createNewLine() {
 	lines.push_back(newLine);
 
 	//returning true since the line was successfully added
+	return true;
+}
+
+bool BusManager::createNewDriver() {
+	int newID;
+
+	cout << "Introduza o ID do novo condutor: ";
+
+	while (true) {
+		cin >> newID;
+		if (cin.fail()) {
+			cout << "ID inv�lido, por favor introduza um ID v�lido (n�mero inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//If the given driver ID results in a match from the drivers vector by searching by ID, then that driver already exists
+	//There are no duplicate IDs so we stop the driver creation
+	if (findDriverByID(newID) != -1) {
+		cout << "O ID dado j� existe. Dois condutores diferentes n�o podem ter o mesmo ID.\nAbortando o processo de adi��o de condutor..." << endl;
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		return false;
+	}
+
+	//Creating the driver we will add
+	driver newDriver;
+
+	//Getting input from user about the driver
+
+	string name; //the driver's name
+
+	cout << "Qual o nome do condutor?" << endl;
+	getline(cin, name); //using getline because the driver's name can have spaces
+	Utilities::trimString(name); //trimming unnecessary whitespace from the driver name
+
+	int shiftsize; //the size of the driver's shift - number of hours he can work per day
+	cout << "Qual o n�mero m�ximo de horas que o condutor pode trabalhar por dia?" << endl;
+
+	while (true) {
+		cin >> shiftsize;
+		if (cin.fail()) {
+			cout << "Tamanho de turno inv�lido, por favor introduza um tamanho v�lido em horas (n�mero inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//TODO: Finish getting weeklyhourlimit and minresttime
+
+	//Assigning values to driver
+	newDriver.ID = newID;
+	newDriver.name = name;
+	newDriver.shiftsize = shiftsize;
+	newDriver.weeklyhourlimit = weeklyhourlimit;
+	newDriver.minresttime = minresttime;
+
+	//Pushing the newly created driver into the drivers vector
+	drivers.push_back(newDriver);
+
+	//returning true since the driver was successfully added
 	return true;
 }
 
