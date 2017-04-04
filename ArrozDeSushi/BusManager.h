@@ -72,7 +72,8 @@ private:
 	vector<line> findStopinLines(string stopname);
 	//Searches for a line by its ID, returns the index of the line in the "lines" vector. If not found returns -1
 	int findLineByID(int lineID);
-
+	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
+	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
 	//Prints the given driver onto the screen
 	void printDriver(driver d);

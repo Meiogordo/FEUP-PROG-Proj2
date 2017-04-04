@@ -365,3 +365,13 @@ int BusManager::findLineByID(int lineID) {
 
 	return -1;
 }
+
+int BusManager::findDriverByID(int driverID) {
+	for (int i = 0; i < drivers.size(); i++) {
+		if (drivers[i].ID == driverID) {
+			return i;
+		}
+	}
+
+	return -1;
+}
