@@ -120,7 +120,7 @@ bool BusManager::createNewLine() {
 	//If the given line ID results in a match from the line vector by searching by ID, then that line already exists
 	//There are no duplicate IDs so we stop the line creation
 	if (findLineByID(newID) != -1) {
-		cout << "O ID dado jï¿½ existe. Duas linhas diferentes nï¿½o podem ter o mesmo ID.\nAbortando o processo de adiï¿½ï¿½o de linha..." << endl;
+		cout << "O ID dado já existe. Duas linhas diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de linha..." << endl;
 		cout << "Pressione enter para continuar...";
 		cin.get();
 		return false;
@@ -132,11 +132,11 @@ bool BusManager::createNewLine() {
 	//Getting input from user about the line
 
 	int frequency; //frequency of buses in the line (minutes)
-	cout << "Qual a frequï¿½ncia de passagem de autocarros na linha (em minutos)?" << endl;
+	cout << "Qual a frequência de passagem de autocarros na linha (em minutos)?" << endl;
 	while (true) {
 		cin >> frequency;
 		if (cin.fail()) {
-			cout << "Frequï¿½ncia invï¿½lida, por favor introduza um nï¿½mero vï¿½lido (inteiro)." << endl;
+			cout << "Frequência inválida, por favor introduza um número válido (inteiro)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -149,7 +149,7 @@ bool BusManager::createNewLine() {
 
 	vector<string> stops; //list of stop names
 	string rawstops;
-	cout << "Qual a sequï¿½ncia de paragens da linha? (Introduzir os nomes separados por vï¿½rgulas, exemplo \"Paragem1, Paragem2, Paragem3\")" << endl;
+	cout << "Qual a sequência de paragens da linha? (Introduzir os nomes separados por vírgulas, exemplo \"Paragem1, Paragem2, Paragem3\")" << endl;
 	getline(cin, rawstops); //Receiving whole line and not only the text until the next space
 
 	//the stops vector is populated by splitting the line when a ',' is found
@@ -170,7 +170,7 @@ bool BusManager::createNewLine() {
 		while (true) {
 			cin >> tempdelay;
 			if (cin.fail()) {
-				cout << "Tempo de viagem invï¿½lido, por favor introduza um nï¿½mero vï¿½lido (inteiro)." << endl;
+				cout << "Tempo de viagem inválido, por favor introduza um número válido (inteiro)." << endl;
 				//Clearing error flag and cin buffer
 				cin.clear();
 				cin.ignore(100000, '\n');
@@ -205,7 +205,7 @@ bool BusManager::createNewDriver() {
 	while (true) {
 		cin >> newID;
 		if (cin.fail()) {
-			cout << "ID invï¿½lido, por favor introduza um ID vï¿½lido (nï¿½mero inteiro)." << endl;
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -219,7 +219,7 @@ bool BusManager::createNewDriver() {
 	//If the given driver ID results in a match from the drivers vector by searching by ID, then that driver already exists
 	//There are no duplicate IDs so we stop the driver creation
 	if (findDriverByID(newID) != -1) {
-		cout << "O ID dado jï¿½ existe. Dois condutores diferentes nï¿½o podem ter o mesmo ID.\nAbortando o processo de adiï¿½ï¿½o de condutor..." << endl;
+		cout << "O ID dado já existe. Dois condutores diferentes nï¿½o podem ter o mesmo ID.\nAbortando o processo de adição de condutor..." << endl;
 		cout << "Pressione enter para continuar...";
 		cin.get();
 		return false;
@@ -237,12 +237,12 @@ bool BusManager::createNewDriver() {
 	Utilities::trimString(name); //trimming unnecessary whitespace from the driver name
 
 	int shiftsize; //the size of the driver's shift - number of hours he can work per day
-	cout << "Qual o nï¿½mero mï¿½ximo de horas que o condutor pode trabalhar por dia?" << endl;
+	cout << "Qual o número máximo de horas que o condutor pode trabalhar por dia?" << endl;
 
 	while (true) {
 		cin >> shiftsize;
 		if (cin.fail()) {
-			cout << "Tamanho de turno invï¿½lido, por favor introduza um tamanho vï¿½lido em horas (nï¿½mero inteiro)." << endl;
+			cout << "Tamanho de turno inválido, por favor introduza um tamanho válido em horas (número inteiro)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
