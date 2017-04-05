@@ -27,7 +27,7 @@ public:
 	void displayDrivers();
 	//Displays drivers - if bool true, then only the available, if false, then only the occupied
 	void displayDrivers(bool available);
-	//Displays all the lines
+	//Displays all the lines -> ID, First stop, Last stop
 	void displayLines();
 
 	//Data ouput - public so that the functions can be called from outside the class

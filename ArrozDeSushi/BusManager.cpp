@@ -327,7 +327,7 @@ bool BusManager::deleteLine() {
 		cin.get();
 		return false; //returning false since the process was not concluded successfully
 	}
-	
+
 	cout << "Linha encontrada, eliminando..." << endl;
 	lines.erase(lines.begin() + IDtodel); //deleting the position of the vector results in deleting the line
 
@@ -367,6 +367,24 @@ bool BusManager::deleteDriver() {
 
 	//process was concluded successfully, returning true
 	return true;
+}
+
+void BusManager::displayDrivers() {
+	for (int i = 0; i < drivers.size(); i++) {
+		cout << "ID: " << drivers[i].ID << " Nome: " << drivers[i].name << endl;
+	}
+}
+
+void BusManager::displayDrivers(bool available) {
+	//WIP
+}
+
+void BusManager::displayLines() {
+	for (int i = 0; i < lines.size(); i++) {
+		cout << "ID: " << lines[i].ID << " Primeira e última paragem: ";
+		cout << lines[i].stops.at(0) << " ... " << lines[i].stops.at(lines[i].stops.size());
+		cout << endl;
+	}
 }
 
 BusManager::driver BusManager::createDriverFromString(string rawline) {
