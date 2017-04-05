@@ -106,7 +106,7 @@ bool BusManager::createNewLine() {
 	while (true) {
 		cin >> newID;
 		if (cin.fail()) {
-			cout << "ID invï¿½lido, por favor introduza um ID vï¿½lido (nï¿½mero inteiro)." << endl;
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
