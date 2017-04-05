@@ -37,6 +37,16 @@ public:
 	void saveLinestoFile(string filepath);
 	//Saves the list of schedules to the given file path. If the file exists it will be overwritten, if it does not it will be created
 	void saveSchedulestoFile(string filepath);
+
+
+	//External data management - public to be accessible from outside the class
+	//TODO: Move stuff done from constructor into Load
+	//Loads data from files into class
+	void Load();
+	//Resets internal class data
+	void Reset();
+	//Saves the internal information into files
+	void Save();
 private:
 	//Describing a driver
 	struct driver {
