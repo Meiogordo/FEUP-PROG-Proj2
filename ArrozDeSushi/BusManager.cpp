@@ -253,7 +253,39 @@ bool BusManager::createNewDriver() {
 		}
 	}
 
-	//TODO: Finish getting weeklyhourlimit and minresttime
+	int weeklyhourlimit; //number of hours the driver can work per day
+	cout << "Qual o número máximo de horas que o condutor pode trabalhar por semana?" << endl;
+
+	while (true) {
+		cin >> weeklyhourlimit;
+		if (cin.fail()) {
+			cout << "Input inválido, por favor introduza um input válido em horas (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	int minresttime; //minimum rest time between shifts (hours)
+	cout << "Qual o tempo mínimo de descanso entre turnos para o condutor?" << endl;
+
+	while (true) {
+		cin >> minresttime;
+		if (cin.fail()) {
+			cout << "Número de horas de descanso inválido, por favor introduza um input válido em horas (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
 
 	//Assigning values to driver
 	newDriver.ID = newID;
