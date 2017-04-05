@@ -301,6 +301,74 @@ bool BusManager::createNewDriver() {
 	return true;
 }
 
+bool BusManager::deleteLine() {
+	int IDtodel;
+	cout << "Qual o ID da linha a apagar?" << endl;
+	while (true) {
+		cin >> IDtodel;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Finding the position of the line in the lines vector
+	int foundpos = findLineByID(IDtodel);
+	//If foundpos is -1 it is because the given ID did not match any stored line
+	if (foundpos == -1) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de eliminação de linha..." << endl;
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		return false; //returning false since the process was not concluded successfully
+	}
+	
+	cout << "Linha encontrada, eliminando..." << endl;
+	lines.erase(lines.begin() + IDtodel); //deleting the position of the vector results in deleting the line
+
+	//process was concluded successfully, returning true
+	return true;
+}
+
+bool BusManager::deleteDriver() {
+	int IDtodel;
+	cout << "Qual o ID do condutor a apagar?" << endl;
+	while (true) {
+		cin >> IDtodel;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Finding the position of the driver in the drivers vector
+	int foundpos = findDriverByID(IDtodel);
+	//If foundpos is -1 it is because the given ID did not match any stored driver
+	if (foundpos == -1) {
+		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de eliminação de condutor..." << endl;
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	cout << "Condutor encontrado, eliminando..." << endl;
+	drivers.erase(drivers.begin() + IDtodel); //deleting the position of the vector results in deleting the line
+
+	//process was concluded successfully, returning true
+	return true;
+}
+
 BusManager::driver BusManager::createDriverFromString(string rawline) {
 	driver newDriver;
 

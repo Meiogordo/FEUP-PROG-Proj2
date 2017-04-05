@@ -17,6 +17,10 @@ public:
 	bool createNewLine();
 	//Adds a new driver, returns false if the line already exists (same ID)
 	bool createNewDriver();
+	//Deletes a line based on a given ID - returns true if successful, false if the ID returned no matches
+	bool deleteLine();
+	//Deletes a driver based on a given ID - returns true if successful, false if the ID returned no matches
+	bool deleteDriver();
 
 	//Data display - public so that the functions can be called from outside the class
 	//Displays all the drivers
