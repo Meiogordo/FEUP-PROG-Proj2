@@ -41,10 +41,8 @@ public:
 
 	//External data management - public to be accessible from outside the class
 	//TODO: Move stuff done from constructor into Load
-	//Loads data from files into class
-	void Load();
-	//Resets internal class data
-	void Reset();
+	//Loads data from files into class - returns true if successful, false if aborted
+	bool Load();
 	//Saves the internal information into files
 	void Save();
 private:
@@ -68,6 +66,8 @@ private:
 	vector<driver> drivers;
 	vector<line> lines;
 	//vector<schedule?> stopSchedules;
+	//Resets internal class data
+	void Reset();
 
 	//Input data treatment
 	//Generate driver from a line of text
