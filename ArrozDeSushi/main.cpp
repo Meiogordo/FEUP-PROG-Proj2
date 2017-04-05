@@ -15,9 +15,19 @@ int main() {
 
 	//Init
 	BusManager bm;
+	bm.Load();
+
+	/*
+	try {
+		bm.Load();
+	}
+	catch () {
+		cout << "Load sem êxito." << endl;
+	}
+	*/
 
 	//Main menu running
-	int menureturn = menuRunner();
+	int menureturn = menuRunner(bm);
 
 	if (menureturn == 0)
 		// menu exited successfully with no errors
@@ -28,7 +38,7 @@ int main() {
 }
 
 //Most menu stuff
-int menuRunner() {
+int menuRunner(BusManager &bm) {
 
 	string currentselection = ""; //current selection holds the menu state
 	string tempinput; //temporary input holder
@@ -61,7 +71,7 @@ int menuRunner() {
 				}
 			}
 
-			if (callFunctions(currentselection)) {
+			if (callFunctions(currentselection, bm)) {
 				//if the function ran, clear the screen afterwards - isn't this useless? We clear the screen anyway
 				menumaozinhas.ClearScreen();
 			}
@@ -74,7 +84,7 @@ int menuRunner() {
 }
 
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
-bool callFunctions(string &id) {
+bool callFunctions(string &id, BusManager &bm) {
 
 	if (id == "specify id here") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
