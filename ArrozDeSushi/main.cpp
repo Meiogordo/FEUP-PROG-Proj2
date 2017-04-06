@@ -86,6 +86,8 @@ int menuRunner(BusManager &bm) {
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
 bool callFunctions(string &id, BusManager &bm) {
 
+	//Template for function calling
+	/* 
 	if (id == "specify id here") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
@@ -93,6 +95,19 @@ bool callFunctions(string &id, BusManager &bm) {
 		//testfunction();
 		//pause to see output
 		system("pause");
+		//function was found, return true
+		return true;
+	}
+	*/
+
+	if (id == "3.1") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.Load();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
 		//function was found, return true
 		return true;
 	}
