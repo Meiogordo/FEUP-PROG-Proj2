@@ -7,9 +7,9 @@ using namespace std;
 //- Decide if menuRunner really needs to be an int - How can menu execution go wrong?
 //- Maybe create menu object inside menu? If file not found then there is your error
 
-
-bool callFunctions(string &id);
-int menuRunner();
+//Prototypes
+int menuRunner(BusManager &bm);
+bool callFunctions(string &id, BusManager &bm);
 
 int main() {
 
@@ -46,6 +46,12 @@ int menuRunner(BusManager &bm) {
 	//Generating menu object with constructor pointing to menu txt file
 	Menu menumaozinhas("Menu.txt");
 
+
+	//clear screen of whatever was printed before, just in case with a pause before so all output is read with time
+	cout << "Pressione enter para continuar...";
+	cin.get();
+	menumaozinhas.ClearScreen();
+
 	//Menu loop
 	while (true) {
 
@@ -72,8 +78,7 @@ int menuRunner(BusManager &bm) {
 			}
 
 			if (callFunctions(currentselection, bm)) {
-				//if the function ran, clear the screen afterwards - isn't this useless? We clear the screen anyway
-				menumaozinhas.ClearScreen();
+				//do something based on failed state maybe
 			}
 
 			menumaozinhas.ClearScreen();
@@ -94,17 +99,114 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		//testfunction();
 		//pause to see output
-		system("pause");
+		cout << "Pressione enter para continuar...";
+		cin.get();
 		//function was found, return true
 		return true;
 	}
 	*/
 
+	//Displaying lines
+	if (id == "2.1.1") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.displayLines();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//Adding lines
+	if (id == "2.1.2") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.createNewLine();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//Modifying lines
+
+	//Deleting lines
+	if (id == "2.1.4") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.deleteLine();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//Displaying drivers
+	if (id == "2.2.1") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.displayDrivers();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//Adding drivers
+	if (id == "2.2.2") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.createNewDriver();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//Modifying drivers
+
+	//Deleting drivers
+	if (id == "2.2.4") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.deleteDriver();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//load
 	if (id == "3.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
 		bm.Load();
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+		//function was found, return true
+		return true;
+	}
+
+	//Not yet implemented stuff
+	if (id == "1.1" || id == "1.2" || id == "1.3" || id == "1.4" || id == "1.5" || id == "1.6" || id == "1.7" || id == "2.3" || id == "2.4") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		cout << "WIP, function not yet implemented";
 		//pause to see output
 		cout << "Pressione enter para continuar...";
 		cin.get();
