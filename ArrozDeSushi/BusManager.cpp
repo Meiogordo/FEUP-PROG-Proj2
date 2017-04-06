@@ -31,8 +31,6 @@ bool BusManager::createNewLine() {
 	//There are no duplicate IDs so we stop the line creation
 	if (findLineByID(newID) != -1) {
 		cout << "O ID dado já existe. Duas linhas diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de linha..." << endl;
-		cout << "Pressione enter para continuar...";
-		cin.get();
 		return false;
 	}
 
@@ -129,9 +127,7 @@ bool BusManager::createNewDriver() {
 	//If the given driver ID results in a match from the drivers vector by searching by ID, then that driver already exists
 	//There are no duplicate IDs so we stop the driver creation
 	if (findDriverByID(newID) != -1) {
-		cout << "O ID dado já existe. Dois condutores diferentes nï¿½o podem ter o mesmo ID.\nAbortando o processo de adição de condutor..." << endl;
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		cout << "O ID dado já existe. Dois condutores diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de condutor..." << endl;
 		return false;
 	}
 
@@ -233,8 +229,6 @@ bool BusManager::deleteLine() {
 	//If foundpos is -1 it is because the given ID did not match any stored line
 	if (foundpos == -1) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de eliminação de linha..." << endl;
-		cout << "Pressione enter para continuar...";
-		cin.get();
 		return false; //returning false since the process was not concluded successfully
 	}
 
@@ -267,8 +261,6 @@ bool BusManager::deleteDriver() {
 	//If foundpos is -1 it is because the given ID did not match any stored driver
 	if (foundpos == -1) {
 		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de eliminação de condutor..." << endl;
-		cout << "Pressione enter para continuar...";
-		cin.get();
 		return false; //returning false since the process was not concluded successfully
 	}
 
@@ -292,7 +284,7 @@ void BusManager::displayDrivers(bool available) {
 void BusManager::displayLines() {
 	for (int i = 0; i < lines.size(); i++) {
 		cout << "ID: " << lines[i].ID << " Primeira e última paragem: ";
-		cout << lines[i].stops.at(0) << " ... " << lines[i].stops.at(lines[i].stops.size());
+		cout << lines[i].stops.at(0) << " ... " << lines[i].stops.at(lines[i].stops.size()-1);
 		cout << endl;
 	}
 }
@@ -307,6 +299,8 @@ bool BusManager::Load() {
 
 	//Drivers file input
 	cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
+	cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
+	cout << ">> ";
 	//Using getline because the path can contain spaces
 	getline(cin, inputpath);
 	//Opening the file with the given path
@@ -314,9 +308,11 @@ bool BusManager::Load() {
 
 	//Testing if the path was invalid
 	while (!inputDrivers.is_open()) {
+		//Clears screen before re-writing
+		Utilities::clearScreen();
 		cout << "Nome do ficheiro inválido!" << endl;
 		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
-		cout << "(Ctrl+Z para abortar o processo)" << endl;
+		cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
 		cout << ">> ";
 		getline(cin, inputpath);
 		if (cin.eof()) {
@@ -335,6 +331,8 @@ bool BusManager::Load() {
 
 	//Lines file input - same idea as above
 	cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
+	cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
+	cout << ">> ";
 	//Using getline because the path can contain spaces
 	getline(cin, inputpath);
 	//Opening the file with the given path
@@ -342,17 +340,19 @@ bool BusManager::Load() {
 
 	//Testing if the path was invalid
 	while (!inputLines.is_open()) {
+		//Clears screen before re-writing
+		Utilities::clearScreen();
 		cout << "Nome do ficheiro inválido!" << endl;
 		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
-		cout << "(Ctrl+Z para abortar o processo)" << endl;
+		cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
 		cout << ">> ";
 		getline(cin, inputpath);
 		if (cin.eof()) {
 			cin.clear();
 			cin.ignore(10000, '\n');
 			cout << "EOF detetado, abortando processo de criação de gestor de empresa de autocarros..." << endl;
-			cout << "Pressione enter para continuar..." << endl;
-			cin.get();
+			/*cout << "Pressione enter para continuar..." << endl; //Pause is in main
+			cin.get();*/
 			return false;
 		}
 		inputLines.open(inputpath);
