@@ -413,6 +413,11 @@ bool BusManager::Load() {
 
 	//Sorting drivers into lines
 	//sortData();
+	//distributeDrivers();
+	//etc
+
+	//After everything was successful
+	return true;
 }
 
 void BusManager::Reset() {
@@ -446,7 +451,6 @@ BusManager::driver BusManager::createDriverFromString(string rawline) {
 	string name = info[1]; //the driver's name
 	int shiftsize = stoi(info[2]); //shift size - number of hours the driver can work per day
 	int weeklyhourlimit = stoi(info[3]); //number of hours the driver can work per day
-	int weeklyhourlimit = stoi(info[3]); //number of hours the driver can work per week
 	int minresttime = stoi(info[4]); //minimum rest time between shifts (hours)
 
 	//Assigning values to driver
