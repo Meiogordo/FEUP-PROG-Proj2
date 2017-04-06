@@ -17,6 +17,10 @@ public:
 	bool createNewLine();
 	//Adds a new driver, returns false if the line already exists (same ID)
 	bool createNewDriver();
+	//Modifies a certain line, returns false if the line is not found
+	bool modifyLine();
+	//Modifies a certain driver, returns false if the driver is not found
+	bool modifyDriver();
 	//Deletes a line based on a given ID - returns true if successful, false if the ID returned no matches
 	bool deleteLine();
 	//Deletes a driver based on a given ID - returns true if successful, false if the ID returned no matches
@@ -75,7 +79,7 @@ private:
 	//Generate line from a line of text
 	line createLineFromString(string rawline);
 
-	//Generating schedules and distributing drivers
+	//Generating schedules and distributing drivers - For part 2
 	void generateSchedule();
 	void generateSchedule(int stopID);
 	void distributeDrivers();
@@ -88,6 +92,8 @@ private:
 	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
 	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
+
+	//Not sure if still necessary given how I'm thinking
 	//Prints the given driver onto the screen
 	void printDriver(driver d);
 	//Prints the given line onto the screen
