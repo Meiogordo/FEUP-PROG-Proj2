@@ -15,8 +15,6 @@ public:
 	void DisplayWholeMenu();
 	//Displays options based on ID, return all adjacent depths downwards (1 returns 1, 1.1, 1.2, etc)
 	void DisplayByID(string &id);
-	//Clears the screen
-	void ClearScreen();
 	//Destructor, unused at the moment
 	~Menu();
 private:

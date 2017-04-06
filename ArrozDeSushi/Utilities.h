@@ -30,4 +30,6 @@ namespace Utilities {
 	vector<string> splitString(string input, string splitter);
 	//Overload for a single char - calls the string version
 	vector<string> splitString(string input, char splitter);
+	//Clears the screen - originally inside Menu
+	void clearScreen();
 }

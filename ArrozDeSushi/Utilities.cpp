@@ -83,7 +83,12 @@ namespace Utilities {
 
 		return output;
 	}
+
 	vector<string> splitString(string input, char splitter)	{
 		return splitString(input, to_string(splitter));
+	}
+
+	void clearScreen() {
+		system("cls"); //temporary - will maybe move to windows.h functions later on
 	}
 }

@@ -72,10 +72,6 @@ void Menu::DisplayByID(string &id) {
 
 }
 
-void Menu::ClearScreen() {
-	system("cls"); //temporary - will move to windows.h functions later on
-}
-
 //returns a vector of options based on the provided ID. If ID is empty, returns all options with 0 depth, otherwise with a matching ID and depth level
 vector<Menu::option> Menu::FindOptionByID(string id) {
 	vector<option> output;

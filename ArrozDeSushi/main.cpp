@@ -50,7 +50,7 @@ int menuRunner(BusManager &bm) {
 	//clear screen of whatever was printed before, just in case with a pause before so all output is read with time
 	cout << "Pressione enter para continuar...";
 	cin.get();
-	menumaozinhas.ClearScreen();
+	Utilities::clearScreen();
 
 	//Menu loop
 	while (true) {
@@ -81,7 +81,7 @@ int menuRunner(BusManager &bm) {
 				//do something based on failed state maybe
 			}
 
-			menumaozinhas.ClearScreen();
+			Utilities::clearScreen();
 	}
 
 	//Menu execution exited successfully
