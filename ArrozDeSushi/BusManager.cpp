@@ -325,6 +325,7 @@ bool BusManager::Load() {
 			cout << "EOF detetado, abortando processo de criação de gestor de empresa de autocarros..." << endl;
 			cout << "Pressione enter para continuar..." << endl;
 			cin.get();
+			return false;
 		}
 		inputDrivers.open(inputpath);
 	}
@@ -341,9 +342,19 @@ bool BusManager::Load() {
 
 	//Testing if the path was invalid
 	while (!inputLines.is_open()) {
-		cout << "Nome do ficheiro invï¿½lido!" << endl;
+		cout << "Nome do ficheiro inválido!" << endl;
 		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
+		cout << "(Ctrl+Z para abortar o processo)" << endl;
+		cout << ">> ";
 		getline(cin, inputpath);
+		if (cin.eof()) {
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout << "EOF detetado, abortando processo de criação de gestor de empresa de autocarros..." << endl;
+			cout << "Pressione enter para continuar..." << endl;
+			cin.get();
+			return false;
+		}
 		inputLines.open(inputpath);
 	}
 
