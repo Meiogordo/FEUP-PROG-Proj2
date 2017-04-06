@@ -323,8 +323,8 @@ bool BusManager::Load() {
 			cin.clear();
 			cin.ignore(10000, '\n');
 			cout << "EOF detetado, abortando processo de criação de gestor de empresa de autocarros..." << endl;
-			cout << "Pressione enter para continuar..." << endl;
-			cin.get();
+			/*cout << "Pressione enter para continuar..." << endl; //Pause is in main
+			cin.get();*/
 			return false;
 		}
 		inputDrivers.open(inputpath);
