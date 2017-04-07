@@ -65,8 +65,10 @@ namespace Utilities {
 	}
 
 	void trimString(string &s) {
-		s = s.substr(s.find_first_not_of(' ')); // Cut spaces to the left
-		s = s.substr(0, s.find_last_not_of(' ') + 1); // Cut spaces to the right
+		if (s.find(' ') != string::npos) {
+			s = s.substr(s.find_first_not_of(' ')); // Cut spaces to the left
+			s = s.substr(0, s.find_last_not_of(' ') + 1); // Cut spaces to the right
+		}
 	}
 
 	vector<string> splitString(string input, string splitter) {
@@ -84,7 +86,7 @@ namespace Utilities {
 		return output;
 	}
 
-	vector<string> splitString(string input, char splitter)	{
+	vector<string> splitString(string input, char splitter) {
 		return splitString(input, to_string(splitter));
 	}
 
