@@ -41,7 +41,7 @@ int main() {
 int menuRunner(BusManager &bm) {
 
 	string currentselection = ""; //current selection holds the menu state
-	string tempinput; //temporary input holder
+	unsigned int tempinput; //temporary input holder - unsigned int to make sure that only numbers are inputted
 
 	//Generating menu object with constructor pointing to menu txt file
 	Menu menumaozinhas("Menu.txt");
@@ -55,24 +55,39 @@ int menuRunner(BusManager &bm) {
 	while (true) {
 
 		menumaozinhas.DisplayByID(currentselection);
-		cin >> tempinput;
+		while (true) {
+			cin >> tempinput;
+			if (cin.fail()) {
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+				//Clearing screen and reprinting
+				Utilities::clearScreen();
+				cout << "Seleção inválida! Tente novamente!\n\n";
+				menumaozinhas.DisplayByID(currentselection);
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
 
-		if (currentselection.empty() && tempinput == "0") {
-			//This means we are at the main menu and the exit option was selected
+		if (currentselection.empty() && tempinput == 0) {
+			//This means we are at the main menu and the exit option was selected so we exit the program by exiting the loop
 			break;
 		}
 		else
-			if (!currentselection.empty() && tempinput == "0") {
-				//This means we are in a submen and want to go back to the main menu
+			if (!currentselection.empty() && tempinput == 0) {
+				//This means we are in a submenu and want to go back to the main menu
 				currentselection = "";
 			}
 			else {
 				//in order to not append a dot to an empty string and get ".1" which wouldn't work
 				if (currentselection.empty()) {
-					currentselection = tempinput;
+					currentselection = to_string(tempinput);
 				}
 				else {
-					currentselection += "." + tempinput;
+					currentselection += "." + to_string(tempinput);
 				}
 			}
 
