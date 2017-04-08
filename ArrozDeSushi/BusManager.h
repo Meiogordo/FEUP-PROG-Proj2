@@ -35,6 +35,15 @@ public:
 	void displayDrivers(bool available);
 	//Displays all the lines -> ID, First stop, Last stop
 	void displayLines();
+	//Detailed data display
+	//Asks for and ID and then prints detailed info about that driver
+	bool printDriver();
+	//Asks for and ID and then prints detailed info about that line
+	bool printLine();
+	//Prints the driver with the given position in its vector onto the screen
+	void printDriver(unsigned int pos);
+	//Prints the line with the given position in its vector onto the screen
+	void printLine(unsigned int pos);
 
 	//Data ouput - public so that the functions can be called from outside the class
 	//Saves the updated list of drivers to the given file path. If the file exists it will be overwritten, if it does not it will be created
@@ -97,15 +106,5 @@ private:
 	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
 	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
-
-	//Detailed data printing
-	//Asks for and ID and then prints detailed info about that driver
-	bool printDriver();
-	//Asks for and ID and then prints detailed info about that line
-	bool printLine();
-	//Prints the driver with the given position in its vector onto the screen
-	void printDriver(unsigned int pos);
-	//Prints the line with the given position in its vector onto the screen
-	void printLine(unsigned int pos);
 };
 
