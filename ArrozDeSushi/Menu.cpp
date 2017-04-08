@@ -42,7 +42,7 @@ void Menu::DisplayByID(string &id) {
 
 	//Dealing with invalid option -> empty vector
 	if (display.empty()) {
-		cout << "Invalid selection! Try again!\n\n";
+		cout << "Seleção inválida! Tente novamente!\n\n";
 		//Removing last selected option from ID
 		if (id.size() == 1) {
 			//First level selection, requested ID can be cleared with no problems to reset the menu
