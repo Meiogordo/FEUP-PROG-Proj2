@@ -103,7 +103,7 @@ namespace Utilities {
 		//
 
 		//Ignores everything in the cin buffer
-		cin.ignore(std::numeric_limits<streamsize>::max(), '\n');
+		cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		//pause to see output
 		cout << "Pressione enter para continuar...";
 		cin.get();
