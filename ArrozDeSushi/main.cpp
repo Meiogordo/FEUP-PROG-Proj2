@@ -6,13 +6,21 @@
 #include "Utilities.h"
 using namespace std;
 
+#ifdef _WIN32
+#include "Windows.h"
+#define enablePTcharacters() SetConsoleCP(1252); SetConsoleOutputCP(1252);
+#else
+#define enablePTcharacters() setlocale(LC_ALL, "Portuguese");
+#endif
+
 //Prototypes
 int menuRunner(BusManager &bm);
 bool callFunctions(string &id, BusManager &bm);
 
 int main() {
 
-	//Enabling portuguese characters on the console
+	//Enabling portuguese characters on the console - for me this doesn't work so I just comment out and use locale for now
+	//enablePTcharacters();
 	setlocale(LC_ALL, "Portuguese");
 
 	//Init
@@ -111,7 +119,7 @@ bool callFunctions(string &id, BusManager &bm) {
 	Utilities::clearScreen();
 
 	//Template for function calling
-	/* 
+	/*
 	if (id == "specify id here") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
@@ -149,6 +157,16 @@ bool callFunctions(string &id, BusManager &bm) {
 	}
 
 	//Modifying lines
+	if (id == "2.1.3") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.modifyLine();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
 
 	//Deleting lines
 	if (id == "2.1.4") {
@@ -156,6 +174,18 @@ bool callFunctions(string &id, BusManager &bm) {
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
 		bm.deleteLine();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
+	//Printing detailed info about a line
+	if (id == "2.1.5") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.printLine();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -187,6 +217,16 @@ bool callFunctions(string &id, BusManager &bm) {
 	}
 
 	//Modifying drivers
+	if (id == "2.2.3") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.modifyDriver();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
 
 	//Deleting drivers
 	if (id == "2.2.4") {
@@ -194,6 +234,18 @@ bool callFunctions(string &id, BusManager &bm) {
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
 		bm.deleteDriver();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
+	//Printing detailed info about a driver
+	if (id == "2.2.5") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.printDriver();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
