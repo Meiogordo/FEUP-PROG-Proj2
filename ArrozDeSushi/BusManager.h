@@ -19,8 +19,6 @@ public:
 	bool createNewDriver();
 	//Modifies a certain line, returns false if the line is not found
 	bool modifyLine();
-	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
-	bool modifyLine(unsigned int choice, int pos);
 	//Modifies a certain driver, returns false if the driver is not found
 	bool modifyDriver();
 	//Deletes a line based on a given ID - returns true if successful, false if the ID returned no matches
@@ -106,5 +104,11 @@ private:
 	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
 	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
+
+	//These two are private because there is no need to access them externally, modify without parameters should be used for modification and nothing else
+	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
+	bool modifyLine(unsigned int choice, int pos);
+	//Modify driver helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
+	bool modifyDriver(unsigned int choice, int pos);
 };
 
