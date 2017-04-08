@@ -19,6 +19,8 @@ public:
 	bool createNewDriver();
 	//Modifies a certain line, returns false if the line is not found
 	bool modifyLine();
+	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
+	bool modifyLine(unsigned int choice, int pos);
 	//Modifies a certain driver, returns false if the driver is not found
 	bool modifyDriver();
 	//Deletes a line based on a given ID - returns true if successful, false if the ID returned no matches
@@ -96,10 +98,14 @@ private:
 	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
 
-	//Not sure if still necessary given how I'm thinking - maybe for debugging showing all the data about a specific driver or line - probably called by ID
-	//Prints the given driver onto the screen
-	void printDriver(driver d);
-	//Prints the given line onto the screen
-	void printLine(line l);
+	//Detailed data printing
+	//Asks for and ID and then prints detailed info about that driver
+	bool printDriver();
+	//Asks for and ID and then prints detailed info about that line
+	bool printLine();
+	//Prints the driver with the given position in its vector onto the screen
+	void printDriver(unsigned int pos);
+	//Prints the line with the given position in its vector onto the screen
+	void printLine(unsigned int pos);
 };
 

@@ -211,9 +211,222 @@ bool BusManager::createNewDriver() {
 	return true;
 }
 
+bool BusManager::modifyLine() {
+	int IDtomodify;
+
+	cout << "Qual o ID da linha a alterar? ";
+	while (true) {
+		cin >> IDtomodify;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Finding the position of the line in the lines vector
+	int foundpos = findLineByID(IDtomodify);
+	//If foundpos is -1 it is because the given ID did not match any stored line
+	if (foundpos == -1) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de modificação de linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Clearing screen
+	Utilities::clearScreen();
+
+	cout << "Linha encontrada." << endl;
+	cout << "Qual das informações da linha quer alterar? (Ctrl + Z para abortar o processo)" << endl;
+
+	unsigned int choice = 0; //holds the user selection of the attribute to modify
+
+	cout << "1 - Frequência de passagem de autocarros na linha\n";
+	cout << "2 - Lista de paragens\n";
+	cout << "3 - Lista de tempos de viagem entre paragens\n";
+	cout << ">> ";
+
+	//This also has to be outside the loop to make sure that the check is ran before the function crashes
+	if (cin.eof()) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cout << "EOF detetado, abortando processo de modificação de linha..." << endl;
+		return false;
+	}
+
+	//Ask for choice again if it was invalid
+	while (true) {
+		cin >> choice;
+		if (choice >= 1 && choice <= 3) {
+			//if the choice is between 1 and 3 the input is valid so the loop is exited
+			break;
+		}
+		else {
+			//Clearing screen before re-printing
+			Utilities::clearScreen();
+			cout << "Escolha inválida, por favor introduza uma opção válida (número inteiro entre 1 e 3)." << endl;
+			cout << "Qual das informações da linha quer alterar? (Ctrl + Z para abortar o processo)" << endl;
+			cout << "1 - Frequência de passagem de autocarros na linha\n";
+			cout << "2 - Lista de paragens\n";
+			cout << "3 - Lista de tempos de viagem entre paragens\n";
+			cout << ">> ";
+			//Clearing error flag and cin buffer in case that this was due to cin.fail() - if it wasn't this has no effect so there is no problem in doing it like this
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+	}
+
+	//Calling modifier function based on choice
+	modifyLine(choice, foundpos);
+
+	//process was concluded successfully, returning true
+	return true;
+}
+
+bool BusManager::modifyLine(unsigned int choice, int pos) {
+
+	switch (choice) {
+	case 1:
+	{
+		//Changing bus frequency
+		unsigned int newFreq;
+		cout << "Qual a nova frequência de passagem de autocarros nas linhas (em minutos)? ";
+		while (true) {
+			cin >> newFreq;
+			if (cin.fail()) {
+				cout << "Frequência inválida, por favor introduza um número válido (inteiro positivo)." << endl;
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
+		//Changing frequency
+		lines[pos].frequency = newFreq;
+		break;
+	}
+	case 2:
+	{
+		//Changing the list of stops - only altering one stop at a time because otherwise the delay vector is no longer correct relative to the stops
+		unsigned int posToChange;
+		string newStopName = "";
+
+		cout << "Qual a paragem a alterar?" << endl;
+		//Printing options
+		Utilities::printVector(lines[pos].stops);
+		cout << ">> ";
+		while (true) {
+			cin >> posToChange;
+			if (cin.fail() || posToChange >= lines[pos].stops.size()) {
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+				//Clearing screen and reprinting with warning
+				Utilities::clearScreen();
+				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << lines[pos].stops.size() - 1 << ")." << endl;
+				cout << "Qual a paragem a alterar?" << endl;
+				//Printing options
+				Utilities::printVector(lines[pos].stops);
+				cout << ">> ";
+			}
+			else {
+				//if cin didn't fail and the input is a good position we have a good input so we break the loop
+				break;
+			}
+		}
+
+		//Now asking for the new name
+		cout << "Qual o novo nome para a paragem a alterar?" << endl;
+		cout << ">> ";
+		//With the testing done, this is needed if we are to use getline after using cin as a stream
+		cin.ignore(10000, '\n');
+		getline(cin, newStopName); //using getline instead of cin because a stop name can have spaces
+		Utilities::trimString(newStopName); //trimming unnecessary whitespace
+
+		//Changing the stop name
+		lines[pos].stops[posToChange] = newStopName;
+		break;
+	}
+	case 3:
+	{
+		//Changing the list of travel delays - only altering one delay at a time because otherwise the delay vector is no longer correct relative to the stops
+		unsigned int posToChange;
+		unsigned int newDelay = 0;
+
+		cout << "Qual o tempo de viagem a alterar?" << endl;
+		//Printing options
+		for (int i = 0; i < lines[pos].stops.size() - 1; i++) {
+			cout << i << ": " << "Tempo de viagem entre " << lines[pos].stops[i] << " e " << lines[pos].stops[i + 1] << ": " << lines[pos].delaybetweenstops[i] << " minutos." << endl;
+		}
+		cout << ">> ";
+
+		while (true) {
+			cin >> posToChange;
+			if (cin.fail() || posToChange >= lines[pos].delaybetweenstops.size()) {
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+				//Clearing screen and reprinting with warning
+				Utilities::clearScreen();
+				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << lines[pos].delaybetweenstops.size() - 1 << ")." << endl;
+				cout << "Qual o tempo de viagem a alterar?" << endl;
+				//Printing options
+				for (int i = 0; i < lines[pos].stops.size() - 1; i++) {
+					cout << i << ": " << "Tempo de viagem entre " << lines[pos].stops[i] << " e " << lines[pos].stops[i + 1] << ": " << lines[pos].delaybetweenstops[i] << " minutos." << endl;
+				}
+				cout << ">> ";
+			}
+			else {
+				//if cin didn't fail and the input is a good position we have a good input so we break the loop
+				break;
+			}
+		}
+
+		//Now asking for the new delay
+		cout << "Qual o novo tempo de viagem (em minutos)? ";
+		while (true) {
+			cin >> newDelay;
+			if (cin.fail()) {
+				cout << "Tempo de viagem inválido, por favor introduza um tempo válido (número inteiro positivo)." << endl;
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
+
+		lines[pos].delaybetweenstops[posToChange] = newDelay;
+		break;
+	}
+	default:
+		//The choice should never be invalid but if it is return false (error has ocurred)
+		return false;
+		break;
+	}
+
+	return true;
+}
+
+bool BusManager::modifyDriver() {
+
+
+	return true;
+}
+
 bool BusManager::deleteLine() {
 	int IDtodel;
-	cout << "Qual o ID da linha a apagar?" << endl;
+
+	cout << "Qual o ID da linha a apagar? ";
 	while (true) {
 		cin >> IDtodel;
 		if (cin.fail()) {
@@ -554,4 +767,56 @@ int BusManager::findDriverByID(int driverID) {
 	}
 
 	return -1;
+}
+
+bool BusManager::printDriver() {
+	unsigned int IDtoprint = 0;
+
+	cout << "Qual o ID do condutor a imprimir?" << endl;
+	while (true) {
+		cin >> IDtoprint;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Finding the position of the driver in the drivers vector
+	unsigned int foundpos = findDriverByID(IDtoprint);
+	//If foundpos is -1 it is because the given ID did not match any stored driver
+	if (foundpos == -1) {
+		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de impressão de informação detalhada de um condutor..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Driver found, printing detailed info
+	cout << "\n";
+	printDriver(foundpos);
+
+	//Process concluded successfully
+	return true;
+}
+
+void BusManager::printDriver(unsigned int pos) {
+
+	cout << "ID: " << drivers[pos].ID << "\nNome: " << drivers[pos].name;
+	cout << "\nTamanho de turno: " << drivers[pos].shiftsize << "\nLimite de horas de trabalho semanal: " << drivers[pos].weeklyhourlimit;
+	cout << "\nTempo mínimo de descanso: " << drivers[pos].minresttime << endl;
+
+}
+
+void BusManager::printLine(unsigned int pos) {
+
+	cout << "ID: " << lines[pos].ID << "\nFrequência de passagem de autocarros: " << lines[pos].frequency;
+	cout << "Paragens desta linha:\n";
+	Utilities::printVector(lines[pos].stops);
+	cout << "Tempos de viagem entre estas paragens:\n";
+	Utilities::printVector(lines[pos].delaybetweenstops);
+
 }
