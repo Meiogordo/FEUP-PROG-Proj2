@@ -69,6 +69,7 @@ private:
 	//Internal class data
 	vector<driver> drivers;
 	vector<line> lines;
+	//vector<stops> stopsBelongToLines; //something to say in what lines a stop is
 	//vector<schedule?> stopSchedules;
 	//Resets internal class data
 	void Reset();
@@ -79,9 +80,11 @@ private:
 	//Generate line from a line of text
 	line createLineFromString(string rawline);
 
-	//Generating schedules and distributing drivers - For part 2
+	//Generating schedules
 	void generateSchedule();
 	void generateSchedule(int stopID);
+
+	//Distributing drivers - For part 2
 	void distributeDrivers();
 
 	//Internal class data handling - searches for ID and whatnot
@@ -93,7 +96,7 @@ private:
 	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
 
-	//Not sure if still necessary given how I'm thinking
+	//Not sure if still necessary given how I'm thinking - maybe for debugging showing all the data about a specific driver or line - probably called by ID
 	//Prints the given driver onto the screen
 	void printDriver(driver d);
 	//Prints the given line onto the screen
