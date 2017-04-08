@@ -91,7 +91,8 @@ namespace Utilities {
 	}
 
 	void clearScreen() {
-		system("cls"); //temporary - will maybe move to windows.h functions later on
+		//system("cls"); //temporary - will move to something else later on due to not being cross platform and having security issues
+		cout << string(10000, '\n');
 	}
 
 	void pause() {
