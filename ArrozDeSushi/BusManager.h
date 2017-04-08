@@ -64,7 +64,7 @@ private:
 		int ID; //the driver's unique ID
 		string name; //the driver's name
 		int shiftsize; //shift size - number of hours the driver can work per day
-		int weeklyhourlimit; //number of hours the driver can work per day
+		int weeklyhourlimit; //number of hours the driver can work per week
 		int minresttime; //minimum rest time between shifts (hours)
 	};
 	//Describing a line
