@@ -90,6 +90,9 @@ int menuRunner(BusManager &bm) {
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
 bool callFunctions(string &id, BusManager &bm) {
 
+	//before running any function, the screen is cleared
+	Utilities::clearScreen();
+
 	//Template for function calling
 	/* 
 	if (id == "specify id here") {
