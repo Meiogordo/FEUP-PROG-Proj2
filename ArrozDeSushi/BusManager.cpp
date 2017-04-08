@@ -428,7 +428,186 @@ bool BusManager::modifyLine(unsigned int choice, int pos) {
 }
 
 bool BusManager::modifyDriver() {
+	int IDtomodify;
 
+	cout << "Qual o ID do condutor a alterar? ";
+	while (true) {
+		cin >> IDtomodify;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Finding the position of the driver in the drivers vector
+	int foundpos = findDriverByID(IDtomodify);
+	//If foundpos is -1 it is because the given ID did not match any stored driver
+	if (foundpos == -1) {
+		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de modificação de condutor..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Clearing screen
+	Utilities::clearScreen();
+
+	cout << "Condutor encontrado." << endl;
+	cout << "Qual das informações do condutor quer alterar? (Ctrl + Z para abortar o processo)" << endl;
+
+	unsigned int choice = 0; //holds the user selection of the attribute to modify
+
+	cout << "1 - Nome\n";
+	cout << "2 - Tamanho de turno em horas\n";
+	cout << "3 - Limite de horas de trabalho semanal\n";
+	cout << "4 - Tempo mínimo de descanso entre turnos\n";
+	cout << ">> ";
+
+	//This also has to be outside the loop to make sure that the check is ran before the function crashes
+	if (cin.eof()) {
+		cin.clear();
+		cin.ignore(10000, '\n');
+		cout << "EOF detetado, abortando processo de modificação de condutor..." << endl;
+		return false;
+	}
+
+	//Ask for choice again if it was invalid
+	while (true) {
+		cin >> choice;
+		if (choice >= 1 && choice <= 4) {
+			//if the choice is between 1 and 4 the input is valid so the loop is exited
+			break;
+		}
+		else {
+			if (cin.eof()) {
+				cin.clear();
+				cin.ignore(10000, '\n');
+				cout << "EOF detetado, abortando processo de modificação de linha..." << endl;
+				return false;
+			}
+			else {
+				//Due to choice out of bounds or cin.fail()
+
+				//Clearing screen before re-printing
+				Utilities::clearScreen();
+				cout << "Escolha inválida, por favor introduza uma opção válida (número inteiro entre 1 e 4)." << endl;
+				cout << "Qual das informações do condutor quer alterar? (Ctrl + Z para abortar o processo)" << endl;
+				cout << "1 - Nome\n";
+				cout << "2 - Tamanho de turno em horas\n";
+				cout << "3 - Limite de horas de trabalho semanal\n";
+				cout << "4 - Tempo mínimo de descanso entre turnos\n";
+				cout << ">> ";
+				//Clearing error flag and cin buffer in case that this was due to cin.fail() - if it wasn't this has no effect so there is no problem in doing it like this
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+		}
+	}
+
+	//Calling modifier function based on choice
+	modifyDriver(choice, foundpos);
+
+	//process was concluded successfully, returning true
+	return true;
+}
+
+bool BusManager::modifyDriver(unsigned int choice, int pos) {
+
+	switch (choice) {
+	case 1:
+	{
+		//Changing driver name
+		string newName;
+		cout << "Qual o novo nome do condutor? ";
+		//With the testing done, this is needed if we are to use getline after using cin as a stream
+		cin.ignore(10000, '\n');
+		getline(cin, newName);
+
+		//Changing name
+		drivers[pos].name = newName;
+		break;
+	}
+	case 2:
+	{
+		//Changing the shift size
+		unsigned int newShiftSize;
+
+		cout << "Qual o novo tamanho de turno (em horas)? ";
+		while (true) {
+			cin >> newShiftSize;
+			if (cin.fail()) {
+				cout << "Tamanho de turno inválido, por favor introduza um número válido (inteiro positivo)." << endl;
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
+
+		//Changing shiftsize
+		drivers[pos].shiftsize = newShiftSize;
+		break;
+	}
+	case 3:
+	{
+		//Changing the number of hours the driver can work per week
+		unsigned int newWeeklyhourlimit;
+
+		cout << "Qual o novo limite de horas de trabalho semanal? ";
+		while (true) {
+			cin >> newWeeklyhourlimit;
+			if (cin.fail()) {
+				cout << "Limite inválido, por favor introduza um número válido (inteiro positivo)." << endl;
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
+
+		//Changing weeklyhourlimit
+		drivers[pos].weeklyhourlimit = newWeeklyhourlimit;
+		break;
+	}
+	case 4:
+	{
+		//Changing the minimum rest time between shifts (hours)
+		unsigned int newMinresttime;
+
+		cout << "Qual o novo tempo mínimo de descanso entre turnos? ";
+		while (true) {
+			cin >> newMinresttime;
+			if (cin.fail()) {
+				cout << "Tempo inválido, por favor introduza um número válido (inteiro positivo)." << endl;
+				//Clearing error flag and cin buffer
+				cin.clear();
+				cin.ignore(100000, '\n');
+			}
+			else {
+				//if cin didn't fail we have a good input so we break the loop
+				break;
+			}
+		}
+
+		//Changing shiftsize
+		drivers[pos].minresttime = newMinresttime;
+		break;
+	}
+	default:
+		//The choice should never be invalid but if it is return false (error has ocurred)
+		return false;
+		break;
+	}
 
 	return true;
 }
@@ -610,6 +789,9 @@ bool BusManager::Load() {
 	ifstream inputDrivers, inputLines;
 	string inputpath = "";
 
+	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
+	cin.ignore(10000, '\n');
+
 	//Drivers file input
 	cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
 	cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
@@ -780,7 +962,7 @@ BusManager::driver BusManager::createDriverFromString(string rawline) {
 	int ID = stoi(info[0]);
 	string name = info[1]; //the driver's name
 	int shiftsize = stoi(info[2]); //shift size - number of hours the driver can work per day
-	int weeklyhourlimit = stoi(info[3]); //number of hours the driver can work per day
+	int weeklyhourlimit = stoi(info[3]); //number of hours the driver can work per week
 	int minresttime = stoi(info[4]); //minimum rest time between shifts (hours)
 
 	//Assigning values to driver
