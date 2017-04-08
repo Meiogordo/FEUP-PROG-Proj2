@@ -48,8 +48,7 @@ int menuRunner(BusManager &bm) {
 
 
 	//clear screen of whatever was printed before, just in case with a pause before so all output is read with time
-	cout << "Pressione enter para continuar...";
-	cin.get();
+	Utilities::pause();
 	Utilities::clearScreen();
 
 	//Menu loop
@@ -91,9 +90,6 @@ int menuRunner(BusManager &bm) {
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
 bool callFunctions(string &id, BusManager &bm) {
 
-	//Debugging an idea, remove later - aka spaghetti if it works, bug if it doesn't
-	cin.ignore(10000, '\n');
-
 	//Template for function calling
 	/* 
 	if (id == "specify id here") {
@@ -102,8 +98,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		//testfunction();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -116,8 +111,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.displayLines();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -129,8 +123,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.createNewLine();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -144,8 +137,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.deleteLine();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -157,8 +149,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.displayDrivers();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -170,8 +161,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.createNewDriver();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -185,8 +175,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.deleteDriver();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -198,8 +187,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		bm.Load();
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
@@ -211,8 +199,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//calls function based on hardcoded id
 		cout << "WIP, function not yet implemented" << endl;
 		//pause to see output
-		cout << "Pressione enter para continuar...";
-		cin.get();
+		Utilities::pause();
 		//function was found, return true
 		return true;
 	}
