@@ -3,6 +3,8 @@
 #include <vector>
 #include <fstream>
 #include <string>
+#include <limits>
+#include <iostream>
 
 using namespace std;
 
@@ -32,4 +34,6 @@ namespace Utilities {
 	vector<string> splitString(string input, char splitter);
 	//Clears the screen - originally inside Menu
 	void clearScreen();
+	//Pauses the program until enter is pressed - displays informative message to prompt the user to press enter. Warning: to pause successfully this function must clear the whole cin buffer, make sure there is no important data there
+	void pause();
 }

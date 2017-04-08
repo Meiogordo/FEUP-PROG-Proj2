@@ -93,4 +93,18 @@ namespace Utilities {
 	void clearScreen() {
 		system("cls"); //temporary - will maybe move to windows.h functions later on
 	}
+
+	void pause() {
+		//Legacy explanation comments, moved from where cin.get() was used to pause:
+		//
+		//This seems like it will be necessary before every cin.get() ... It looks like cin is getting trash stuck in it
+		//Disregard, it is cin getting the "\n" from the enter press at the end of every input... So, cin.ignore before pause is mandatory!
+		//
+
+		//Ignores everything in the cin buffer
+		cin.ignore(std::numeric_limits<streamsize>::max(), '\n');
+		//pause to see output
+		cout << "Pressione enter para continuar...";
+		cin.get();
+	}
 }
