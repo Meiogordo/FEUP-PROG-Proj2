@@ -1,17 +1,19 @@
 #include <iostream>
+#include <string>
+#include <clocale>
 #include "Menu.h"
 #include "BusManager.h"
+#include "Utilities.h"
 using namespace std;
-
-//TODO:
-//- Decide if menuRunner really needs to be an int - How can menu execution go wrong?
-//- Maybe create menu object inside menu? If file not found then there is your error
 
 //Prototypes
 int menuRunner(BusManager &bm);
 bool callFunctions(string &id, BusManager &bm);
 
 int main() {
+
+	//Enabling portuguese characters on the console
+	setlocale(LC_ALL, "Portuguese");
 
 	//Init
 	BusManager bm;
