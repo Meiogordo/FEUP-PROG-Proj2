@@ -100,10 +100,15 @@ namespace Utilities {
 		//
 		//This seems like it will be necessary before every cin.get() ... It looks like cin is getting trash stuck in it
 		//Disregard, it is cin getting the "\n" from the enter press at the end of every input... So, cin.ignore before pause is mandatory!
-		//
+		//However, if cin.ignore is used and there is nothing in the buffer, it waits until it gets something, thus resulting in a double pause!!
+		//To get around that we check if there is something in the cin buffer and we only clear if there is
 
-		//Ignores everything in the cin buffer
-		cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		//If there are more than 0 characters in the cin buffer, clear them
+		if (cin.rdbuf()->in_avail() > 0) {
+			//Ignores everything in the cin buffer
+			cin.ignore(numeric_limits<streamsize>::max(), '\n');
+		}
+		
 		//pause to see output
 		cout << "Pressione enter para continuar...";
 		cin.get();
