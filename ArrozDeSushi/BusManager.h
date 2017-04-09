@@ -38,10 +38,6 @@ public:
 	bool printDriver();
 	//Asks for and ID and then prints detailed info about that line
 	bool printLine();
-	//Prints the driver with the given position in its vector onto the screen
-	void printDriver(unsigned int pos);
-	//Prints the line with the given position in its vector onto the screen
-	void printLine(unsigned int pos);
 
 	//Data ouput - public so that the functions can be called from outside the class
 	//Saves the updated list of drivers to the given file path. If the file exists it will be overwritten, if it does not it will be created
@@ -59,6 +55,12 @@ public:
 	//Saves the internal information into files
 	void Save();
 private:
+	//Describing a shift
+	struct shift {
+		unsigned int startHour; //hour at which the shift starts
+		unsigned int endHour; //hour at which the shift ends
+		unsigned int weekday; //day of week, starts at monday and is [0,6] with 0 being monday and 6 sunday
+	};
 	//Describing a driver
 	struct driver {
 		int ID; //the driver's unique ID
@@ -66,6 +68,8 @@ private:
 		int shiftsize; //shift size - number of hours the driver can work per day
 		int weeklyhourlimit; //number of hours the driver can work per week
 		int minresttime; //minimum rest time between shifts (hours)
+		vector<shift> shifts; //list of shifts the driver was assigned to do
+		bool available; //true if the driver is available, false if not
 	};
 	//Describing a line
 	struct line {
@@ -76,10 +80,13 @@ private:
 	};
 
 	//Internal class data
-	vector<driver> drivers;
-	vector<line> lines;
+	vector<driver> drivers; //vector of all the drivers
+	vector<line> lines; //vector of all the lines
 	//vector<stops> stopsBelongToLines; //something to say in what lines a stop is
 	//vector<schedule?> stopSchedules;
+	//Schedule constants
+	const unsigned int BUS_START_TIME = 8; //Service starts at 8:00
+	const unsigned int BUS_END_TIME = 20; //Service ends at 20:00
 	//Resets internal class data
 	void Reset();
 
@@ -94,7 +101,7 @@ private:
 	void generateSchedule(int stopID);
 
 	//Distributing drivers - For part 2
-	void distributeDrivers();
+	//void distributeDrivers();
 
 	//Internal class data handling - searches for ID and whatnot
 	//Searches for a certain stop, by name. Returns the vector of all the lines it belongs to
@@ -105,10 +112,14 @@ private:
 	int findDriverByID(int driverID);
 	//Other (TODO: Later on sort these into other categories if possible)
 
-	//These two are private because there is no need to access them externally, modify without parameters should be used for modification and nothing else
+	//These four are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else
 	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
 	bool modifyLine(unsigned int choice, int pos);
 	//Modify driver helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
 	bool modifyDriver(unsigned int choice, int pos);
+	//Prints the driver with the given position in its vector onto the screen
+	void printDriver(unsigned int pos);
+	//Prints the line with the given position in its vector onto the screen
+	void printLine(unsigned int pos);
 };
 
