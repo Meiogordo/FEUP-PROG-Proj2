@@ -203,6 +203,9 @@ bool BusManager::createNewDriver() {
 	newDriver.shiftsize = shiftsize;
 	newDriver.weeklyhourlimit = weeklyhourlimit;
 	newDriver.minresttime = minresttime;
+	//Data not gotten from string from user input
+	newDriver.shifts = vector<shift>(); //Empty vector of shifts
+	newDriver.available = true; //All drivers are available at first
 
 	//Pushing the newly created driver into the drivers vector
 	drivers.push_back(newDriver);
@@ -944,6 +947,9 @@ BusManager::driver BusManager::createDriverFromString(string rawline) {
 	newDriver.shiftsize = shiftsize;
 	newDriver.weeklyhourlimit = weeklyhourlimit;
 	newDriver.minresttime = minresttime;
+	//Data not gotten from string from text file
+	newDriver.shifts = vector<shift>(); //Empty vector of shifts
+	newDriver.available = true; //All drivers are available at first
 
 	return newDriver;
 }
