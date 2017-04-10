@@ -54,6 +54,11 @@ public:
 	bool Load();
 	//Saves the internal information into files
 	void Save();
+
+	//Other
+	//Finds which lines a stop belongs to
+	void findStopsinLines();
+	
 private:
 	//Describing a shift
 	struct shift {
@@ -98,7 +103,7 @@ private:
 
 	//Generating schedules
 	void generateSchedule();
-	void generateSchedule(int stopID);
+	void generateSchedule(string stopname);
 
 	//Distributing drivers - For part 2
 	//void distributeDrivers();
@@ -110,6 +115,8 @@ private:
 	int findLineByID(int lineID);
 	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
 	int findDriverByID(int driverID);
+	//Searches for a certain stop in all of the lines and returns a vector of line IDs to which the given stop belongs
+	vector<int> findStopsinLines(string stopname);
 	//Other (TODO: Later on sort these into other categories if possible)
 
 	//These four are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else
@@ -122,4 +129,3 @@ private:
 	//Prints the line with the given position in its vector onto the screen
 	void printLine(unsigned int pos);
 };
-
