@@ -687,7 +687,10 @@ void BusManager::displayDrivers() {
 }
 
 void BusManager::displayDrivers(bool available) {
-	//WIP
+	for (int i = 0; i < drivers.size(); i++) {
+		if (drivers[i].available == available) //If the driver has the same availability as the one given as parameters, print him
+			cout << "ID: " << drivers[i].ID << " Nome: " << drivers[i].name << endl;
+	}
 }
 
 void BusManager::displayLines() {
@@ -786,9 +789,6 @@ void BusManager::printLine(unsigned int pos) {
 
 bool BusManager::Load() {
 
-	//Internal data is reset. For the first load this does nothing but for the next ones this will clear internal data
-	Reset();
-
 	ifstream inputDrivers, inputLines;
 	string inputpath = "";
 
@@ -879,6 +879,10 @@ bool BusManager::Load() {
 	//Success
 	cout << "\nFicheiro de linhas aberto com sucesso!\n\n\n";
 
+	//Both files were opened successfully, resetting internal data to replace it with new one:
+	//Internal data is reset. For the first load this does nothing but for the next ones this will clear internal data
+	Reset();
+
 	//Passing the contents of the text files to a string vector where each index is a line in the file
 	vector<string> RawDrivers = Utilities::ReadFile(inputDrivers);
 	vector<string> RawLines = Utilities::ReadFile(inputLines);
@@ -906,6 +910,33 @@ bool BusManager::Load() {
 
 	//After everything was successful
 	return true;
+}
+
+void BusManager::findStopsinLines() {
+	string stopname;
+
+	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
+	//If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
+	if (cin.rdbuf()->in_avail() > 0) {
+		cin.ignore(10000, '\n');
+	}
+
+	cout << "Qual a paragem que deseja procurar?" << endl;
+	getline(cin, stopname); //getline is used because the stop name can have spaces in it
+
+	//Searching for the stop in lines using findStopsinLines's overload
+	vector<int> foundLines = findStopsinLines(stopname);
+
+	if (foundLines.empty()) {
+		cout << "A paragem dada não pertence a nenhuma linha guardada." << endl;
+	}
+	else {
+		cout << "A paragem dada pertence às seguintes linhas: ";
+		cout << foundLines[0];
+		for (int i = 1; i < foundLines.size(); i++)	{
+			cout << ", " << foundLines[i];
+		}
+	}
 }
 
 void BusManager::Reset() {
@@ -1024,4 +1055,23 @@ int BusManager::findDriverByID(int driverID) {
 	}
 
 	return -1;
+}
+
+vector<int> BusManager::findStopsinLines(string stopname) {
+	vector<int> output;
+
+	//outer loop goes through all the lines
+	for (int i = 0; i < lines.size(); i++) {
+		//inner loop goes through the list of stops for each line
+		for (int j = 0; j < lines[i].stops.size(); j++) {
+			if (lines[i].stops[j] == stopname) {
+				//If the given stop is in the list of stops, the ID of the line is pushed back into the output and the inner loop is broken (a stop cannot appear two times in the same line)
+				output.push_back(lines[i].ID);
+				break;
+			}
+		}
+	}
+
+	//returning the matches found
+	return output;
 }
