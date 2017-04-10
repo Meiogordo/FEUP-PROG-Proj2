@@ -30,7 +30,7 @@ public:
 	//Displays all the drivers
 	void displayDrivers();
 	//Displays drivers - if bool true, then only the available, if false, then only the occupied
-	void displayDrivers(bool available);
+	void displayDrivers(bool availability);
 	//Displays all the lines -> ID, First stop, Last stop
 	void displayLines();
 	//Detailed data display
@@ -45,7 +45,7 @@ public:
 	//Saves the updated list of lines to the given file path. If the file exists it will be overwritten, if it does not it will be created
 	void saveLinestoFile(string filepath);
 	//Saves the list of schedules to the given file path. If the file exists it will be overwritten, if it does not it will be created
-	void saveSchedulestoFile(string filepath);
+	//void saveSchedulestoFile(string filepath); //Is this needed?
 
 
 	//External data management - public to be accessible from outside the class
@@ -56,8 +56,10 @@ public:
 	void Save();
 
 	//Other
-	//Finds which lines a stop belongs to
-	void findStopsinLines();
+	//Finds which lines a stop belongs to - find which lines pass through a certain stop
+	void findLinesinStop();
+	//Calculates and displays the route between two given stops
+	bool routeBetweenTwoStops();
 	
 private:
 	//Describing a shift
@@ -116,7 +118,7 @@ private:
 	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
 	int findDriverByID(int driverID);
 	//Searches for a certain stop in all of the lines and returns a vector of line IDs to which the given stop belongs
-	vector<int> findStopsinLines(string stopname);
+	vector<int> findLinesinStop(string stopname);
 	//Other (TODO: Later on sort these into other categories if possible)
 
 	//These four are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else
