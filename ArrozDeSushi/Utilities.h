@@ -20,7 +20,7 @@ namespace Utilities {
 	bool compareDiffSizeStrings(string a, string b);
 	//Remove whitespace surrounding text  - "   aa  " -> "aa"
 	void trimString(string &s);
-	//Print vector of any kind of element
+	//Print vector of any kind of element as long as it has << operator defined
 	template<typename T>
 	void printVector(const vector<T> &v) {
 		for (int i = 0; i < v.size(); i++) {
@@ -36,4 +36,39 @@ namespace Utilities {
 	void clearScreen();
 	//Pauses the program until enter is pressed - displays informative message to prompt the user to press enter. Warning: to pause successfully this function must clear the whole cin buffer, make sure there is no important data there
 	void pause();
+	//Intersects two vectors, searching for common values - using templates so that it works for any kind of element
+	template<typename T>
+	vector<T> intersectVectors(const vector<T> &v1, const vector<T> &v2) {
+		//Initializing empty output vector
+		vector<T> output;
+
+		//Intersecting
+		for (int i = 0; i < v1.size(); i++) {
+			for (int j = 0; j < v2.size(); j++) {
+				if (v1[i] == v2[j])
+					output.push_back(v1[i]);
+			}
+		}
+
+		//Removing duplicate elements
+		Utilities::removeDuplicates(output);
+
+		return output;
+	}
+
+	//Removes duplicate elements in a vector - using templates so that it works for any kind of element
+	template<typename T>
+	void removeDuplicates(vector<T> &v) {
+		for (int i = 0; i < v.size(); i++) {
+			//Searching for a duplicate element
+			for (int j = i + 1; j < v.size(); j++) {
+				//If found deletes the occurrence at j
+				if (v[i] == v[j]) {
+					v.erase(v.begin() + j);
+					//j-- because the element at j was deleted so j+1 is now j, if we increment directly then we are skipping an element
+					j--;
+				}
+			}
+		}
+	}
 }
