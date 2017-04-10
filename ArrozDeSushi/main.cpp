@@ -23,18 +23,11 @@ int main() {
 	//enablePTcharacters();
 	setlocale(LC_ALL, "Portuguese");
 
+	//Tests here
+
 	//Init
 	BusManager bm;
 	bm.Load();
-
-	/*
-	try {
-		bm.Load();
-	}
-	catch () {
-		cout << "Load sem êxito." << endl;
-	}
-	*/
 
 	//Main menu running
 	int menureturn = menuRunner(bm);
@@ -131,6 +124,30 @@ bool callFunctions(string &id, BusManager &bm) {
 		return true;
 	}
 	*/
+
+	//Which lines pass at a certain stop
+	if (id == "1.4") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.findLinesinStop();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
+	//Listing available drivers
+	if (id == "1.5") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.displayDrivers(true);
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
 
 	//Displaying lines
 	if (id == "2.1.1") {
@@ -265,7 +282,7 @@ bool callFunctions(string &id, BusManager &bm) {
 	}
 
 	//Not yet implemented stuff
-	if (id == "1.1" || id == "1.2" || id == "1.3" || id == "1.4" || id == "1.5" || id == "1.6" || id == "1.7" || id == "2.3" || id == "2.4") {
+	if (id == "1.1" || id == "1.2" || id == "1.3" || id == "1.6" || id == "1.7" || id == "2.3" || id == "2.4") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
