@@ -8,6 +8,7 @@
 
 using namespace std;
 
+//Utilities is a namespace created to contain useful functions for use throughout the program
 namespace Utilities {
 	//Reads a file and returns a vector in which each position is a string representing a line in the file
 	vector<string> ReadFile(string path);
