@@ -686,9 +686,9 @@ void BusManager::displayDrivers() {
 	}
 }
 
-void BusManager::displayDrivers(bool available) {
+void BusManager::displayDrivers(bool availability) {
 	for (int i = 0; i < drivers.size(); i++) {
-		if (drivers[i].available == available) //If the driver has the same availability as the one given as parameters, print him
+		if (drivers[i].available == availability) //If the driver has the same availability as the one given as parameters, print him
 			cout << "ID: " << drivers[i].ID << " Nome: " << drivers[i].name << endl;
 	}
 }
@@ -764,6 +764,52 @@ bool BusManager::printLine() {
 	//Driver found, printing detailed info
 	cout << "\n";
 	printLine(foundpos);
+
+	//Process concluded successfully
+	return true;
+}
+
+bool BusManager::printDriverShifts() {
+	unsigned int IDtoprint = 0;
+
+	cout << "Qual o ID do condutor para o qual se irá imprimir o trabalho atribuído?" << endl;
+	while (true) {
+		cin >> IDtoprint;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Finding the position of the driver in the drivers vector
+	unsigned int foundpos = findDriverByID(IDtoprint);
+	//If foundpos is -1 it is because the given ID did not match any stored driver
+	if (foundpos == -1) {
+		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de impressão de informação detalhada de um condutor..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Driver found, printing shifts
+	cout << "\n";
+	if (drivers[foundpos].shifts.empty()) {
+		cout << "O condutor em questão não tem trabalho atribuído." << endl;
+		return true;
+	}
+	else {
+		cout << "O condutor tem " << drivers[foundpos].shifts.size() << " turnos atribuídos." << endl;
+		for (int i = 0; i < drivers[foundpos].shifts.size(); i++) { 
+			cout << "O turno nº " << i << " decorrerá ao " << weekdays.at(drivers[foundpos].shifts[i].weekday);
+			cout << " começará às " << setw(2) << drivers[foundpos].shifts[i].startHour << ":" << setw(2) << drivers[foundpos].shifts[i].startMinute;
+			cout << " e terminará às " << setw(2) << drivers[foundpos].shifts[i].endHour << ":" << setw(2) << drivers[foundpos].shifts[i].endMinute;
+			cout << ", sendo que o condutor irá trabalhar na linha " << drivers[foundpos].shifts[i].lineID << "." << endl;
+		}
+	}
 
 	//Process concluded successfully
 	return true;
@@ -912,7 +958,7 @@ bool BusManager::Load() {
 	return true;
 }
 
-void BusManager::findStopsinLines() {
+void BusManager::findLinesinStop() {
 	string stopname;
 
 	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
@@ -924,19 +970,105 @@ void BusManager::findStopsinLines() {
 	cout << "Qual a paragem que deseja procurar?" << endl;
 	getline(cin, stopname); //getline is used because the stop name can have spaces in it
 
-	//Searching for the stop in lines using findStopsinLines's overload
-	vector<int> foundLines = findStopsinLines(stopname);
+	//Searching for the stop in lines using findLinesinStop's overload
+	vector<int> foundLines = findLinesinStop(stopname);
 
+	//Outputting result based on foundLines being empty or not
 	if (foundLines.empty()) {
 		cout << "A paragem dada não pertence a nenhuma linha guardada." << endl;
 	}
 	else {
 		cout << "A paragem dada pertence às seguintes linhas: ";
 		cout << foundLines[0];
-		for (int i = 1; i < foundLines.size(); i++)	{
+		for (int i = 1; i < foundLines.size(); i++) {
 			cout << ", " << foundLines[i];
 		}
+		cout << endl;
 	}
+}
+
+bool BusManager::routeBetweenTwoStops() {
+	//CASES:
+	//0: One of them has no lines
+	//1: No common lines - impossible with what we know at least for now
+	//2: One common line - check best direction in the line
+	//3: Several common lines - check best direction in each line.. 
+
+	//Ideas - function to check best direction in line
+
+	string stop1, stop2; //variables to hold stop names
+
+	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
+	//If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
+	if (cin.rdbuf()->in_avail() > 0) {
+		cin.ignore(10000, '\n');
+	}
+
+	cout << "Qual a paragem de início do percurso?" << endl;
+	getline(cin, stop1); //getline is used because the stop name can have spaces in it
+
+	//Checking to which lines stop1 belongs
+	vector<int> foundLinesStop1 = findLinesinStop(stop1);
+
+	//Case 0.1
+	if (foundLinesStop1.empty()) {
+		cout << "A primeira paragem não pertence a nenhuma das linhas guardadas.\nAbortando o processo de cálculo de percurso entre duas paragens..." << endl;
+		return false;
+	}
+
+	cout << "Qual a paragem de final do percurso?" << endl;
+	getline(cin, stop2); //getline is used because the stop name can have spaces in it
+
+	//Searching for the stop in lines using findLinesinStop
+	vector<int> foundLinesStop2 = findLinesinStop(stop2);
+
+	//Case 0.2
+	if (foundLinesStop2.empty()) {
+		cout << "A segunda paragem não pertence a nenhuma das linhas guardadas.\nAbortando o processo de cálculo de percurso entre duas paragens..." << endl;
+		return false;
+	}
+
+	//Check lines in common between the two stops
+	vector<int> intersection = Utilities::intersectVectors(foundLinesStop1, foundLinesStop2);
+
+	//Case 1
+	if (intersection.empty()) {
+		cout << "As duas paragens dadas não têm nenhuma linha em comum.\nAbortando o processo de cálculo de percurso entre duas paragens..." << endl;
+		return false;
+	}
+
+	//Case 2 & 3 - can be handled together due to how things were structured
+
+	//Distances holds the distances in stops and best direction between stop1 and stop2 for each line in intersection
+	vector<vector<int>> distances = calculateStopsForEachDirection(stop1, stop2, intersection);
+
+	//Determining the smallest distance
+	int smallestDistIndex = 0;
+	for (int i = 0; i < distances.size(); i++) {
+		//if the distance at this index is smaller then that is the new index for the smallest distance
+		if (distances[i][1] < distances[smallestDistIndex][1])
+			smallestDistIndex = i;
+	}
+
+	//Getting direction for the smallest distance
+	int lineindex = findLineByID(intersection[smallestDistIndex]); //finds the index of the line that allows for the shortest route using findLineByID in the lines vector
+	string direction;
+	if (distances[smallestDistIndex][0] == 1) {
+		//Positive direction - direction given by last stop in the stops vector
+		direction = lines[lineindex].stops[lines[lineindex].stops.size() - 1];
+	}
+	else {
+		//Negative direction - direction given by first stop in the stops vector
+		direction = lines[lineindex].stops[0];
+	}
+
+	//The smallest distance was found
+	cout << "Para percorrer o menor número de paragens entre " << stop1 << " e " << stop2 << ", deve-se apanhar a linha " << intersection[smallestDistIndex] << ", com direção a ";
+	cout << direction << ", andando " << distances[smallestDistIndex][1] << " paragens.";
+	cout << endl;
+
+	//Process was successful
+	return true;
 }
 
 void BusManager::Reset() {
@@ -1057,7 +1189,7 @@ int BusManager::findDriverByID(int driverID) {
 	return -1;
 }
 
-vector<int> BusManager::findStopsinLines(string stopname) {
+vector<int> BusManager::findLinesinStop(string stopname) {
 	vector<int> output;
 
 	//outer loop goes through all the lines
@@ -1073,5 +1205,54 @@ vector<int> BusManager::findStopsinLines(string stopname) {
 	}
 
 	//returning the matches found
+	return output;
+}
+
+vector<vector<int>> BusManager::calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines) {
+	//each outer position is the match for each line, with 0 on the inner being the direction (-1 or 1) and 1 being the number of stops to go through
+	vector<vector<int>> output(commonLines.size(), vector<int>(2));
+
+	for (int i = 0; i < commonLines.size(); i++) {
+		//output was already with the correct dimensions so there is no need to use push_back
+		output[i] = calculateStopsForEachDirection(startStop, endStop, commonLines[i]);
+	}
+
+	return output;
+}
+
+vector<int> BusManager::calculateStopsForEachDirection(string startStop, string endStop, int commonLine) {
+	vector<int> output(2);
+	//0: Direction - -1 is negative (index gets smaller), 1 is positive (index gets bigger)
+
+	//getting the line index from the line ID
+	int lineIndex = findLineByID(commonLine);
+
+	//finding the startStop position in the given line
+	int startpos;
+	for (startpos = 0; startpos < lines[lineIndex].stops.size(); startpos++) {
+		if (lines[lineIndex].stops[startpos] == startStop) {
+			break; //if we find the stop we break the loop and now have successfully got the start position
+		}
+	}
+
+	//finding the endStop position in the given line
+	int endpos;
+	for (endpos = 0; endpos < lines[lineIndex].stops.size(); endpos++) {
+		if (lines[lineIndex].stops[endpos] == endStop) {
+			break; //if we find the stop we break the loop and now have successfully got the end position
+		}
+	}
+
+	//start is left of end - positive direction
+	if (startpos < endpos) {
+		output[0] = 1;
+		output[1] = endpos - startpos;
+	}
+	else {
+		//start is right of end - negative direction
+		output[0] = -1;
+		output[1] = startpos - endpos;
+	}
+
 	return output;
 }
