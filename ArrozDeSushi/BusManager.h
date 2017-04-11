@@ -3,6 +3,7 @@
 #include <vector>
 #include <iostream>
 #include <fstream>
+#include <iomanip>
 #include "Utilities.h"
 using namespace std;
 
@@ -38,12 +39,14 @@ public:
 	bool printDriver();
 	//Asks for and ID and then prints detailed info about that line
 	bool printLine();
+	//Prints a driver's assigned work
+	bool printDriverShifts();
 
 	//Data ouput - public so that the functions can be called from outside the class
 	//Saves the updated list of drivers to the given file path. If the file exists it will be overwritten, if it does not it will be created
-	void saveDriverstoFile(string filepath);
+	void saveDriverstoFile();
 	//Saves the updated list of lines to the given file path. If the file exists it will be overwritten, if it does not it will be created
-	void saveLinestoFile(string filepath);
+	void saveLinestoFile();
 	//Saves the list of schedules to the given file path. If the file exists it will be overwritten, if it does not it will be created
 	//void saveSchedulestoFile(string filepath); //Is this needed?
 
@@ -60,14 +63,20 @@ public:
 	void findLinesinStop();
 	//Calculates and displays the route between two given stops
 	bool routeBetweenTwoStops();
-	
+
 private:
+	//Internal class data
 	//Describing a shift
 	struct shift {
 		unsigned int startHour; //hour at which the shift starts
+		unsigned int startMinute; //minute at which the shift starts
 		unsigned int endHour; //hour at which the shift ends
+		unsigned int endMinute; //minute at which the shift ends
 		unsigned int weekday; //day of week, starts at monday and is [0,6] with 0 being monday and 6 sunday
+		unsigned int lineID; //ID of the line to which the driver was assigned
 	};
+	//Vector to give a string that represents the week day from the weekday variable in a shift
+	const vector<string> weekdays = {"Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"};
 	//Describing a driver
 	struct driver {
 		int ID; //the driver's unique ID
@@ -85,15 +94,17 @@ private:
 		vector<string> stops; //list of stop names
 		vector<int> delaybetweenstops; //times (in minutes) of travel between stops (TODO: Add note about indexes)
 	};
-
-	//Internal class data
 	vector<driver> drivers; //vector of all the drivers
 	vector<line> lines; //vector of all the lines
 	//vector<stops> stopsBelongToLines; //something to say in what lines a stop is
 	//vector<schedule?> stopSchedules;
 	//Schedule constants
-	const unsigned int BUS_START_TIME = 8; //Service starts at 8:00
-	const unsigned int BUS_END_TIME = 20; //Service ends at 20:00
+	//Service starts at 8:00
+	const unsigned int BUS_START_TIME_HOUR = 8;
+	const unsigned int BUS_START_TIME_MINUTE = 00;
+	//Service ends at 20:00
+	const unsigned int BUS_END_TIME_HOUR = 20;
+	const unsigned int BUS_END_TIME_MINUTE = 0;
 	//Resets internal class data
 	void Reset();
 
@@ -121,7 +132,7 @@ private:
 	vector<int> findLinesinStop(string stopname);
 	//Other (TODO: Later on sort these into other categories if possible)
 
-	//These four are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else
+	//These five are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else
 	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
 	bool modifyLine(unsigned int choice, int pos);
 	//Modify driver helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
@@ -130,4 +141,8 @@ private:
 	void printDriver(unsigned int pos);
 	//Prints the line with the given position in its vector onto the screen
 	void printLine(unsigned int pos);
+	//Calculates the number of stops between two stops for each direction for a vector of lines
+	vector<vector <int>> calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines);
+	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
+	vector<int> calculateStopsForEachDirection(string startStop, string endStop, int commonLine);
 };
