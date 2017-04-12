@@ -353,7 +353,7 @@ bool callFunctions(string &id, BusManager &bm) {
 	}
 
 	//Not yet implemented stuff
-	if (id == "1.1" || id == "1.2" || id == "1.3" || id == "1.7" || id == "2.3" || id == "2.4") {
+	if (id == "1.1" || id == "1.2" || id == "1.3" || id == "1.7") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
