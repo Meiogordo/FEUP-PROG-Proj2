@@ -53,6 +53,8 @@ public:
 	void findLinesinStop();
 	//Calculates and displays the route between two given stops
 	bool routeBetweenTwoStops();
+	//Checks if the user has unsaved changes - getter method for hasUnsavedChanges - setter is not necessary because the setting is internal and done through direct access
+	bool getIfHasUnsavedChanges();
 
 private:
 	//Internal class data
@@ -144,4 +146,7 @@ private:
 	void saveDriverstoFile(ostream &file);
 	//Saves the updated list of lines to the given file path.
 	void saveLinestoFile(ostream &file);
+	//Also for data output but more of a Quality of Life tweak
+	//Registers if the user has unsaved changes: to warn when opening a new file or exiting the program without saving before
+	bool hasUnsavedChanges = false;
 };

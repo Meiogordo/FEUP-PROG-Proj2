@@ -103,6 +103,9 @@ bool BusManager::createNewLine() {
 	//Pushing the newly created line into the lines vector
 	lines.push_back(newLine);
 
+	//Updating hasUnsavedChanges
+	hasUnsavedChanges = true;
+
 	//returning true since the line was successfully added
 	return true;
 }
@@ -210,6 +213,9 @@ bool BusManager::createNewDriver() {
 	//Pushing the newly created driver into the drivers vector
 	drivers.push_back(newDriver);
 
+	//Updating hasUnsavedChanges
+	hasUnsavedChanges = true;
+
 	//returning true since the driver was successfully added
 	return true;
 }
@@ -295,6 +301,9 @@ bool BusManager::modifyLine() {
 
 	//Calling modifier function based on choice
 	modifyLine(choice, foundpos);
+
+	//Updating hasUnsavedChanges
+	hasUnsavedChanges = true;
 
 	//process was concluded successfully, returning true
 	return true;
@@ -514,6 +523,9 @@ bool BusManager::modifyDriver() {
 	//Calling modifier function based on choice
 	modifyDriver(choice, foundpos);
 
+	//Updating hasUnsavedChanges
+	hasUnsavedChanges = true;
+
 	//process was concluded successfully, returning true
 	return true;
 }
@@ -644,6 +656,9 @@ bool BusManager::deleteLine() {
 	cout << "Linha encontrada, eliminando..." << endl;
 	lines.erase(lines.begin() + foundpos); //deleting the position of the vector results in deleting the line
 
+	//Updating hasUnsavedChanges
+	hasUnsavedChanges = true;
+
 	//process was concluded successfully, returning true
 	return true;
 }
@@ -675,6 +690,9 @@ bool BusManager::deleteDriver() {
 
 	cout << "Condutor encontrado, eliminando..." << endl;
 	drivers.erase(drivers.begin() + foundpos); //deleting the position of the vector results in deleting the line
+
+    //Updating hasUnsavedChanges
+	hasUnsavedChanges = true;
 
 	//process was concluded successfully, returning true
 	return true;
@@ -835,6 +853,39 @@ void BusManager::printLine(unsigned int pos) {
 
 bool BusManager::Load() {
 
+	//Check to see if the user has unsaved changes before loading a new file
+	if (getIfHasUnsavedChanges()) {
+		string option;
+		cout << "Tem alterações não gravadas, deseja prosseguir com o carregamento de um novo ficheiro? (S/N)" << endl;
+		cout << ">> ";
+		while (true) {
+			cin >> option;
+			if (cin.fail() || (option != "S" && option != "N")) {
+				//Clearing error flags and buffer
+				cin.clear();
+				cin.ignore(10000, '\n');
+				//Clearing screen to display input prompt again
+				cout << "Opção inválida." << endl;
+				cout << "Tem alterações não gravadas, deseja prosseguir com o carregamento de um novo ficheiro? (S/N)" << endl;
+				cout << ">> ";
+			}
+			else {
+				//input is valid so we break the loop
+				break;
+			}
+		}
+
+		//If the user specifies that he does not want to continue because he has unsaved progress we quit the file loading
+		if (option == "N") {
+			cout << "Abortando processo de carregamento de ficheiros..." << endl;
+			return false;
+		}
+		else {
+			//Otherwise, the user specified that he does want to continue so we simply clear the screen to make space for the following output
+			Utilities::clearScreen();
+		}
+	}
+
 	ifstream inputDrivers, inputLines;
 	//string for the path for the drivers and lines files. Separate variables are used to be able to save the path to internal variables if the process is not aborted
 	string  inputpathDrivers = "", inputpathLines = "";
@@ -933,7 +984,10 @@ bool BusManager::Load() {
 	//From now on the files are loaded into memory so it is safe to save the path from which they were gotten
 	driversFilePath = inputpathDrivers;
 	linesFilePath = inputpathLines;
-	//The save is only done now because if the process was aborted before this the internal memory would be unchanged and thus still linked to a certain file
+	//The save is only done now because if the process was aborted before this the internal memory would be unchanged and thus still linked to the file that was opened before
+
+	//Updating hasUnsavedChanges - if we are loading from a file we do not have unsaved changes
+	hasUnsavedChanges = false;
 
 	//Passing the contents of the text files to a string vector where each index is a line in the file
 	vector<string> RawDrivers = Utilities::ReadFile(inputDrivers);
@@ -1061,9 +1115,10 @@ bool BusManager::Save() {
 
 	//outputLines is ready
 
-	//From now on the process can't aborted so the internal file paths are updated with the new filepaths
+	//From now on the process can't aborted so the internal file paths are updated with the new filepaths and hasUnsavedChanges is updated
 	driversFilePath = tempDriversFilePath;
 	linesFilePath = tempLinesFilePath;
+	hasUnsavedChanges = false;
 
 	//Calling save functions
 	saveDriverstoFile(outputDrivers);
@@ -1187,6 +1242,10 @@ bool BusManager::routeBetweenTwoStops() {
 
 	//Process was successful
 	return true;
+}
+
+bool BusManager::getIfHasUnsavedChanges() {
+	return hasUnsavedChanges;
 }
 
 void BusManager::Reset() {
@@ -1414,7 +1473,7 @@ void BusManager::saveLinestoFile(ostream &file) {
 
 	//First index of delays list also done outside so ',' can be appended to the left
 	file << lines[0].delaybetweenstops[0];
-	
+
 	//Delays list separated by ','
 	for (int k = 1; k < lines[0].delaybetweenstops.size(); k++) {
 		file << ", " << lines[0].delaybetweenstops[k];

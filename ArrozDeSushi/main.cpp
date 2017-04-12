@@ -76,8 +76,44 @@ int menuRunner(BusManager &bm) {
 		}
 
 		if (currentselection.empty() && tempinput == 0) {
-			//This means we are at the main menu and the exit option was selected so we exit the program by exiting the loop
-			break;
+			//This means we are at the main menu and the exit option was selected so we can exit the program by exiting the loop
+
+			//But first, checking if there are unsaved changes
+			if (bm.getIfHasUnsavedChanges()) {
+				string option;
+				cout << "Tem alterações não gravadas, deseja mesmo assim sair do programa? (S/N)" << endl;
+				cout << ">> ";
+				while (true) {
+					cin >> option;
+					if (cin.fail() || (option != "S" && option != "N")) {
+						//Clearing error flags and buffer
+						cin.clear();
+						cin.ignore(10000, '\n');
+						//Clearing screen to display input prompt again
+						cout << "Opção inválida." << endl;
+						cout << "Tem alterações não gravadas, deseja mesmo assim sair do programa? (S/N)" << endl;
+						cout << ">> ";
+					}
+					else {
+						//input is valid so we break the loop
+						break;
+					}
+				}
+
+				//If the user specifies that he does not want to exit the program because he has unsaved progress we do not exit the program
+				if (option == "N") {
+					//As such, we do nothing
+				}
+				else {
+					//Otherwise, the user specified that he does want to exit so we break the loop to exit the program
+					break;
+				}
+			}
+			else {
+				//If the user does not have unsaved changes we simply exit the program as usual
+				break;
+			}
+
 		}
 		else
 			if (!currentselection.empty() && tempinput == 0) {
