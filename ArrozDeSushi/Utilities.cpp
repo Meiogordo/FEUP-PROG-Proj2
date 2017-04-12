@@ -113,4 +113,20 @@ namespace Utilities {
 		cout << "Pressione enter para continuar...";
 		cin.get();
 	}
+
+	string minutesToHHMM(int minutes) {
+
+		//Final time
+		int hours = 0;
+
+		while (minutes >= 60) {
+			minutes -= 60;
+			hours++;
+		}
+
+		stringstream ss;
+		ss << setfill('0') << setw(2) << hours << ":" << setw(2) << minutes;
+
+		return ss.str();
+	}
 }

@@ -2,9 +2,11 @@
 #include <string>
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include <string>
 #include <limits>
 #include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -72,4 +74,7 @@ namespace Utilities {
 			}
 		}
 	}
+
+	//Converts minutes to a string in the HH:MM format
+	string minutesToHHMM(int minutes);
 }
