@@ -1030,6 +1030,13 @@ bool BusManager::Save() {
 	outputLines.open(linesFilePath);
 
 	if (!outputDrivers.is_open()) {
+
+		//Clearing the cin stream - might get unwanted input in if not cleared before using getline
+		//If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
+		if (cin.rdbuf()->in_avail() > 0) {
+			cin.ignore(10000, '\n');
+		}
+
 		cout << "Ainda não foi carregada informação de um ficheiro de condutores ou o ficheiro já não existe." << endl;
 		cout << "Por favor introduza o nome do ficheiro a usar para guardar os condutores: (exemplo: \"condutores_test.txt\")" << endl;
 		cout << "(Ctrl+Z para abortar o processo - a informação interna não será gravada)" << endl;
