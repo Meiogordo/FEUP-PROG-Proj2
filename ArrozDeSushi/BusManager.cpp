@@ -803,7 +803,7 @@ bool BusManager::printDriverShifts() {
 	}
 	else {
 		cout << "O condutor tem " << drivers[foundpos].shifts.size() << " turnos atribuídos." << endl;
-		for (int i = 0; i < drivers[foundpos].shifts.size(); i++) { 
+		for (int i = 0; i < drivers[foundpos].shifts.size(); i++) {
 			cout << "O turno nº " << i << " decorrerá ao " << weekdays.at(drivers[foundpos].shifts[i].weekday);
 			cout << " começará às " << setw(2) << drivers[foundpos].shifts[i].startHour << ":" << setw(2) << drivers[foundpos].shifts[i].startMinute;
 			cout << " e terminará às " << setw(2) << drivers[foundpos].shifts[i].endHour << ":" << setw(2) << drivers[foundpos].shifts[i].endMinute;
@@ -836,7 +836,8 @@ void BusManager::printLine(unsigned int pos) {
 bool BusManager::Load() {
 
 	ifstream inputDrivers, inputLines;
-	string inputpath = "";
+	//string for the path for the drivers and lines files. Separate variables are used to be able to save the path to internal variables if the process is not aborted
+	string  inputpathDrivers = "", inputpathLines = "";
 
 	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
 	//If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
@@ -849,7 +850,7 @@ bool BusManager::Load() {
 	cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
 	cout << ">> ";
 	//Using getline because the path can contain spaces
-	getline(cin, inputpath);
+	getline(cin, inputpathDrivers);
 
 	//This also has to be outside the loop to make sure that the check is ran before the function crashes
 	//It seems to not be possible to avoid having to press enter twice for this to work, must be because getline needs an enter and then cin.eof wants cin to be populated and so requires another enter
@@ -861,7 +862,7 @@ bool BusManager::Load() {
 	}
 
 	//Opening the file with the given path
-	inputDrivers.open(inputpath);
+	inputDrivers.open(inputpathDrivers);
 
 	//Testing if the path was invalid
 	while (!inputDrivers.is_open()) {
@@ -871,7 +872,7 @@ bool BusManager::Load() {
 		cout << "Insira o nome do ficheiro a usar para os condutores: (exemplo: \"condutores_test.txt\")" << endl;
 		cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
 		cout << ">> ";
-		getline(cin, inputpath);
+		getline(cin, inputpathDrivers);
 		if (cin.eof()) {
 			cin.clear();
 			cin.ignore(10000, '\n');
@@ -879,7 +880,7 @@ bool BusManager::Load() {
 			return false;
 		}
 		else
-			inputDrivers.open(inputpath);
+			inputDrivers.open(inputpathDrivers);
 	}
 
 	//Success
@@ -890,7 +891,7 @@ bool BusManager::Load() {
 	cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
 	cout << ">> ";
 	//Using getline because the path can contain spaces
-	getline(cin, inputpath);
+	getline(cin, inputpathLines);
 
 	//This also has to be outside the loop to make sure that the check is ran before the function crashes
 	if (cin.eof()) {
@@ -902,7 +903,7 @@ bool BusManager::Load() {
 
 
 	//Opening the file with the given path
-	inputLines.open(inputpath);
+	inputLines.open(inputpathLines);
 
 	//Testing if the path was invalid
 	while (!inputLines.is_open()) {
@@ -912,22 +913,27 @@ bool BusManager::Load() {
 		cout << "Insira o nome do ficheiro a usar para as linhas: (exemplo: \"linhas_test.txt\")" << endl;
 		cout << "(Ctrl+Z para abortar o processo - a informação interna estará vazia e a maior parte das funcionalidades não irão funcionar corretamente)" << endl;
 		cout << ">> ";
-		getline(cin, inputpath);
+		getline(cin, inputpathLines);
 		if (cin.eof()) {
 			cin.clear();
 			cin.ignore(10000, '\n');
 			cout << "EOF detetado, abortando processo de criação de gestor de empresa de autocarros..." << endl;
 			return false;
 		}
-		inputLines.open(inputpath);
+		inputLines.open(inputpathLines);
 	}
 
 	//Success
 	cout << "\nFicheiro de linhas aberto com sucesso!\n\n\n";
 
 	//Both files were opened successfully, resetting internal data to replace it with new one:
-	//Internal data is reset. For the first load this does nothing but for the next ones this will clear internal data
+	//Internal data is reset. For the first load this does nothing but for the next ones this will clear internal data (drivers, lines, etc)
 	Reset();
+
+	//From now on the files are loaded into memory so it is safe to save the path from which they were gotten
+	driversFilePath = inputpathDrivers;
+	linesFilePath = inputpathLines;
+	//The save is only done now because if the process was aborted before this the internal memory would be unchanged and thus still linked to a certain file
 
 	//Passing the contents of the text files to a string vector where each index is a line in the file
 	vector<string> RawDrivers = Utilities::ReadFile(inputDrivers);
@@ -955,6 +961,118 @@ bool BusManager::Load() {
 	//etc
 
 	//After everything was successful
+	return true;
+}
+
+bool BusManager::Save() {
+	//File output streams
+	ofstream outputDrivers, outputLines;
+
+	//temporary variables for file path in case the internal variables do not work - they start as the internal paths because if the paths open straight away they are not changed so the internal vars are not reset accidentally
+	string tempLinesFilePath = linesFilePath, tempDriversFilePath = driversFilePath;
+
+	//Attempting to open files
+	outputDrivers.open(driversFilePath);
+	outputLines.open(linesFilePath);
+
+	if (!outputDrivers.is_open()) {
+		cout << "Ainda não foi carregada informação de um ficheiro de condutores ou o ficheiro já não existe." << endl;
+		cout << "Por favor introduza o nome do ficheiro a usar para guardar os condutores: (exemplo: \"condutores_test.txt\")" << endl;
+		cout << "(Ctrl+Z para abortar o processo - a informação interna não será gravada)" << endl;
+		cout << ">> ";
+
+		//Using getline because the path can contain spaces
+		getline(cin, tempDriversFilePath);
+
+		//This also has to be outside the loop to make sure that the check is ran before the function crashes
+		//It seems to not be possible to avoid having to press enter twice for this to work, must be because getline needs an enter and then cin.eof wants cin to be populated and so requires another enter
+		if (cin.eof()) {
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout << "EOF detetado, abortando processo de gravação de ficheiros..." << endl;
+			return false;
+		}
+
+		//Opening the file with the given path
+		outputDrivers.open(tempDriversFilePath);
+
+		//Testing if the path was invalid
+		while (!outputDrivers.is_open()) {
+			//Clears screen before re-writing
+			Utilities::clearScreen();
+			cout << "Nome do ficheiro inválido!" << endl;
+			cout << "Por favor introduza o nome do ficheiro a usar para guardar os condutores: (exemplo: \"condutores_test.txt\")" << endl;
+			cout << "(Ctrl+Z para abortar o processo - a informação interna não será gravada)" << endl;
+			cout << ">> ";
+			getline(cin, tempDriversFilePath);
+			if (cin.eof()) {
+				cin.clear();
+				cin.ignore(10000, '\n');
+				cout << "EOF detetado, abortando processo de gravação de ficheiros..." << endl;
+				return false;
+			}
+			else
+				outputDrivers.open(tempDriversFilePath);
+		}
+	}
+
+	//outputDrivers is ready
+
+	if (!outputLines.is_open()) {
+		cout << "Ainda não foi carregada informação de um ficheiro de linhas ou o ficheiro já não existe." << endl;
+		cout << "Por favor introduza o nome do ficheiro a usar para guardar os linhas: (exemplo: \"linhas_test.txt\")" << endl;
+		cout << "(Ctrl+Z para abortar o processo - a informação interna não será gravada)" << endl;
+		cout << ">> ";
+
+		//Using getline because the path can contain spaces
+		getline(cin, tempLinesFilePath);
+
+		//This also has to be outside the loop to make sure that the check is ran before the function crashes
+		//It seems to not be possible to avoid having to press enter twice for this to work, must be because getline needs an enter and then cin.eof wants cin to be populated and so requires another enter
+		if (cin.eof()) {
+			cin.clear();
+			cin.ignore(10000, '\n');
+			cout << "EOF detetado, abortando processo de gravação de ficheiros..." << endl;
+			return false;
+		}
+
+		//Opening the file with the given path
+		outputLines.open(tempLinesFilePath);
+
+		//Testing if the path was invalid
+		while (!outputLines.is_open()) {
+			//Clears screen before re-writing
+			Utilities::clearScreen();
+			cout << "Nome do ficheiro inválido!" << endl;
+			cout << "Por favor introduza o nome do ficheiro a usar para guardar os linhas: (exemplo: \"linhas_test.txt\")" << endl;
+			cout << "(Ctrl+Z para abortar o processo - a informação interna não será gravada)" << endl;
+			cout << ">> ";
+			getline(cin, tempLinesFilePath);
+			if (cin.eof()) {
+				cin.clear();
+				cin.ignore(10000, '\n');
+				cout << "EOF detetado, abortando processo de gravação de ficheiros..." << endl;
+				return false;
+			}
+			else
+				outputLines.open(tempLinesFilePath);
+		}
+	}
+
+	//outputLines is ready
+
+	//From now on the process can't aborted so the internal file paths are updated with the new filepaths
+	driversFilePath = tempDriversFilePath;
+	linesFilePath = tempLinesFilePath;
+
+	//Calling save functions
+	saveDriverstoFile(outputDrivers);
+	saveLinestoFile(outputLines);
+
+	//Function successful
+	outputDrivers.close();
+	outputLines.close();
+	cout << "Ficheiros guardados com sucesso." << endl;
 	return true;
 }
 
@@ -1255,4 +1373,78 @@ vector<int> BusManager::calculateStopsForEachDirection(string startStop, string 
 	}
 
 	return output;
+}
+
+void BusManager::saveDriverstoFile(ostream &file) {
+
+	//Text lines are supposed to be in the following format:
+	// ID ; Name ; Shift size ; Weekly hour limit ; Minimum rest time
+	// (With a new line between each line)
+
+	//First index done outside so that the newline can be appended before to cause for no newline at the end of the file
+	file << drivers[0].ID << " ; " << drivers[0].name << " ; " << drivers[0].shiftsize << " ; " << drivers[0].weeklyhourlimit << " ; " << drivers[0].minresttime;
+
+	//Starts at 1 because 0 was already done outside
+	for (int i = 1; i < drivers.size(); i++) {
+		file << "\n" << drivers[i].ID << " ; " << drivers[i].name << " ; " << drivers[i].shiftsize << " ; " << drivers[i].weeklyhourlimit << " ; " << drivers[i].minresttime;
+	}
+
+	//Driver file updated.
+}
+
+void BusManager::saveLinestoFile(ostream &file) {
+
+	//Text lines are supposed to be in the following format
+	// ID ; bus frequency ; stops list separated by ',' ; delays list separated by ','
+	// (With a new line between each line)
+
+	//First index done outside so that the newline can be appended before to cause for no newline at the end of the file
+	file << lines[0].ID << " ; " << lines[0].frequency << " ; ";
+
+	//First index of stops list also done outside so ',' can be appended to the left
+	file << lines[0].stops[0];
+
+	//Stops list separated by ','
+	for (int j = 1; j < lines[0].stops.size(); j++) {
+		file << ", " << lines[0].stops[j];
+	}
+
+	//Separator between stops list and delays list
+	file << "; ";
+
+	//First index of delays list also done outside so ',' can be appended to the left
+	file << lines[0].delaybetweenstops[0];
+	
+	//Delays list separated by ','
+	for (int k = 1; k < lines[0].delaybetweenstops.size(); k++) {
+		file << ", " << lines[0].delaybetweenstops[k];
+	}
+
+
+	//Starts at 1 because 0 was already done outside
+	for (int i = 1; i < lines.size(); i++) {
+		file << "\n" << lines[i].ID << " ; " << lines[i].frequency << " ; ";
+
+		//First index of stops list also done outside so ',' can be appended to the left
+		file << lines[i].stops[0];
+
+		//Stops list separated by ','
+		for (int j = 1; j < lines[i].stops.size(); j++) {
+			file << ", " << lines[i].stops[j];
+		}
+
+		//Separator between stops list and delays list
+		file << "; ";
+
+		//First index of delays list also done outside so ',' can be appended to the left
+		file << lines[i].delaybetweenstops[0];
+
+		//Delays list separated by ','
+		for (int k = 1; k < lines[i].delaybetweenstops.size(); k++) {
+			file << ", " << lines[i].delaybetweenstops[k];
+		}
+
+	}
+
+	//Lines file updated.
 }

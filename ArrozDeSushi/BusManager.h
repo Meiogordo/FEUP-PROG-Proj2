@@ -42,21 +42,11 @@ public:
 	//Prints a driver's assigned work
 	bool printDriverShifts();
 
-	//Data ouput - public so that the functions can be called from outside the class
-	//Saves the updated list of drivers to the given file path. If the file exists it will be overwritten, if it does not it will be created
-	void saveDriverstoFile();
-	//Saves the updated list of lines to the given file path. If the file exists it will be overwritten, if it does not it will be created
-	void saveLinestoFile();
-	//Saves the list of schedules to the given file path. If the file exists it will be overwritten, if it does not it will be created
-	//void saveSchedulestoFile(string filepath); //Is this needed?
-
-
 	//External data management - public to be accessible from outside the class
-	//TODO: Move stuff done from constructor into Load
 	//Loads data from files into class - returns true if successful, false if aborted
 	bool Load();
 	//Saves the internal information into files
-	void Save();
+	bool Save();
 
 	//Other
 	//Finds which lines a stop belongs to - find which lines pass through a certain stop
@@ -96,8 +86,7 @@ private:
 	};
 	vector<driver> drivers; //vector of all the drivers
 	vector<line> lines; //vector of all the lines
-	//vector<stops> stopsBelongToLines; //something to say in what lines a stop is
-	//vector<schedule?> stopSchedules;
+	//vector<schedule?> stopSchedules; //decide if needed - probably not, calculated whenever needed
 	//Schedule constants
 	//Service starts at 8:00
 	const unsigned int BUS_START_TIME_HOUR = 8;
@@ -145,4 +134,14 @@ private:
 	vector<vector <int>> calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines);
 	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
 	vector<int> calculateStopsForEachDirection(string startStop, string endStop, int commonLine);
+
+	//Data ouput helpers - private because they only need to be accessed by Save()
+	//Path from where the drivers were loaded - used to save
+	string driversFilePath;
+	//Path from where the lines were loaded - used to save
+	string linesFilePath;
+	//Saves the updated list of drivers to the given file.
+	void saveDriverstoFile(ostream &file);
+	//Saves the updated list of lines to the given file path.
+	void saveLinestoFile(ostream &file);
 };
