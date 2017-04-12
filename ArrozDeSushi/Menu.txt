@@ -22,5 +22,5 @@
 2.2.5 Informação detalhada sobre um condutor
 2.3 Gerir tabelas com horarios de uma paragem (?)
 2.4 Gerir horario de uma linha (?)
-3.1 Carregar informação de ficheiros
-3.2 Escrever informação em ficheiros
+3.1 Carregar informação de ficheiros (Load)
+3.2 Escrever informação em ficheiros (Save)
