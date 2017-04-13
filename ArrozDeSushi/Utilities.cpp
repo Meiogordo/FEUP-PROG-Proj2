@@ -129,4 +129,13 @@ namespace Utilities {
 
 		return ss.str();
 	}
+	vector<string> minutesToHHMM(const vector<int>& minutes) {
+		vector<string> output;
+
+		for (int i = 0; i < minutes.size(); i++) {
+			output.push_back(minutesToHHMM(minutes[i]));
+		}
+
+		return output;
+	}
 }
