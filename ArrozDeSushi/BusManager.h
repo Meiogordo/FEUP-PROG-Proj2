@@ -55,6 +55,8 @@ public:
 	bool routeBetweenTwoStops();
 	//Checks if the user has unsaved changes - getter method for hasUnsavedChanges - setter is not necessary because the setting is internal and done through direct access
 	bool getIfHasUnsavedChanges();
+	//Shows the schedule for a certain stop (includes all lines that pass there)
+	bool showStopSchedule();
 
 private:
 	//Internal class data
@@ -88,7 +90,6 @@ private:
 	};
 	vector<driver> drivers; //vector of all the drivers
 	vector<line> lines; //vector of all the lines
-	//vector<schedule?> stopSchedules; //decide if needed - probably not, calculated whenever needed
 	//Schedule constants
 	//Service starts at 8:00
 	const unsigned int BUS_START_TIME_HOUR = 8;
@@ -96,6 +97,13 @@ private:
 	//Service ends at 20:00
 	const unsigned int BUS_END_TIME_HOUR = 20;
 	const unsigned int BUS_END_TIME_MINUTE = 0;
+	//To better describe a stop schedule
+	struct schedule {
+		int lineID; //The id of the line that the schedule is for
+		//The times at which the bus from a certain line passes through the stop
+		vector<string> positiveBusTimes; //In the positive direction (start to finish)
+		vector <string> negativeBusTimes; //In the negative direction (finish to start)
+	};
 	//Resets internal class data
 	void Reset();
 
@@ -104,13 +112,6 @@ private:
 	driver createDriverFromString(string rawline);
 	//Generate line from a line of text
 	line createLineFromString(string rawline);
-
-	//Generating schedules
-	void generateSchedule();
-	void generateSchedule(string stopname);
-
-	//Distributing drivers - For part 2
-	//void distributeDrivers();
 
 	//Internal class data handling - searches for ID and whatnot
 	//Searches for a certain stop, by name. Returns the vector of all the lines it belongs to
@@ -121,6 +122,13 @@ private:
 	int findDriverByID(int driverID);
 	//Searches for a certain stop in all of the lines and returns a vector of line IDs to which the given stop belongs
 	vector<int> findLinesinStop(string stopname);
+	//Generating schedules
+	//Generates the schedule for a stop for the specified lines
+	vector<schedule> generateStopSchedules(string stop, vector<int> lineIDs);
+	//Generates the schedule for a stop for the given lineID
+	schedule generateStopSchedules(string stop, int lineID);
+
+
 	//Other (TODO: Later on sort these into other categories if possible)
 
 	//These five are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else

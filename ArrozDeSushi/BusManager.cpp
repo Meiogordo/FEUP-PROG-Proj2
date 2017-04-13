@@ -691,7 +691,7 @@ bool BusManager::deleteDriver() {
 	cout << "Condutor encontrado, eliminando..." << endl;
 	drivers.erase(drivers.begin() + foundpos); //deleting the position of the vector results in deleting the line
 
-    //Updating hasUnsavedChanges
+	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
 
 	//process was concluded successfully, returning true
@@ -1173,7 +1173,6 @@ bool BusManager::routeBetweenTwoStops() {
 	//1: No common lines - impossible with what we know at least for now
 	//2: One common line - check best direction in the line
 	//3: Several common lines - check best direction in each line.. 
-
 	//Ideas - function to check best direction in line
 
 	string stop1, stop2; //variables to hold stop names
@@ -1253,6 +1252,95 @@ bool BusManager::routeBetweenTwoStops() {
 
 bool BusManager::getIfHasUnsavedChanges() {
 	return hasUnsavedChanges;
+}
+
+bool BusManager::showStopSchedule() {
+	string stop;
+
+	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
+	//If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
+	if (cin.rdbuf()->in_avail() > 0) {
+		cin.ignore(10000, '\n');
+	}
+
+	cout << "Qual a paragem cujo horário se irá imprimir?" << endl;
+	getline(cin, stop); //getline is used because the stop name can have spaces in it
+
+	//Checking to which lines the given stop belongs
+	vector<int> foundLinesStop = findLinesinStop(stop);
+
+	//Checking if the stop is in no line
+	if (foundLinesStop.empty()) {
+		cout << "A paragem dada não pertence a nenhuma das linhas guardadas.\nAbortando o processo de impressão de horário para uma paragem..." << endl;
+		return false;
+	}
+
+	//Getting schedules for the stop given and all the lines it belongs to
+	vector<schedule> schedules = generateStopSchedules(stop, foundLinesStop);
+
+	cout << "\n\n\n";
+
+	cout << "Horário na paragem " << stop << ":" << "\n\n";
+
+	for (int i = 0; i < schedules.size(); i++) {
+
+		//Positive direction - start to finish
+
+		//Gets the last stop name for the direction
+		string direction = lines[findLineByID(schedules[i].lineID)].stops[lines[findLineByID(schedules[i].lineID)].stops.size() - 1];
+
+		string fulldirection = "Sentido em direção a " + direction;
+		int spaces = fulldirection.length();
+
+		//Table formatting with |---|
+
+		//Line and direction print
+		cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
+		cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+
+		cout << right;
+
+		//Spacer
+		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+
+		//Times print
+		for (int j = 0; j < schedules[i].positiveBusTimes.size(); j++) {
+			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].positiveBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+		}
+
+		//Space between directions
+		cout << "\n";
+
+		//Negative direction - finish to start
+
+		//Gets the first stop name for the direction
+		direction = lines[findLineByID(schedules[i].lineID)].stops[0];
+
+		fulldirection = "Sentido em direção a " + direction;
+		spaces = fulldirection.length();
+
+		//Table formatting with |---|
+
+		//Line and direction print
+		cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
+		cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+
+		cout << right;
+
+		//Spacer
+		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+
+		//Times print
+		for (int j = 0; j < schedules[i].negativeBusTimes.size(); j++) {
+			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].negativeBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+		}
+
+
+	}
+
+	return true;
 }
 
 void BusManager::Reset() {
@@ -1389,6 +1477,90 @@ vector<int> BusManager::findLinesinStop(string stopname) {
 	}
 
 	//returning the matches found
+	return output;
+}
+
+vector<BusManager::schedule> BusManager::generateStopSchedules(string stop, vector<int> lineIDs) {
+	vector<schedule> output;
+
+	for (int i = 0; i < lineIDs.size(); i++) {
+		output.push_back(generateStopSchedules(stop, lineIDs[i]));
+	}
+
+	return output;
+}
+
+BusManager::schedule BusManager::generateStopSchedules(string stop, int lineID) {
+	//Function note: to simplify the math here everything is done as minutes and in the end it is converted to strings
+
+	schedule output;
+
+	//Get access to line from the line id
+	int lineIndex = findLineByID(lineID);
+
+	//Store the frequency to not have to keep accessing array memory
+	int frequency = lines[lineIndex].frequency;
+
+	//Get start and end times in minutes
+	unsigned int startTime = BUS_START_TIME_HOUR * 60 + BUS_START_TIME_MINUTE;
+	unsigned int endTime = BUS_END_TIME_HOUR * 60 + BUS_END_TIME_MINUTE;
+
+	//Get travel duration to the given stop from the start and from end
+	unsigned int travelTimeFromStart = 0;
+	for (int i = 0; i < lines[lineIndex].stops.size(); i++) {
+		if (lines[lineIndex].stops[i] == stop) {
+			//The stop was found
+			break;
+		}
+		else {
+			//Add travel time from this stop to the next one because this is not the one we want
+			travelTimeFromStart += lines[lineIndex].delaybetweenstops[i];
+			//There is no problem with getting out of bounds because at most the loop will break at stops.size which is one more than delaybetweenstops.size
+		}
+	}
+
+	unsigned int travelTimeFromEnd = 0;
+	for (int i = lines[lineIndex].stops.size() - 1; i >= 0; i--) {
+		if (lines[lineIndex].stops[i] == stop) {
+			//The stop was found
+			break;
+		}
+		else {
+			//Add travel time from this stop to the next one because this is not the one we want
+			travelTimeFromEnd += lines[lineIndex].delaybetweenstops[i - 1]; //-1 because delays have 1 less index than stops
+		}
+	}
+
+	//Complete travel time for the whole line - used to know if a bus will depart (has to arrive at one of the line endings before the endTime)
+	unsigned int fullTravelTime = 0;
+
+	for (int i = 0; i < lines[lineIndex].delaybetweenstops.size(); i++) {
+		fullTravelTime += lines[lineIndex].delaybetweenstops[i];
+	}
+
+	//Times at which the buses start the line (direction does not matter for this because we are considering that buses depart from start and end simultaneously)
+	vector<int> busDepartures;
+
+	//Filling the vector - the stop condition is if the bus cannot make it to one of the endings of the line, he does not depart
+	for (int currentTime = startTime; currentTime + fullTravelTime < endTime; currentTime += frequency) {
+		busDepartures.push_back(currentTime);
+	}
+
+	//Times at which the bus passes at the given stop
+	vector<int> positiveBusPassagesAtStop; //In the positive direction (start to finish)
+	vector<int> negativeBusPassagesAtStop; //In the negative direction (finish to start)
+
+	//Filling bus passages at the stop vector
+	for (int i = 0; i < busDepartures.size(); i++) {
+		positiveBusPassagesAtStop.push_back(busDepartures[i] + travelTimeFromStart);
+		negativeBusPassagesAtStop.push_back(busDepartures[i] + travelTimeFromEnd);
+	}
+
+	//Setting output schedule values
+	output.lineID = lineID;
+	output.positiveBusTimes = Utilities::minutesToHHMM(positiveBusPassagesAtStop);
+	output.negativeBusTimes = Utilities::minutesToHHMM(negativeBusPassagesAtStop);
+
 	return output;
 }
 
