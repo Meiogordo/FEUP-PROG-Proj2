@@ -1306,7 +1306,7 @@ bool BusManager::showStopSchedule() {
 
 		//Times print
 		for (int j = 0; j < schedules[i].positiveBusTimes.size(); j++) {
-			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].positiveBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+			cout << setfill(' ') << "|" << setw(spaces / 2 + 2) << schedules[i].positiveBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
 		}
 
 		//Space between directions
@@ -1325,6 +1325,107 @@ bool BusManager::showStopSchedule() {
 		//Line and direction print
 		cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
 		cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+
+		cout << right;
+
+		//Spacer
+		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+
+		//Times print
+		for (int j = 0; j < schedules[i].negativeBusTimes.size(); j++) {
+			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].negativeBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+		}
+
+		//Spacer between stops
+		cout << "\n";
+	}
+
+	return true;
+}
+
+bool BusManager::showLineSchedule() {
+	int lineIDtoprint;
+
+	cout << "Qual o ID da linha cujo horário se irá imprimir? ";
+	while (true) {
+		cin >> lineIDtoprint;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Getting the index in the lines vector from the ID
+	int lineIndex = findLineByID(lineIDtoprint);
+
+	//If the result from findLineByID is -1 it is because the given ID did not match any stored line
+	if (lineIndex == -1) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão do horário de uma linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Getting schedules for each stop - each index will be the schedule for the stop in the same index as the stops vector
+	vector<schedule> schedules;
+
+	//Filling the schedules vector
+	for (int i = 0; i < lines[lineIndex].stops.size(); i++) {
+		schedules.push_back(generateStopSchedules(lines[lineIndex].stops[i], lineIDtoprint));
+	}
+
+	cout << "\n\n\n";
+
+	//Printing schedules
+
+	//Because this is always the same line, the directions are always the same
+	string positivedirection = lines[lineIndex].stops[lines[lineIndex].stops.size() - 1]; //Last stop is the positive direction
+	string negativedirection = lines[lineIndex].stops[0]; //First stop is the negative direction
+	string positivedirectionfull = "Sentido em direção a " + positivedirection;
+	string negativefulldirection = "Sentido em direção a " + negativedirection;
+
+	cout << "Horário para a linha " << lineIDtoprint << ":" << "\n\n";
+
+	for (int i = 0; i < schedules.size(); i++) {
+
+		//Positive direction - start to finish
+		
+		int spaces = positivedirectionfull.length();
+
+		//Table formatting with |---|
+
+		//Stop and direction print
+		cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
+		cout << "|" << setw(spaces) << positivedirectionfull << "|" << endl;
+
+		cout << right;
+
+		//Spacer
+		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+
+		//Times print
+		for (int j = 0; j < schedules[i].positiveBusTimes.size(); j++) {
+			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].positiveBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+		}
+
+		//Space between directions
+		cout << "\n";
+
+		//Negative direction - finish to start
+		
+		spaces = negativefulldirection.length();
+
+		//Table formatting with |---|
+
+		//Line and direction print
+		cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
+		cout << "|" << setw(spaces) << negativefulldirection << "|" << endl;
 
 		cout << right;
 

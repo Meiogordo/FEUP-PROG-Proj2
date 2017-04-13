@@ -57,6 +57,8 @@ public:
 	bool getIfHasUnsavedChanges();
 	//Shows the schedule for a certain stop (includes all lines that pass there)
 	bool showStopSchedule();
+	//Shows the schedule for a certain line (all times for all stops in this certain line)
+	bool showLineSchedule();
 
 private:
 	//Internal class data
