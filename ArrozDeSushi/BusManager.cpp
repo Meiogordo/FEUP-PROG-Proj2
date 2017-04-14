@@ -1739,8 +1739,10 @@ BusManager::schedule BusManager::generateStopSchedules(string stop, int lineID) 
 	//Times at which the buses start the line (direction does not matter for this because we are considering that buses depart from start and end simultaneously)
 	vector<int> busDepartures;
 
-	//Filling the vector - the stop condition is if the bus cannot make it to one of the endings of the line, he does not depart
-	for (int currentTime = startTime; currentTime + fullTravelTime < endTime; currentTime += frequency) {
+	//Filling the vector 
+	// Discarded: the stop condition is if the bus cannot make it to one of the endings of the line, he does not depart
+	// Now using pure "if before the time of end of service" as a stop condition due to teacher suggestion
+	for (int currentTime = startTime; currentTime < endTime; currentTime += frequency) {
 		busDepartures.push_back(currentTime);
 	}
 
