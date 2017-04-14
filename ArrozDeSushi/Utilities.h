@@ -79,4 +79,6 @@ namespace Utilities {
 	string minutesToHHMM(int minutes);
 	//Overload of the above for vectors, in order to better organize code
 	vector<string> minutesToHHMM(const vector<int> &minutes);
+	//Rounds double to nearest integer (works with negative values)
+	int roundToInt(double input);
 }

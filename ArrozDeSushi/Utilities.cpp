@@ -129,6 +129,7 @@ namespace Utilities {
 
 		return ss.str();
 	}
+
 	vector<string> minutesToHHMM(const vector<int>& minutes) {
 		vector<string> output;
 
@@ -137,5 +138,9 @@ namespace Utilities {
 		}
 
 		return output;
+	}
+
+	int roundToInt(double input) {
+		return (input > 0.0) ? (input + 0.5) : (input - 0.5);
 	}
 }
