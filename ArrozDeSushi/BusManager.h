@@ -88,7 +88,9 @@ private:
 		int ID; //line ID
 		int frequency; //frequency of buses in the line (minutes)
 		vector<string> stops; //list of stop names
-		vector<int> delaybetweenstops; //times (in minutes) of travel between stops (TODO: Add note about indexes)
+		vector<int> delaybetweenstops; //times (in minutes) of travel between stops
+		//Note about indexes of delaysbetweenstops: This vector is 1 index smaller than the stops vector because this one is between stops, a sort of delta
+		//So, delaybetweenstops[0] is the time of travel between stops[0] and stops[1], delaybetweenstops[1] is the time of travel between stops[1] and stops[2], and so on and so forth
 	};
 	vector<driver> drivers; //vector of all the drivers
 	vector<line> lines; //vector of all the lines
