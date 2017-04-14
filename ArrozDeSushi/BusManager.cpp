@@ -1278,6 +1278,12 @@ bool BusManager::showStopSchedule() {
 	//Getting schedules for the stop given and all the lines it belongs to
 	vector<schedule> schedules = generateStopSchedules(stop, foundLinesStop);
 
+
+	//Variables for inside the loop (preventing redeclaring)
+	string direction;
+	string fulldirection;
+	int spaces, spacesdiv4, middlespace, spacediff;
+
 	cout << "\n\n\n";
 
 	cout << "Horário na paragem " << stop << ":" << "\n\n";
@@ -1286,59 +1292,102 @@ bool BusManager::showStopSchedule() {
 
 		//Positive direction - start to finish
 
-		//Gets the last stop name for the direction
-		string direction = lines[findLineByID(schedules[i].lineID)].stops[lines[findLineByID(schedules[i].lineID)].stops.size() - 1];
+		//If the schedule for this direction is empty it means that the stop is one of the endings in this certain line and thus it makes no sense to display the schedule
+		//So, only display it if the schedule isn't empty
 
-		string fulldirection = "Sentido em direção a " + direction;
-		int spaces = fulldirection.length();
+		if (!schedules[i].positiveBusTimes.empty()) {
 
-		//Table formatting with |---|
+			//Gets the last stop name for the direction
+			direction = lines[findLineByID(schedules[i].lineID)].stops[lines[findLineByID(schedules[i].lineID)].stops.size() - 1];
 
-		//Line and direction print
-		cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
-		cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+			fulldirection = "Sentido em direção a " + direction;
 
-		cout << right;
+			//Spacing definitions
+			spaces = fulldirection.length();
+			//Fixing the formatting because of uneven divisions
+			spacesdiv4 = Utilities::roundToInt((double)spaces / 4);
+			spacediff = Utilities::roundToInt((double)spacesdiv4 * 0.2);
+			if (spaces % 2 == 0)
+				middlespace = spacesdiv4 + 1;
+			else
+				middlespace = spacesdiv4 + 2;
 
-		//Spacer
-		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+			//Table formatting with |---|
+
+			//Spacer header top
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+			//Line and direction print
+			cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
+			cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+
+			cout << right;
+
+			//Spacer header bottom
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
 
 
-		//Times print
-		for (int j = 0; j < schedules[i].positiveBusTimes.size(); j++) {
-			cout << setfill(' ') << "|" << setw(spaces / 2 + 2) << schedules[i].positiveBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+			//Times print
+			for (int j = 0; j < schedules[i].positiveBusTimes.size() - 1; j += 2) {
+				cout << setfill(' ') << "|" << setw(spacesdiv4 + spacediff) << schedules[i].positiveBusTimes[j]
+					<< setw(middlespace - spacediff) << "!"
+					<< setw(spacesdiv4 + spacediff) << schedules[i].positiveBusTimes[j + 1]
+					<< setw(spacesdiv4 - spacediff) << "|" << endl;
+			}
+
+			//Space between directions
+			cout << "\n";
 		}
-
-		//Space between directions
-		cout << "\n";
 
 		//Negative direction - finish to start
 
-		//Gets the first stop name for the direction
-		direction = lines[findLineByID(schedules[i].lineID)].stops[0];
+		//If the schedule for this direction is empty it means that the stop is one of the endings in this certain line and thus it makes no sense to display the schedule
+		//So, only display it if the schedule isn't empty
 
-		fulldirection = "Sentido em direção a " + direction;
-		spaces = fulldirection.length();
+		if (!schedules[i].negativeBusTimes.empty()) {
+			//Gets the first stop name for the direction
+			direction = lines[findLineByID(schedules[i].lineID)].stops[0];
 
-		//Table formatting with |---|
+			fulldirection = "Sentido em direção a " + direction;
 
-		//Line and direction print
-		cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
-		cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+			//Spacing definitions
+			spaces = fulldirection.length();
+			//Fixing the formatting because of uneven divisions
+			spacesdiv4 = Utilities::roundToInt((double)spaces / 4);
+			spacediff = Utilities::roundToInt((double)spacesdiv4 * 0.2);
+			if (spaces % 2 == 0)
+				middlespace = spacesdiv4 + 1;
+			else
+				middlespace = spacesdiv4 + 2;
 
-		cout << right;
+			//Table formatting with |---|
 
-		//Spacer
-		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+			//Spacer header top
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+			//Line and direction print
+			cout << "|" << setfill(' ') << left << setw(spaces) << "Linha " + to_string(schedules[i].lineID) << "|" << endl;
+			cout << "|" << setw(spaces) << fulldirection << "|" << endl;
+
+			cout << right;
+
+			//Spacer header bottom
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
 
 
-		//Times print
-		for (int j = 0; j < schedules[i].negativeBusTimes.size(); j++) {
-			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].negativeBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+			//Times print
+			for (int j = 0; j < schedules[i].negativeBusTimes.size() - 1; j += 2) {
+				cout << setfill(' ') << "|" << setw(spacesdiv4 + spacediff) << schedules[i].negativeBusTimes[j]
+					<< setw(middlespace - spacediff) << "!"
+					<< setw(spacesdiv4 + spacediff) << schedules[i].negativeBusTimes[j + 1]
+					<< setw(spacesdiv4 - spacediff) << "|" << endl;
+			}
+
+			//Spacer between lines
+			cout << "\n";
 		}
 
-		//Spacer between stops
-		cout << "\n";
+
 	}
 
 	return true;
@@ -1386,56 +1435,104 @@ bool BusManager::showLineSchedule() {
 	//Because this is always the same line, the directions are always the same
 	string positivedirection = lines[lineIndex].stops[lines[lineIndex].stops.size() - 1]; //Last stop is the positive direction
 	string negativedirection = lines[lineIndex].stops[0]; //First stop is the negative direction
-	string positivedirectionfull = "Sentido em direção a " + positivedirection;
+	string positivefulldirection = "Sentido em direção a " + positivedirection;
 	string negativefulldirection = "Sentido em direção a " + negativedirection;
+	// to use inside the loop - preventing redeclaring
+	int spaces;
+	int spacesdiv4;
+	int middlespace;
+	int spacediff;
 
 	cout << "Horário para a linha " << lineIDtoprint << ":" << "\n\n";
 
 	for (int i = 0; i < schedules.size(); i++) {
 
 		//Positive direction - start to finish
-		
-		int spaces = positivedirectionfull.length();
 
-		//Table formatting with |---|
+		//If the schedule for this direction is empty it means that the stop is one of the endings and thus it makes no sense to display the schedule
+		//So, only display it if the schedule isn't empty
 
-		//Stop and direction print
-		cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
-		cout << "|" << setw(spaces) << positivedirectionfull << "|" << endl;
+		if (!schedules[i].positiveBusTimes.empty()) {
 
-		cout << right;
+			//Spacing definitions
+			spaces = positivefulldirection.length();
+			//Fixing the formatting because of uneven divisions
+			spacesdiv4 = Utilities::roundToInt((double)spaces / 4);
+			spacediff = Utilities::roundToInt((double)spacesdiv4 * 0.2);
+			if (spaces % 2 == 0)
+				middlespace = spacesdiv4 + 1;
+			else
+				middlespace = spacesdiv4 + 2;
 
-		//Spacer
-		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
 
+			//Table formatting with |---|
 
-		//Times print
-		for (int j = 0; j < schedules[i].positiveBusTimes.size(); j++) {
-			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].positiveBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+			//Spacer header top
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+			//Stop and direction print
+			cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
+			cout << "|" << setw(spaces) << positivefulldirection << "|" << endl;
+
+			cout << right;
+
+			//Spacer header bottom
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+			//Times print
+			for (int j = 0; j < schedules[i].positiveBusTimes.size() - 1; j += 2) {
+				cout << setfill(' ') << "|" << setw(spacesdiv4 + spacediff) << schedules[i].positiveBusTimes[j]
+					<< setw(middlespace - spacediff) << "!"
+					<< setw(spacesdiv4 + spacediff) << schedules[i].positiveBusTimes[j + 1]
+					<< setw(spacesdiv4 - spacediff) << "|" << endl;
+			}
+
+			//Space between directions
+			cout << "\n";
 		}
 
-		//Space between directions
-		cout << "\n";
-
 		//Negative direction - finish to start
-		
-		spaces = negativefulldirection.length();
 
-		//Table formatting with |---|
+		//If the schedule for this direction is empty it means that the stop is one of the endings and thus it makes no sense to display the schedule
+		//So, only display it if the schedule isn't empty
+		if (!schedules[i].negativeBusTimes.empty()) {
 
-		//Line and direction print
-		cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
-		cout << "|" << setw(spaces) << negativefulldirection << "|" << endl;
+			//Spacing definitions
+			spaces = negativefulldirection.length();
+			//Fixing the formatting because of uneven divisions
+			spacesdiv4 = Utilities::roundToInt((double)spaces / 4);
+			spacediff = Utilities::roundToInt((double)spacesdiv4 * 0.2);
+			if (spaces % 2 == 0)
+				middlespace = spacesdiv4 + 1;
+			else
+				middlespace = spacesdiv4 + 2;
 
-		cout << right;
+			//Table formatting with |---|
 
-		//Spacer
-		cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+			//Spacer header top
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
+
+			//Line and direction print
+			cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
+			cout << "|" << setw(spaces) << negativefulldirection << "|" << endl;
+
+			cout << right;
+
+			//Spacer header bottom
+			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
 
 
-		//Times print
-		for (int j = 0; j < schedules[i].negativeBusTimes.size(); j++) {
-			cout << setfill(' ') << "|" << setw(spaces / 2 + 3) << schedules[i].negativeBusTimes[j] << setw(spaces / 2 - 1) << "|" << endl;
+			//Times print
+			for (int j = 0; j < schedules[i].negativeBusTimes.size() - 1; j += 2) {
+				cout << setfill(' ') << "|" << setw(spacesdiv4 + spacediff) << schedules[i].negativeBusTimes[j]
+					<< setw(middlespace - spacediff) << "!"
+					<< setw(spacesdiv4 + spacediff) << schedules[i].negativeBusTimes[j + 1]
+					<< setw(spacesdiv4 - spacediff) << "|" << endl;
+			}
+
+
+			//Spacer between stops
+			cout << "\n";
 		}
 
 
@@ -1659,8 +1756,24 @@ BusManager::schedule BusManager::generateStopSchedules(string stop, int lineID) 
 
 	//Setting output schedule values
 	output.lineID = lineID;
-	output.positiveBusTimes = Utilities::minutesToHHMM(positiveBusPassagesAtStop);
-	output.negativeBusTimes = Utilities::minutesToHHMM(negativeBusPassagesAtStop);
+
+	//Dealing with the stop being the end or the beginning of the line
+
+	//If the stop is the end, it makes no sense to show the positive timetable
+
+	if (stop == lines[lineIndex].stops[lines[lineIndex].stops.size() - 1])
+		output.positiveBusTimes = vector<string>();
+	else
+		output.positiveBusTimes = Utilities::minutesToHHMM(positiveBusPassagesAtStop);
+
+	//Likewise, if the stop is the beginning, it makes no sense to show the negative timetable
+
+	if (stop == lines[lineIndex].stops[0])
+		output.negativeBusTimes = vector<string>();
+	else
+		output.negativeBusTimes = Utilities::minutesToHHMM(negativeBusPassagesAtStop);
+
+	//TODO remove from calculation if it is meaningless as well
 
 	return output;
 }
