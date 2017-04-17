@@ -1541,6 +1541,61 @@ bool BusManager::showLineSchedule() {
 	return true;
 }
 
+bool BusManager::getDriversNeeded() {
+	unsigned int lineID = 0;
+
+	cout << "Qual o ID da linha para a qual se irá calcular o número de condutores necessários? ";
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Getting the index in the lines vector from the ID
+	int lineIndex = findLineByID(lineID);
+
+	//If the result from findLineByID is -1 it is because the given ID did not match any stored line
+	if (lineIndex == -1) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de cálculo do número de condutores necessários para uma linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	unsigned int drivershiftsize = 0;
+
+	cout << "Qual o tamanho do turno dos condutores que irão trabalhar nesta linha (em horas)? ";
+	while (true) {
+		cin >> drivershiftsize;
+		if (cin.fail()) {
+			cout << "Tamanho de turno inválido, por favor introduza um tamanho de turno válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Calculating the number of drivers
+	int ndriversneeded = calculateDriversNeeded(lines[lineIndex].delaybetweenstops, lines[lineIndex].frequency, drivershiftsize);
+
+	//Output
+	cout << "\n\n";
+	cout << "O número de condutores necessários para assegurar o serviço na linha " << lineID 
+		<< ", considerando condutores com turnos fixos de " << drivershiftsize << " horas é " << ndriversneeded << endl;
+
+	return true;
+}
+
 void BusManager::Reset() {
 	//Deleting drivers
 	drivers.erase(drivers.begin(), drivers.end());
@@ -1862,8 +1917,8 @@ int BusManager::calculateDriversNeeded(const vector<int>& travelTimes, int frequ
 	//Since the line has 2 directions and they are being run simultaneously
 	nTravels *= 2;
 
-	//Total minutes of travelling in one day - unsigned long to make sure that it is big enough, just in case
-	unsigned long int totalTravelTimeDay = nTravels * totalTravelTimeOneWay;
+	//Total minutes of travelling in one day - long to make sure that it is big enough, just in case
+	long int totalTravelTimeDay = nTravels * totalTravelTimeOneWay;
 
 	//Calculating the number of drivers needed
 
@@ -1871,12 +1926,32 @@ int BusManager::calculateDriversNeeded(const vector<int>& travelTimes, int frequ
 	int currentDriverTime = shiftsize;
 
 	//The remaining line time (if last driver did not finish at the end of the line)
-	int remainingLineTime = 0;
+	unsigned int remainingLineTime = 0;
 
+	//We will be subtracting from totalTravelTimeDay
 	while (totalTravelTimeDay > 0) {
 
+		//Resetting remaining line time because we now have a new driver
+		remainingLineTime = 0;
+
 		while (currentDriverTime > 0) {
-		
+			
+			//Going through the line
+			for (int i = 0; i < travelTimes.size(); i++){
+				//If the driver can go until the next stop then we substract the time (if a > b means if a - b > 0)
+				if (currentDriverTime > travelTimes[i]) {
+					currentDriverTime -= travelTimes[i]; //Subtracting from the driver time
+					totalTravelTimeDay -= travelTimes[i]; //Subtracting from the day total
+				}
+				else {
+					//If the driver cannot go until the next stop then a switch has happened and we will save the time to subtract from the next driver
+					remainingLineTime += travelTimes[i];
+					//In case the driver has some time left over, to break the while loop when the for loop ends and to make sure that the driver really stops driving
+					//Otherwise the driver might've not gone between two stops very far apart but might've gone between two stops very close, straight after...
+					currentDriverTime = 0;
+				}
+			}
+
 		}
 
 		//This driver is done
@@ -1887,6 +1962,7 @@ int BusManager::calculateDriversNeeded(const vector<int>& travelTimes, int frequ
 
 		//Subtracts remaining line time (last driver did not finish at the end of the line)
 		currentDriverTime -= remainingLineTime;
+		totalTravelTimeDay -= remainingLineTime;
 	}
 
 	return ndrivers;

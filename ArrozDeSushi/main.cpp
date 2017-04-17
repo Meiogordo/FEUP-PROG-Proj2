@@ -219,11 +219,24 @@ bool callFunctions(string &id, BusManager &bm) {
 		return true;
 	}
 
+	//Route between two given stops
 	if (id == "1.6") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
 		bm.routeBetweenTwoStops();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
+	//Calculate drivers needed for a certain line
+	if (id == "1.7") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bm.getDriversNeeded();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -375,7 +388,7 @@ bool callFunctions(string &id, BusManager &bm) {
 	}
 
 	//Not yet implemented stuff
-	if (id == "1.7") {
+	if (id == "unimplemented option ID") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
