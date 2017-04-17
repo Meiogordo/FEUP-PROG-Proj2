@@ -59,6 +59,8 @@ public:
 	bool showStopSchedule();
 	//Shows the schedule for a certain line (all times for all stops in this certain line)
 	bool showLineSchedule();
+	//Gets the amount of drivers needed for a specific line (assuming fixed shift sizes)
+	bool getDriversNeeded();
 
 private:
 	//Internal class data
@@ -135,7 +137,9 @@ private:
 
 	//Other (TODO: Later on sort these into other categories if possible)
 
-	//These five are private because there is no need to access them externally, modify and print without parameters should be used for modification and printing and nothing else
+	//These seven are private because there is no need to access them externally
+
+	//Modify and print without parameters should be used for modification and printing and nothing else
 	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
 	bool modifyLine(unsigned int choice, int pos);
 	//Modify driver helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
@@ -148,6 +152,8 @@ private:
 	vector<vector <int>> calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines);
 	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
 	vector<int> calculateStopsForEachDirection(string startStop, string endStop, int commonLine);
+	//Calculates the amount of drivers needed for a specific line - represented by its travel times (passed directly to avoid having to call findLinesByID) (assuming fixed shift size)
+	int calculateDriversNeeded(const vector<int> &travelTimes, int frequency, int shiftsize);
 
 	//Data ouput helpers - private because they only need to be accessed by Save()
 	//Path from where the drivers were loaded - used to save

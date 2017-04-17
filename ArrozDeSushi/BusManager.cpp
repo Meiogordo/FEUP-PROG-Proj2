@@ -1829,6 +1829,69 @@ vector<int> BusManager::calculateStopsForEachDirection(string startStop, string 
 	return output;
 }
 
+int BusManager::calculateDriversNeeded(const vector<int>& travelTimes, int frequency, int shiftsize) {
+
+	//Note: To simplify internal calculations everything is done in minutes
+	//As such, converting shiftsize to minutes by multiplying by 60
+	shiftsize *= 60;
+
+	//number of drivers needed
+	unsigned int ndrivers = 0;
+
+	//total travel time for the line in minutes (one iteration of the line, start to end with no reverse trip)
+	unsigned int totalTravelTimeOneWay = 0;
+
+	for (int i = 0; i < travelTimes.size(); i++) {
+		totalTravelTimeOneWay += travelTimes[i];
+	}
+
+	//Calculating number of times that the line is traveled in one day
+
+	//Start time of the service in minutes
+	unsigned int startTime = BUS_START_TIME_HOUR * 60 + BUS_START_TIME_MINUTE;
+	//End time of the service in minutes
+	unsigned int endTime = BUS_END_TIME_HOUR * 60 + BUS_END_TIME_MINUTE;
+
+	unsigned int nTravels = 0;
+
+	//Runs through the schedule by summing frequency to determine number of buses that will start the line
+	for (int currentTime = startTime; currentTime < endTime; currentTime += frequency) {
+		nTravels++;
+	}
+
+	//Since the line has 2 directions and they are being run simultaneously
+	nTravels *= 2;
+
+	//Total minutes of travelling in one day - unsigned long to make sure that it is big enough, just in case
+	unsigned long int totalTravelTimeDay = nTravels * totalTravelTimeOneWay;
+
+	//Calculating the number of drivers needed
+
+	//The time that the driver is available to work for
+	int currentDriverTime = shiftsize;
+
+	//The remaining line time (if last driver did not finish at the end of the line)
+	int remainingLineTime = 0;
+
+	while (totalTravelTimeDay > 0) {
+
+		while (currentDriverTime > 0) {
+		
+		}
+
+		//This driver is done
+		//Add one to the counter of drivers needed
+		ndrivers++;
+		//Reset driver time because a new driver is taking over
+		currentDriverTime = shiftsize;
+
+		//Subtracts remaining line time (last driver did not finish at the end of the line)
+		currentDriverTime -= remainingLineTime;
+	}
+
+	return ndrivers;
+}
+
 void BusManager::saveDriverstoFile(ostream &file) {
 
 	//Text lines are supposed to be in the following format:
