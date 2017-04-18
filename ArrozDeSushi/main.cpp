@@ -19,9 +19,10 @@ bool callFunctions(string &id, BusManager &bm);
 
 int main() {
 
-	//Enabling portuguese characters on the console - for me this doesn't work so I just comment out and use locale for now
-	//enablePTcharacters();
-	setlocale(LC_ALL, "Portuguese");
+	//Enabling portuguese characters on the console - function defined above
+	enablePTcharacters();
+	//This should work in theory, if it does not work, which was my case, please comment out the function and uncomment the next line
+	//setlocale(LC_ALL, "Portuguese");
 
 	//Tests here
 

@@ -92,7 +92,7 @@ namespace Utilities {
 
 	void clearScreen() {
 		//system("cls"); //temporary - will move to something else later on due to not being cross platform and having security issues
-		cout << string(1000, '\n'); //this is also not the best solution due to being a bit laggy but is the easiest to implement and 100% cross platform while avoiding system calls
+		cout << string(800, '\n'); //this is also not the best solution due to being a bit laggy but is the easiest to implement and 100% cross platform while avoiding system calls
 	}
 
 	void pause() {
