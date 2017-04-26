@@ -9,8 +9,30 @@ using namespace std;
 
 class Driver {
 public:
-	Driver();
+	
+
+	Driver(unsigned int ID, string name, unsigned int shiftsize, unsigned int weeklyhourlimit, unsigned int minresttime, vector<Shift> shifts);
 	~Driver();
+
+	//setters
+
+	unsigned int setID(unsigned int ID);
+	string setName(string name);
+	unsigned int setShiftSize(unsigned int shiftsize);
+	unsigned int setWeeklyHourLimit(unsigned int weeklyhourlimit);
+	unsigned int setMinRestTime(unsigned int minresttime);
+	vector<Shift> setShifts(vector<Shift> shifts);
+
+
+	//getters
+
+	unsigned int getID(); 
+	string getName(); 
+	unsigned int getShiftSize();
+	unsigned int getWeeklyHourLimit();
+	unsigned int getMinRestTime(); 
+	vector<Shift> getShifts();
+
 private:
 	unsigned int ID; //the driver's unique ID
 	string name; //the driver's name

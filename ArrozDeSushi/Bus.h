@@ -16,21 +16,23 @@
 using namespace std;
 
 class Bus {
-private:
-	unsigned int orderInLine;
-	unsigned int driverID;
-	unsigned int lineID;
-	vector<Shift> schedule;
 public:
-	Bus(unsigned int id, unsigned int driver, unsigned int line);
-	// get methods
+	Bus(unsigned int ID, unsigned int driverID, unsigned int lineID);
+	~Bus();
+	//getters
 	unsigned int getBusOrderInLine() const;
 	unsigned int getDriverID() const;
 	unsigned int getLineID() const;
 	vector<Shift> getSchedule() const;
-	// set methods
+	//setters
 	unsigned int setDriverID(unsigned int driverID);
 	unsigned int setLineID(unsigned int lineID);
 	// other methods
+private:
+	unsigned int ID; //not sure about this
+	unsigned int orderInLine;
+	unsigned int driverID;
+	unsigned int lineID;
+	vector<Shift> schedule;
 
 };
