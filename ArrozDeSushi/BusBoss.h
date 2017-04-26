@@ -1,18 +1,19 @@
 #pragma once
-#include <string>
-#include <vector>
+
 #include <iostream>
-#include <fstream>
-#include <iomanip>
+#include <string>
+#include <map>
+
 #include "Utilities.h"
+#include "Line.h"
+#include "Driver.h"
+
 using namespace std;
 
-class BusManager {
+class BusBoss {
 public:
-	//Constructor manages file input while also checking if the file path is valid - Lies lol, it's empty
-	BusManager();
-	~BusManager();
-
+	BusBoss();
+	~BusBoss();
 	//Data alteration - public so that the functions can be called from outside the class
 	//Adds a new line, returns false if the line already exists (same ID)
 	bool createNewLine();
@@ -74,7 +75,7 @@ private:
 		unsigned int lineID; //ID of the line to which the driver was assigned
 	};
 	//Vector to give a string that represents the week day from the weekday variable in a shift
-	const vector<string> weekdays = {"Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo"};
+	const vector<string> weekdays = { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo" };
 	//Describing a driver
 	struct driver {
 		int ID; //the driver's unique ID
@@ -91,13 +92,13 @@ private:
 		int frequency; //frequency of buses in the line (minutes)
 		vector<string> stops; //list of stop names
 		vector<int> delaybetweenstops; //times (in minutes) of travel between stops
-		//Note about indexes of delaysbetweenstops: This vector is 1 index smaller than the stops vector because this one is between stops, a sort of delta
-		//So, delaybetweenstops[0] is the time of travel between stops[0] and stops[1], delaybetweenstops[1] is the time of travel between stops[1] and stops[2], and so on and so forth
+									   //Note about indexes of delaysbetweenstops: This vector is 1 index smaller than the stops vector because this one is between stops, a sort of delta
+									   //So, delaybetweenstops[0] is the time of travel between stops[0] and stops[1], delaybetweenstops[1] is the time of travel between stops[1] and stops[2], and so on and so forth
 	};
 	vector<driver> drivers; //vector of all the drivers
 	vector<line> lines; //vector of all the lines
-	//Schedule constants
-	//Service starts at 8:00
+						//Schedule constants
+						//Service starts at 8:00
 	const unsigned int BUS_START_TIME_HOUR = 8;
 	const unsigned int BUS_START_TIME_MINUTE = 00;
 	//Service ends at 20:00
@@ -106,7 +107,7 @@ private:
 	//To better describe a stop schedule
 	struct schedule {
 		int lineID; //The id of the line that the schedule is for
-		//The times at which the bus from a certain line passes through the stop
+					//The times at which the bus from a certain line passes through the stop
 		vector<string> positiveBusTimes; //In the positive direction (start to finish)
 		vector <string> negativeBusTimes; //In the negative direction (finish to start)
 	};
@@ -167,4 +168,9 @@ private:
 	//Also for data output but more of a Quality of Life tweak
 	//Registers if the user has unsaved changes: to warn when opening a new file or exiting the program without saving before
 	bool hasUnsavedChanges = false;
+private:
+	string name;
+	map<int, Driver> drivers;
+	map<int, Line> lines;
 };
+
