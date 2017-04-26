@@ -9,14 +9,14 @@ BusBoss::~BusBoss() {
 }
 
 bool BusBoss::createNewLine() {
-	int newID;
+	unsigned int newID;
 
 	cout << "Introduza o ID da nova linha: ";
 
 	while (true) {
 		cin >> newID;
 		if (cin.fail()) {
-			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -37,12 +37,12 @@ bool BusBoss::createNewLine() {
 
 	//Getting input from user about the line
 
-	int frequency; //frequency of buses in the line (minutes)
+	unsigned int frequency; //frequency of buses in the line (minutes)
 	cout << "Qual a frequência de passagem de autocarros na linha (em minutos)? ";
 	while (true) {
 		cin >> frequency;
 		if (cin.fail()) {
-			cout << "Frequência inválida, por favor introduza um número válido (inteiro)." << endl;
+			cout << "Frequência inválida, por favor introduza um número válido (inteiro positivo)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -68,7 +68,7 @@ bool BusBoss::createNewLine() {
 		Utilities::trimString(stops[i]);
 	}
 
-	vector<int> delaybetweenstops; //times (in minutes) of travel between stops
+	vector<unsigned int> delaybetweenstops; //times (in minutes) of travel between stops
 	int tempdelay; //Temporary variable to hold the input to later on push back
 	cout << "Introduza os tempos de viagem entre as paragens (em minutos):" << endl;
 	//We are going to go through the stops vector because the delaybetweenstops vector can only, at most, have its size-1
@@ -107,7 +107,7 @@ bool BusBoss::createNewLine() {
 }
 
 bool BusBoss::createNewDriver() {
-	int newID;
+	unsigned int newID;
 
 	cout << "Introduza o ID do novo condutor: ";
 
@@ -125,15 +125,13 @@ bool BusBoss::createNewDriver() {
 		}
 	}
 
-	//If the given driver ID results in a match from the drivers vector by searching by ID, then that driver already exists
-	//There are no duplicate IDs so we stop the driver creation
-	if (findDriverByID(newID) != -1) {
+	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool driverExists = (drivers.count(newID) > 0);
+	if (driverExists) {
 		cout << "O ID dado já existe. Dois condutores diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de condutor..." << endl;
 		return false;
 	}
-
-	//Creating the driver we will add
-	driver newDriver;
 
 	//Getting input from user about the driver
 
@@ -145,7 +143,7 @@ bool BusBoss::createNewDriver() {
 	getline(cin, name); //using getline because the driver's name can have spaces
 	Utilities::trimString(name); //trimming unnecessary whitespace from the driver name
 
-	int shiftsize; //the size of the driver's shift - number of hours he can work per day
+	unsigned int shiftsize; //the size of the driver's shift - number of hours he can work per day
 	cout << "Qual o número máximo de horas que o condutor pode trabalhar por dia?" << endl;
 
 	while (true) {
@@ -162,7 +160,7 @@ bool BusBoss::createNewDriver() {
 		}
 	}
 
-	int weeklyhourlimit; //number of hours the driver can work per day
+	unsigned int weeklyhourlimit; //number of hours the driver can work per day
 	cout << "Qual o número máximo de horas que o condutor pode trabalhar por semana?" << endl;
 
 	while (true) {
@@ -179,7 +177,7 @@ bool BusBoss::createNewDriver() {
 		}
 	}
 
-	int minresttime; //minimum rest time between shifts (hours)
+	unsigned int minresttime; //minimum rest time between shifts (hours)
 	cout << "Qual o tempo mínimo de descanso entre turnos para o condutor?" << endl;
 
 	while (true) {
@@ -196,18 +194,13 @@ bool BusBoss::createNewDriver() {
 		}
 	}
 
-	//Assigning values to driver
-	newDriver.ID = newID;
-	newDriver.name = name;
-	newDriver.shiftsize = shiftsize;
-	newDriver.weeklyhourlimit = weeklyhourlimit;
-	newDriver.minresttime = minresttime;
-	//Data not gotten from string from user input
-	newDriver.shifts = vector<shift>(); //Empty vector of shifts
-	newDriver.available = true; //All drivers are available at first
 
-								//Pushing the newly created driver into the drivers vector
-	drivers.push_back(newDriver);
+	//Creating the driver we will add - shifts vector is added as empty
+	Driver newDriver(newID, name, shiftsize, weeklyhourlimit, minresttime, vector<Shift>());
+
+
+	//Adding the newly created driver into the drivers map
+	drivers.emplace(newID, newDriver);
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;

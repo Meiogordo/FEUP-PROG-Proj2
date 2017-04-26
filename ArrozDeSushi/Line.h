@@ -7,7 +7,7 @@ using namespace std;
 
 class Line {
 public:
-	Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<int> travelTimesBetweenStops);
+	Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<unsigned int> travelTimesBetweenStops);
 	~Line();
 private:
 	//Missing frequency and travel times between stops???
@@ -15,6 +15,6 @@ private:
 	unsigned int ID;
 	unsigned int frequency;
 	vector<string> stops;
-	vector<int> travelTimesBetweenStops;
+	vector<unsigned int> travelTimesBetweenStops;
 };
 
