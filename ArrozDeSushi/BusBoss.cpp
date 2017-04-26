@@ -28,8 +28,12 @@ bool BusBoss::createNewLine() {
 	}
 
 	//Checking if a line with the given ID already exists (number of elements bigger than 0)
-	//Because we are using a map .count will always be either 0 or 1
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool lineExists = (lines.count(newID) > 0);
+	if (lineExists) {
+		cout << "O ID dado já existe. Duas linhas diferentes não podem ter o mesmo ID.\nAbortando o processo de adição de linha..." << endl;
+		return false;
+	}
 
 	//Getting input from user about the line
 
@@ -83,6 +87,7 @@ bool BusBoss::createNewLine() {
 				//if cin didn't fail we have a good input so we break the loop
 				break;
 			}
+			Utilities::clearScreen();
 		}
 		//when input is an int, input is successful and is now pushed back into the vector
 		delaybetweenstops.push_back(tempdelay);
@@ -90,6 +95,9 @@ bool BusBoss::createNewLine() {
 
 	//Creating the line we will add
 	Line newLine(newID, frequency, stops, delaybetweenstops);
+
+	//Adding the line to the lines map
+	lines.emplace(newID, newLine);
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
