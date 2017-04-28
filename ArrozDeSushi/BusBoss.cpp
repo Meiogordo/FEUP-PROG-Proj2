@@ -227,13 +227,14 @@ bool BusBoss::modifyLine() {
 		}
 	}
 
-	//Finding the position of the line in the lines vector
-	int foundpos = findLineByID(IDtomodify);
-	//If foundpos is -1 it is because the given ID did not match any stored line
-	if (foundpos == -1) {
+	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(IDtomodify) > 0);
+	if (lineExists) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de modificação de linha..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
+
 
 	//Clearing screen
 	Utilities::clearScreen();
@@ -289,7 +290,7 @@ bool BusBoss::modifyLine() {
 	}
 
 	//Calling modifier function based on choice
-	modifyLine(choice, foundpos);
+	modifyLine(choice, IDtomodify);
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
@@ -298,7 +299,7 @@ bool BusBoss::modifyLine() {
 	return true;
 }
 
-bool BusBoss::modifyLine(unsigned int choice, int pos) {
+bool BusBoss::modifyLine(unsigned int choice, int IDtomodify) {
 
 	switch (choice) {
 	case 1:
@@ -320,7 +321,7 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 			}
 		}
 		//Changing frequency
-		lines[pos].frequency = newFreq;
+		lines[IDtomodify].setFrequency(newFreq);
 		break;
 	}
 	case 2:
@@ -329,13 +330,16 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 		unsigned int posToChange;
 		string newStopName = "";
 
+		//Getting stops vector
+		vector<string> stops = lines[IDtomodify].getStops();
+
 		cout << "Qual a paragem a alterar?" << endl;
 		//Printing options
-		Utilities::printVector(lines[pos].stops);
+		Utilities::printVector(stops);
 		cout << ">> ";
 		while (true) {
 			cin >> posToChange;
-			if (cin.fail() || posToChange >= lines[pos].stops.size()) {
+			if (cin.fail() || posToChange >= stops.size()) {
 				//Clearing error flag and cin buffer
 				cin.clear();
 				cin.ignore(100000, '\n');
@@ -344,7 +348,7 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << lines[pos].stops.size() - 1 << ")." << endl;
 				cout << "Qual a paragem a alterar?" << endl;
 				//Printing options
-				Utilities::printVector(lines[pos].stops);
+				Utilities::printVector(stops);
 				cout << ">> ";
 			}
 			else {
@@ -361,8 +365,12 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 		getline(cin, newStopName); //using getline instead of cin because a stop name can have spaces
 		Utilities::trimString(newStopName); //trimming unnecessary whitespace
 
-											//Changing the stop name
-		lines[pos].stops[posToChange] = newStopName;
+		//Changing the stop name in local vector
+		stops[posToChange] = newStopName;
+
+		//Changing the line object
+		lines[IDtomodify].setStops(stops);
+
 		break;
 	}
 	case 3:
@@ -371,16 +379,21 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 		unsigned int posToChange;
 		unsigned int newDelay = 0;
 
+		//Getting times vector
+		vector<int> times = lines[IDtomodify].getTravelTimesBetweenStops();
+		//Getting stops vector
+		vector<string> stops = lines[IDtomodify].getStops();
+
 		cout << "Qual o tempo de viagem a alterar?" << endl;
 		//Printing options
-		for (int i = 0; i < lines[pos].stops.size() - 1; i++) {
-			cout << i << ": " << "Tempo de viagem entre " << lines[pos].stops[i] << " e " << lines[pos].stops[i + 1] << ": " << lines[pos].delaybetweenstops[i] << " minutos." << endl;
+		for (int i = 0; i < stops.size() - 1; i++) {
+			cout << i << ": " << "Tempo de viagem entre " << stops[i] << " e " << stops[i + 1] << ": " << times[i] << " minutos." << endl;
 		}
 		cout << ">> ";
 
 		while (true) {
 			cin >> posToChange;
-			if (cin.fail() || posToChange >= lines[pos].delaybetweenstops.size()) {
+			if (cin.fail() || posToChange >= times.size()) {
 				//Clearing error flag and cin buffer
 				cin.clear();
 				cin.ignore(100000, '\n');
@@ -389,8 +402,8 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << lines[pos].delaybetweenstops.size() - 1 << ")." << endl;
 				cout << "Qual o tempo de viagem a alterar?" << endl;
 				//Printing options
-				for (int i = 0; i < lines[pos].stops.size() - 1; i++) {
-					cout << i << ": " << "Tempo de viagem entre " << lines[pos].stops[i] << " e " << lines[pos].stops[i + 1] << ": " << lines[pos].delaybetweenstops[i] << " minutos." << endl;
+				for (int i = 0; i < stops.size() - 1; i++) {
+					cout << i << ": " << "Tempo de viagem entre " << stops[i] << " e " << stops[i + 1] << ": " << times[i] << " minutos." << endl;
 				}
 				cout << ">> ";
 			}
@@ -416,7 +429,12 @@ bool BusBoss::modifyLine(unsigned int choice, int pos) {
 			}
 		}
 
-		lines[pos].delaybetweenstops[posToChange] = newDelay;
+		//Changing time vector locally
+		times[posToChange] = newDelay;
+
+		//Changing times in object
+		lines[IDtomodify].setTravelTimesBetweenStops(times);
+
 		break;
 	}
 	default:
