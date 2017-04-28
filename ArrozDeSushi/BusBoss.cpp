@@ -464,12 +464,12 @@ bool BusBoss::modifyDriver() {
 		}
 	}
 
-	//Finding the position of the driver in the drivers vector
-	int foundpos = findDriverByID(IDtomodify);
-	//If foundpos is -1 it is because the given ID did not match any stored driver
-	if (foundpos == -1) {
+	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool driverExists = (drivers.count(IDtomodify) > 0);
+	if (driverExists) {
 		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de modificação de condutor..." << endl;
-		return false; //returning false since the process was not concluded successfully
+		return false;
 	}
 
 	//Clearing screen
@@ -528,7 +528,7 @@ bool BusBoss::modifyDriver() {
 	}
 
 	//Calling modifier function based on choice
-	modifyDriver(choice, foundpos);
+	modifyDriver(choice, IDtomodify);
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
@@ -537,7 +537,7 @@ bool BusBoss::modifyDriver() {
 	return true;
 }
 
-bool BusBoss::modifyDriver(unsigned int choice, int pos) {
+bool BusBoss::modifyDriver(unsigned int choice, int IDtomodify) {
 
 	switch (choice) {
 	case 1:
@@ -550,7 +550,7 @@ bool BusBoss::modifyDriver(unsigned int choice, int pos) {
 		getline(cin, newName);
 
 		//Changing name
-		drivers[pos].name = newName;
+		drivers[IDtomodify].setName(newName);
 		break;
 	}
 	case 2:
@@ -574,7 +574,7 @@ bool BusBoss::modifyDriver(unsigned int choice, int pos) {
 		}
 
 		//Changing shiftsize
-		drivers[pos].shiftsize = newShiftSize;
+		drivers[IDtomodify].setShiftSize(newShiftSize);
 		break;
 	}
 	case 3:
@@ -598,7 +598,7 @@ bool BusBoss::modifyDriver(unsigned int choice, int pos) {
 		}
 
 		//Changing weeklyhourlimit
-		drivers[pos].weeklyhourlimit = newWeeklyhourlimit;
+		drivers[IDtomodify].setWeeklyHourLimit(newWeeklyhourlimit);
 		break;
 	}
 	case 4:
@@ -622,7 +622,7 @@ bool BusBoss::modifyDriver(unsigned int choice, int pos) {
 		}
 
 		//Changing shiftsize
-		drivers[pos].minresttime = newMinresttime;
+		drivers[IDtomodify].setMinRestTime(newMinresttime);
 		break;
 	}
 	default:
