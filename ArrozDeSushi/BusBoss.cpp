@@ -652,18 +652,20 @@ bool BusBoss::deleteLine() {
 		}
 	}
 
-	//Finding the position of the line in the lines vector
-	int foundpos = findLineByID(IDtodel);
-	//If foundpos is -1 it is because the given ID did not match any stored line
-	if (foundpos == -1) {
+	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(IDtodel) > 0);
+	if (lineExists) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de eliminação de linha..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
 
-	cout << "Linha encontrada, eliminando..." << endl;
-	lines.erase(lines.begin() + foundpos); //deleting the position of the vector results in deleting the line
+	//deleting the position of the map results in deleting the line
 
-										   //Updating hasUnsavedChanges
+	cout << "Linha encontrada, eliminando..." << endl;
+	lines.erase(IDtodel);
+
+	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
 
 	//process was concluded successfully, returning true
