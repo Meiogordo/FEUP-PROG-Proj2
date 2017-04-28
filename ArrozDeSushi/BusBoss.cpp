@@ -708,9 +708,13 @@ bool BusBoss::deleteDriver() {
 }
 
 void BusBoss::displayDrivers() {
-	for (int i = 0; i < drivers.size(); i++) {
-		cout << "ID: " << drivers[i].ID << " Nome: " << drivers[i].name << endl;
+
+	//for to go through all elements of map aka all drivers
+	for (auto const &it : drivers) {
+		//.second gets data, .first is key
+		cout << "ID: " << it.second.getID() << " Nome: " << it.second.getName() << endl;
 	}
+
 }
 
 void BusBoss::displayDrivers(bool availability) {
