@@ -125,7 +125,7 @@ bool BusBoss::createNewDriver() {
 		}
 	}
 
-	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Checking if a driver with the given ID already exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool driverExists = (drivers.count(newID) > 0);
 	if (driverExists) {
@@ -464,7 +464,7 @@ bool BusBoss::modifyDriver() {
 		}
 	}
 
-	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Checking if a driver with the given ID exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool driverExists = (drivers.count(IDtomodify) > 0);
 	if (!driverExists) {
@@ -661,7 +661,6 @@ bool BusBoss::deleteLine() {
 	}
 
 	//deleting the position of the map results in deleting the line
-
 	cout << "Linha encontrada, eliminando..." << endl;
 	lines.erase(IDtodel);
 
@@ -689,7 +688,7 @@ bool BusBoss::deleteDriver() {
 		}
 	}
 
-	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Checking if a driver with the given ID exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool driverExists = (drivers.count(IDtodel) > 0);
 	if (!driverExists) {
@@ -698,7 +697,7 @@ bool BusBoss::deleteDriver() {
 	}
 
 	cout << "Condutor encontrado, eliminando..." << endl;
-	drivers.erase(IDtodel); //deleting the position of the map results in deleting the line
+	drivers.erase(IDtodel); //deleting the position of the map results in deleting the driver
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
