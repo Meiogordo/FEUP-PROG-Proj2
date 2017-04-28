@@ -227,10 +227,10 @@ bool BusBoss::modifyLine() {
 		}
 	}
 
-	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool lineExists = (lines.count(IDtomodify) > 0);
-	if (lineExists) {
+	if (!lineExists) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de modificação de linha..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
@@ -464,10 +464,10 @@ bool BusBoss::modifyDriver() {
 		}
 	}
 
-	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool driverExists = (drivers.count(IDtomodify) > 0);
-	if (driverExists) {
+	if (!driverExists) {
 		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de modificação de condutor..." << endl;
 		return false;
 	}
@@ -652,10 +652,10 @@ bool BusBoss::deleteLine() {
 		}
 	}
 
-	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool lineExists = (lines.count(IDtodel) > 0);
-	if (lineExists) {
+	if (!lineExists) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de eliminação de linha..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
@@ -689,7 +689,7 @@ bool BusBoss::deleteDriver() {
 		}
 	}
 
-	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool driverExists = (drivers.count(IDtodel) > 0);
 	if (!driverExists) {
