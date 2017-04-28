@@ -716,7 +716,7 @@ void BusBoss::displayDrivers() {
 	}
 
 }
-
+//TODO
 void BusBoss::displayDrivers(bool availability) {
 	for (int i = 0; i < drivers.size(); i++) {
 		if (drivers[i].available == availability) //If the driver has the same availability as the one given as parameters, print him
@@ -725,11 +725,20 @@ void BusBoss::displayDrivers(bool availability) {
 }
 
 void BusBoss::displayLines() {
-	for (int i = 0; i < lines.size(); i++) {
-		cout << "ID: " << lines[i].ID << " Primeira e última paragem: ";
-		cout << lines[i].stops.at(0) << " ... " << lines[i].stops.at(lines[i].stops.size() - 1);
+	vector<string> stops;
+
+	//for to go through all elements of map aka all lines
+	for (auto const &it : lines) {
+		//.second gets data, .first is key
+
+		//getting the stops vector to show first and last stop
+		stops = it.second.getStops();
+
+		cout << "ID: " << it.second.getID() << " Primeira e última paragem: ";
+		cout << stops.at(0) << " ... " << stops.at(stops.size() - 1);
 		cout << endl;
 	}
+
 }
 
 bool BusBoss::printDriver() {
