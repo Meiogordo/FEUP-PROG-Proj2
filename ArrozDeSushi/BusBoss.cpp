@@ -716,7 +716,7 @@ void BusBoss::displayDrivers() {
 	}
 
 }
-//TODO
+//TODO - waiting for .isAvailable
 void BusBoss::displayDrivers(bool availability) {
 	for (int i = 0; i < drivers.size(); i++) {
 		if (drivers[i].available == availability) //If the driver has the same availability as the one given as parameters, print him
@@ -759,17 +759,17 @@ bool BusBoss::printDriver() {
 		}
 	}
 
-	//Finding the position of the driver in the drivers vector
-	unsigned int foundpos = findDriverByID(IDtoprint);
-	//If foundpos is -1 it is because the given ID did not match any stored driver
-	if (foundpos == -1) {
+	//Checking if a driver with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool driverExists = (drivers.count(IDtoprint) > 0);
+	if (!driverExists) {
 		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de impressão de informação detalhada de um condutor..." << endl;
-		return false; //returning false since the process was not concluded successfully
+		return false;
 	}
 
 	//Driver found, printing detailed info
 	cout << "\n";
-	printDriver(foundpos);
+	printDriver(IDtoprint);
 
 	//Process concluded successfully
 	return true;
@@ -808,7 +808,7 @@ bool BusBoss::printLine() {
 	//Process concluded successfully
 	return true;
 }
-
+//TODO - overload << for shift using this code or similar
 bool BusBoss::printDriverShifts() {
 	unsigned int IDtoprint = 0;
 
@@ -854,8 +854,8 @@ bool BusBoss::printDriverShifts() {
 	//Process concluded successfully
 	return true;
 }
-
-void BusBoss::printDriver(unsigned int pos) {
+//TODO - decide if using overloaded <<
+void BusBoss::printDriver(unsigned int ID) {
 
 	cout << "ID: " << drivers[pos].ID << "\nNome: " << drivers[pos].name;
 	cout << "\nTamanho de turno: " << drivers[pos].shiftsize << "\nLimite de horas de trabalho semanal: " << drivers[pos].weeklyhourlimit;
