@@ -792,17 +792,17 @@ bool BusBoss::printLine() {
 		}
 	}
 
-	//Finding the position of the driver in the drivers vector
-	unsigned int foundpos = findLineByID(IDtoprint);
-	//If foundpos is -1 it is because the given ID did not match any stored driver
-	if (foundpos == -1) {
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(IDtoprint) > 0);
+	if (!lineExists) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de informação detalhada de uma linha..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
 
-	//Driver found, printing detailed info
+	//Line found, printing detailed info
 	cout << "\n";
-	printLine(foundpos);
+	printLine(IDtoprint);
 
 	//Process concluded successfully
 	return true;
@@ -854,15 +854,15 @@ bool BusBoss::printDriverShifts() {
 	return true;
 }
 //TODO - decide if using overloaded <<
-void BusBoss::printDriver(unsigned int ID) {
+void BusBoss::printDriver(unsigned int IDtoprint) {
 
 	cout << "ID: " << drivers[pos].ID << "\nNome: " << drivers[pos].name;
 	cout << "\nTamanho de turno: " << drivers[pos].shiftsize << "\nLimite de horas de trabalho semanal: " << drivers[pos].weeklyhourlimit;
 	cout << "\nTempo mínimo de descanso: " << drivers[pos].minresttime << endl;
 
 }
-
-void BusBoss::printLine(unsigned int pos) {
+//TODO - decide if using overloaded <<
+void BusBoss::printLine(unsigned int IDtoprint) {
 
 	cout << "ID: " << lines[pos].ID << "\nFrequência de passagem de autocarros: " << lines[pos].frequency;
 	cout << "\nParagens desta linha:\n";
