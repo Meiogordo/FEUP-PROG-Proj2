@@ -1725,14 +1725,10 @@ vector<int> BusBoss::findLinesinStop(string stopname) {
 	vector<int> output;
 
 	//outer loop goes through all the lines
-	for (int i = 0; i < lines.size(); i++) {
-		//inner loop goes through the list of stops for each line
-		for (int j = 0; j < lines[i].stops.size(); j++) {
-			if (lines[i].stops[j] == stopname) {
-				//If the given stop is in the list of stops, the ID of the line is pushed back into the output and the inner loop is broken (a stop cannot appear two times in the same line)
-				output.push_back(lines[i].ID);
-				break;
-			}
+	for (auto const &it : lines) {
+		//If the given stop is in the list of stops, the ID of the line is pushed back into the output
+		if (it.second.hasStop(stopname)) {
+			output.push_back(it.second.getID());
 		}
 	}
 
