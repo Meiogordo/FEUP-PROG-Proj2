@@ -689,18 +689,18 @@ bool BusBoss::deleteDriver() {
 		}
 	}
 
-	//Finding the position of the driver in the drivers vector
-	int foundpos = findDriverByID(IDtodel);
-	//If foundpos is -1 it is because the given ID did not match any stored driver
-	if (foundpos == -1) {
+	//Checking if a line with the given ID already exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool driverExists = (drivers.count(IDtodel) > 0);
+	if (!driverExists) {
 		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de eliminação de condutor..." << endl;
-		return false; //returning false since the process was not concluded successfully
+		return false;
 	}
 
 	cout << "Condutor encontrado, eliminando..." << endl;
-	drivers.erase(drivers.begin() + foundpos); //deleting the position of the vector results in deleting the line
+	drivers.erase(IDtodel); //deleting the position of the map results in deleting the line
 
-											   //Updating hasUnsavedChanges
+	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
 
 	//process was concluded successfully, returning true
