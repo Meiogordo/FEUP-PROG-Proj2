@@ -1724,11 +1724,12 @@ int BusBoss::findDriverByID(int driverID) {
 vector<int> BusBoss::findLinesinStop(string stopname) {
 	vector<int> output;
 
-	//outer loop goes through all the lines
+	//loop goes through all the lines in the map
+	//(works like a for each in which each it is an iterator but can be used to directly access the map element, kind of)
 	for (auto const &it : lines) {
 		//If the given stop is in the list of stops, the ID of the line is pushed back into the output
 		if (it.second.hasStop(stopname)) {
-			output.push_back(it.second.getID());
+			output.push_back(it.second.getID()); //.first gets key, .second gets data in key
 		}
 	}
 
