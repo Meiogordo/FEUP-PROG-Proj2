@@ -20,10 +20,10 @@ public:
 
 	//getters
 
-	unsigned int getID();
-	unsigned int getFrequency();
-	vector<string> getStops();
-	vector<int> getTravelTimesBetweenStops();
+	unsigned int getID() const;
+	unsigned int getFrequency() const;
+	vector<string> getStops() const;
+	vector<unsigned int> getTravelTimesBetweenStops() const;
 private:
 	//Missing frequency and travel times between stops???
 	//do not understand what they want the int vector (times here, timesList there) to be...

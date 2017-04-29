@@ -9,27 +9,27 @@ Driver::Driver(unsigned int ID, string name, unsigned int shiftsize, unsigned in
 
 Driver::~Driver() {}
 
-unsigned int Driver::getID() {
+unsigned int Driver::getID() const {
 	return ID;
 }
 
-string Driver::getName(){
+string Driver::getName() const {
 	return name;
 }
 
-unsigned int Driver::getShiftSize() {
+unsigned int Driver::getShiftSize() const {
 	return shiftsize;
 }
 
-unsigned int Driver::getWeeklyHourLimit() {
+unsigned int Driver::getWeeklyHourLimit() const {
 	return weeklyhourlimit;
 }
 
-unsigned int Driver::getMinRestTime() {
+unsigned int Driver::getMinRestTime() const {
 	return minresttime;
 }
 
-vector<Shift> Driver::getShifts() {
+vector<Shift> Driver::getShifts() const {
 	return shifts;
 }
 

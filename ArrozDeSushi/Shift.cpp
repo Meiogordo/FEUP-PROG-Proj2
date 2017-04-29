@@ -28,18 +28,18 @@ unsigned int Shift::getEndTime() const {
 	return endTime;
 }
 
-unsigned int Shift::setBusLineId(unsigned int busLineID) {
+unsigned int Shift::setBusLineId(unsigned int busLineID){
 	this->busLineID = busLineID;
 }
-unsigned int Shift::setDriverId(unsigned int driverID) {
+unsigned int Shift::setDriverId(unsigned int driverID){
 	this->driverID = driverID;
 }
-unsigned int Shift::setBusOrderNumber(unsigned int busOrderNumber) {
+unsigned int Shift::setBusOrderNumber(unsigned int busOrderNumber){
 	this->busOrderNumber = busOrderNumber;
 }
-unsigned int Shift::setStartTime(unsigned int startTime) {
+unsigned int Shift::setStartTime(unsigned int startTime){
 	this->startTime = startTime;
 }
-unsigned int Shift::setEndTime(unsigned int endTime) {
+unsigned int Shift::setEndTime(unsigned int endTime){
 	this->endTime = endTime;
 }

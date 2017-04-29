@@ -26,12 +26,12 @@ public:
 
 	//getters
 
-	unsigned int getID(); 
-	string getName(); 
-	unsigned int getShiftSize();
-	unsigned int getWeeklyHourLimit();
-	unsigned int getMinRestTime(); 
-	vector<Shift> getShifts();
+	unsigned int getID() const;
+	string getName() const;
+	unsigned int getShiftSize() const;
+	unsigned int getWeeklyHourLimit() const;
+	unsigned int getMinRestTime() const;
+	vector<Shift> getShifts() const;
 
 private:
 	unsigned int ID; //the driver's unique ID

@@ -2,26 +2,26 @@
 
 
 
-Line::Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<int> travelTimesBetweenStops)
+Line::Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<unsigned int> travelTimesBetweenStops)
 	: ID(ID), frequency(frequency), stops(stops), travelTimesBetweenStops(travelTimesBetweenStops)
 {}
 
 Line::~Line()
 {}
 
-unsigned int Line::getID() {
+unsigned int Line::getID() const {
 	return ID;
 }
 
-unsigned int Line::getFrequency() {
+unsigned int Line::getFrequency() const {
 	return frequency;
 }
 
-vector<string> Line::getStops() {
+vector<string> Line::getStops() const {
 	return stops;
 }
 
-vector<int> Line::getTravelTimesBetweenStops() {
+vector<unsigned int> Line::getTravelTimesBetweenStops() const {
 	return travelTimesBetweenStops;
 }
 
