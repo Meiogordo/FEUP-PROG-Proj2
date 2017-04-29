@@ -65,6 +65,12 @@ public:
 
 private:
 	//Internal class data
+	//Describing a distance - using a struct instead of an int vector because when nested it would be confusing
+	struct distance {
+		int lineID; //ID of the line that is being taken
+		short int direction; //direction of the shortest distance, -1 for negative and 1 for positive
+		unsigned int nStops; //number of stops to go through
+	};
 	//Describing a shift
 	struct shift {
 		unsigned int startHour; //hour at which the shift starts
@@ -107,7 +113,7 @@ private:
 	//To better describe a stop schedule
 	struct schedule {
 		int lineID; //The id of the line that the schedule is for
-					//The times at which the bus from a certain line passes through the stop
+		//The times at which the bus from a certain line passes through the stop
 		vector<string> positiveBusTimes; //In the positive direction (start to finish)
 		vector <string> negativeBusTimes; //In the negative direction (finish to start)
 	};
@@ -150,9 +156,9 @@ private:
 	//Prints the line with the given position in its vector onto the screen
 	void printLine(unsigned int pos);
 	//Calculates the number of stops between two stops for each direction for a vector of lines
-	vector<vector <int>> calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines);
+	vector<distance> calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines);
 	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
-	vector<int> calculateStopsForEachDirection(string startStop, string endStop, int commonLine);
+	distance calculateStopsForEachDirection(string startStop, string endStop, int commonLine);
 	//Calculates the amount of drivers needed for a specific line - represented by its travel times (passed directly to avoid having to call findLinesByID) (assuming fixed shift size)
 	int calculateDriversNeeded(const vector<int> &travelTimes, int frequency, int shiftsize);
 

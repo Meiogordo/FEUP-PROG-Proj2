@@ -1187,7 +1187,7 @@ void BusBoss::findLinesinStop() {
 		cout << endl;
 	}
 }
-
+//In pause at the moment but (heavily) refactored nonetheless - also TODO change to time instead of nr of stops
 bool BusBoss::routeBetweenTwoStops() {
 	//CASES:
 	//0: One of them has no lines
@@ -1198,8 +1198,8 @@ bool BusBoss::routeBetweenTwoStops() {
 
 	string stop1, stop2; //variables to hold stop names
 
-						 //Clearing the cin stream - might get unwanted input in if not cleared before using getline
-						 //If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
+	//Clearing the cin stream - might get unwanted input in if not cleared before using getline
+	//If there are more than 0 characters in the cin buffer, clear them, otherwise getline will get that input
 	if (cin.rdbuf()->in_avail() > 0) {
 		cin.ignore(10000, '\n');
 	}
@@ -1207,7 +1207,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	cout << "Qual a paragem de início do percurso?" << endl;
 	getline(cin, stop1); //getline is used because the stop name can have spaces in it
 
-						 //Checking to which lines stop1 belongs
+	//Checking to which lines stop1 belongs
 	vector<int> foundLinesStop1 = findLinesinStop(stop1);
 
 	//Case 0.1
@@ -1219,7 +1219,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	cout << "Qual a paragem de final do percurso?" << endl;
 	getline(cin, stop2); //getline is used because the stop name can have spaces in it
 
-						 //Searching for the stop in lines using findLinesinStop
+	//Searching for the stop in lines using findLinesinStop
 	vector<int> foundLinesStop2 = findLinesinStop(stop2);
 
 	//Case 0.2
@@ -1240,40 +1240,42 @@ bool BusBoss::routeBetweenTwoStops() {
 	//Case 2 & 3 - can be handled together due to how things were structured
 
 	//Distances holds the distances in stops and best direction between stop1 and stop2 for each line in intersection
-	vector<vector<int>> distances = calculateStopsForEachDirection(stop1, stop2, intersection);
+	vector<distance> distances = calculateStopsForEachDirection(stop1, stop2, intersection);
 
 	//Determining the smallest distance
 	int smallestDistIndex = 0;
 	for (int i = 0; i < distances.size(); i++) {
 		//if the distance at this index is smaller then that is the new index for the smallest distance
-		if (distances[i][1] < distances[smallestDistIndex][1])
+		if (distances[i].nStops < distances[smallestDistIndex].nStops)
 			smallestDistIndex = i;
 	}
 
 	//Getting direction for the smallest distance
-	int lineindex = findLineByID(intersection[smallestDistIndex]); //finds the index of the line that allows for the shortest route using findLineByID in the lines vector
+
 	string direction;
+
+	//getting the stops list for the line in which we can go the smallest distance
+	vector<string> stopsforsmallestdistline = lines[distances[smallestDistIndex].lineID].getStops();
+
 	if (distances[smallestDistIndex][0] == 1) {
 		//Positive direction - direction given by last stop in the stops vector
-		direction = lines[lineindex].stops[lines[lineindex].stops.size() - 1];
+		direction = stopsforsmallestdistline[stopsforsmallestdistline.size() - 1];
 	}
 	else {
 		//Negative direction - direction given by first stop in the stops vector
-		direction = lines[lineindex].stops[0];
+		direction = stopsforsmallestdistline[0];
 	}
 
 	//The smallest distance was found
 	cout << "Para percorrer o menor número de paragens entre " << stop1 << " e " << stop2 << ", deve-se apanhar a linha " << intersection[smallestDistIndex] << ", com direção a ";
-	cout << direction << ", andando " << distances[smallestDistIndex][1] << " paragens.";
+	cout << direction << ", andando " << distances[smallestDistIndex].nStops << " paragens.";
 	cout << endl;
 
 	//Process was successful
 	return true;
 }
 
-bool BusBoss::getIfHasUnsavedChanges() {
-	return hasUnsavedChanges;
-}
+bool BusBoss::getIfHasUnsavedChanges() { return this->hasUnsavedChanges; }
 
 bool BusBoss::showStopSchedule() {
 	string stop;
@@ -1853,9 +1855,9 @@ BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
 	return output;
 }
 
-vector<vector<int>> BusBoss::calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines) {
-	//each outer position is the match for each line, with 0 on the inner being the direction (-1 or 1) and 1 being the number of stops to go through
-	vector<vector<int>> output(commonLines.size(), vector<int>(2));
+vector<BusBoss::distance> BusBoss::calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines) {
+	//vector of distances, distance has the ID for the line, the direction and the number of stops to go through (to compare each line)
+	vector<distance> output(commonLines.size());
 
 	for (int i = 0; i < commonLines.size(); i++) {
 		//output was already with the correct dimensions so there is no need to use push_back
@@ -1865,41 +1867,43 @@ vector<vector<int>> BusBoss::calculateStopsForEachDirection(string startStop, st
 	return output;
 }
 
-vector<int> BusBoss::calculateStopsForEachDirection(string startStop, string endStop, int commonLine) {
-	vector<int> output(2);
-	//0: Direction - -1 is negative (index gets smaller), 1 is positive (index gets bigger)
+BusBoss::distance BusBoss::calculateStopsForEachDirection(string startStop, string endStop, int commonLineID) {
+	distance outputdist;
 
-	//getting the line index from the line ID
-	int lineIndex = findLineByID(commonLine);
+	//Setting line ID to be able to know which line we are referring to in the future
+	outputdist.lineID = commonLineID;
+
+	//Getting the stops vector for this line
+	vector<string> stops = lines[commonLineID].getStops();
 
 	//finding the startStop position in the given line
 	int startpos;
-	for (startpos = 0; startpos < lines[lineIndex].stops.size(); startpos++) {
-		if (lines[lineIndex].stops[startpos] == startStop) {
+	for (startpos = 0; startpos < stops.size(); startpos++) {
+		if (stops[startpos] == startStop) {
 			break; //if we find the stop we break the loop and now have successfully got the start position
 		}
 	}
 
 	//finding the endStop position in the given line
 	int endpos;
-	for (endpos = 0; endpos < lines[lineIndex].stops.size(); endpos++) {
-		if (lines[lineIndex].stops[endpos] == endStop) {
+	for (endpos = 0; endpos < stops.size(); endpos++) {
+		if (stops[endpos] == endStop) {
 			break; //if we find the stop we break the loop and now have successfully got the end position
 		}
 	}
 
 	//start is left of end - positive direction
 	if (startpos < endpos) {
-		output[0] = 1;
-		output[1] = endpos - startpos;
+		outputdist.direction = 1;
+		outputdist.nStops = endpos - startpos;
 	}
 	else {
 		//start is right of end - negative direction
-		output[0] = -1;
-		output[1] = startpos - endpos;
+		outputdist.direction = -1;
+		outputdist.nStops = startpos - endpos;
 	}
 
-	return output;
+	return outputdist;
 }
 
 int BusBoss::calculateDriversNeeded(const vector<int>& travelTimes, int frequency, int shiftsize) {
