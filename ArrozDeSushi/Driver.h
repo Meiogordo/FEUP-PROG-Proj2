@@ -33,6 +33,10 @@ public:
 	unsigned int getMinRestTime() const;
 	vector<Shift> getShifts() const;
 
+	//other methods
+
+	void addShift(Shift newShift);
+
 private:
 	unsigned int ID; //the driver's unique ID
 	string name; //the driver's name

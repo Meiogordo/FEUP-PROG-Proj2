@@ -51,3 +51,7 @@ void Driver::setMinRestTime(unsigned int minresttime) {
 void Driver::setShifts(vector<Shift> shifts) {
 	this->shifts = shifts;
 }
+
+void Driver::addShift(Shift newShift) {
+	shifts.push_back(newShift);
+}
