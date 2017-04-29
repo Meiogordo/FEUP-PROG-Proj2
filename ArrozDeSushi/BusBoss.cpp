@@ -1171,7 +1171,7 @@ void BusBoss::findLinesinStop() {
 	cout << "Qual a paragem que deseja procurar?" << endl;
 	getline(cin, stopname); //getline is used because the stop name can have spaces in it
 
-							//Searching for the stop in lines using findLinesinStop's overload
+	//Searching for the stop in lines using findLinesinStop's overload
 	vector<int> foundLines = findLinesinStop(stopname);
 
 	//Outputting result based on foundLines being empty or not
