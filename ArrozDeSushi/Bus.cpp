@@ -22,9 +22,9 @@ vector<Shift> Bus::getSchedule() const {
 	return schedule;
 }
 
-unsigned int Bus::setDriverID(unsigned int driverID) {
+void Bus::setDriverID(unsigned int driverID) {
 	this->driverID = driverID;
 }
-unsigned int Bus::setLineID(unsigned int lineID) {
+void Bus::setLineID(unsigned int lineID) {
 	this->lineID = lineID;
 }

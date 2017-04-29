@@ -26,16 +26,16 @@ vector<unsigned int> Line::getTravelTimesBetweenStops() const {
 }
 
 
-unsigned int Line::setID(unsigned int ID) {
+void Line::setID(unsigned int ID) {
 	this->ID = ID;
 }
-unsigned int Line::setFrequency(unsigned int frequency) {
+void Line::setFrequency(unsigned int frequency) {
 	this->frequency = frequency;
 }
-vector<string> Line::setStops(vector<string> stops) {
+void Line::setStops(vector<string> stops) {
 	this->stops = stops;
 }
-vector<int> Line::setTravelTimesBetweenStops(vector<int> travelTimesBetweenStops) {
+void Line::setTravelTimesBetweenStops(vector<int> travelTimesBetweenStops) {
 	this->travelTimesBetweenStops = travelTimesBetweenStops;
 }
 

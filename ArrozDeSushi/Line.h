@@ -11,10 +11,10 @@ public:
 	~Line();
 
 	//setters
-	unsigned int setID(unsigned int ID);
-	unsigned int setFrequency(unsigned int frequency);
-	vector<string> setStops(vector<string> stops);
-	vector<int> setTravelTimesBetweenStops(vector<int> travelTimesBetweenStops);
+	void setID(unsigned int ID);
+	void setFrequency(unsigned int frequency);
+	void setStops(vector<string> stops);
+	void setTravelTimesBetweenStops(vector<int> travelTimesBetweenStops);
 
 
 

@@ -16,12 +16,12 @@ public:
 
 	//setters
 
-	unsigned int setID(unsigned int ID);
-	string setName(string name);
-	unsigned int setShiftSize(unsigned int shiftsize);
-	unsigned int setWeeklyHourLimit(unsigned int weeklyhourlimit);
-	unsigned int setMinRestTime(unsigned int minresttime);
-	vector<Shift> setShifts(vector<Shift> shifts);
+	void setID(unsigned int ID);
+	void setName(string name);
+	void setShiftSize(unsigned int shiftsize);
+	void setWeeklyHourLimit(unsigned int weeklyhourlimit);
+	void setMinRestTime(unsigned int minresttime);
+	void setShifts(vector<Shift> shifts);
 
 
 	//getters

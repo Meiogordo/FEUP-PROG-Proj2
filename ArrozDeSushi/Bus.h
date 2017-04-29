@@ -25,8 +25,8 @@ public:
 	unsigned int getLineID() const;
 	vector<Shift> getSchedule() const;
 	//setters
-	unsigned int setDriverID(unsigned int driverID);
-	unsigned int setLineID(unsigned int lineID);
+	void setDriverID(unsigned int driverID);
+	void setLineID(unsigned int lineID);
 	// other methods
 private:
 	unsigned int ID; //not sure about this

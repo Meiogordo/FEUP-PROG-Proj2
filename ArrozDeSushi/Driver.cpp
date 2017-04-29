@@ -33,21 +33,21 @@ vector<Shift> Driver::getShifts() const {
 	return shifts;
 }
 
-unsigned int Driver::setID(unsigned int ID) {
+void Driver::setID(unsigned int ID) {
 	this->ID = ID;
 }
-string Driver::setName(string name) {
+void Driver::setName(string name) {
 	this->name = name;
 }
-unsigned int Driver::setShiftSize(unsigned int shiftsize) {
+void Driver::setShiftSize(unsigned int shiftsize) {
 	this->shiftsize = shiftsize;
 }
-unsigned int Driver::setWeeklyHourLimit(unsigned int weeklyhourlimit) {
+void Driver::setWeeklyHourLimit(unsigned int weeklyhourlimit) {
 	this->weeklyhourlimit;
 }
-unsigned int Driver::setMinRestTime(unsigned int minresttime) {
+void Driver::setMinRestTime(unsigned int minresttime) {
 	this->minresttime;
 }
-vector<Shift> Driver::setShifts(vector<Shift> shifts) {
+void Driver::setShifts(vector<Shift> shifts) {
 	this->shifts = shifts;
 }

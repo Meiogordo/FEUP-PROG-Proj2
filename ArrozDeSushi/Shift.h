@@ -21,11 +21,11 @@ public:
 
 	//setters
 	
-	unsigned int setBusLineId(unsigned int busLineID);
-	unsigned int setDriverId(unsigned int driverID);
-	unsigned int setBusOrderNumber(unsigned int busOrderNumber);
-	unsigned int setStartTime(unsigned int startTime);
-	unsigned int setEndTime(unsigned int endTime);
+	void setBusLineId(unsigned int busLineID);
+	void setDriverId(unsigned int driverID);
+	void setBusOrderNumber(unsigned int busOrderNumber);
+	void setStartTime(unsigned int startTime);
+	void setEndTime(unsigned int endTime);
 	
 	// other methods
 
