@@ -39,3 +39,11 @@ void Line::setTravelTimesBetweenStops(vector<int> travelTimesBetweenStops) {
 	this->travelTimesBetweenStops = travelTimesBetweenStops;
 }
 
+bool Line::hasStop(string stopname) const {
+	for (int i = 0; i < stops.size(); i++) {
+		if (stopname == stops[i]) {
+			return true;
+		}
+	}
+	return false;
+}
