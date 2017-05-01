@@ -1577,7 +1577,7 @@ bool BusBoss::showLineSchedule() {
 
 	return true;
 }
-//To scrap?
+//To scrap? - unused in this part
 bool BusBoss::getDriversNeeded() {
 	unsigned int lineID = 0;
 
@@ -1640,26 +1640,6 @@ void BusBoss::Reset() {
 	lines.clear();
 
 	//If more internal data is added, update this
-}
-
-int BusBoss::findLineByID(int lineID) {
-	for (int i = 0; i < lines.size(); i++) {
-		if (lines[i].ID == lineID) {
-			return i;
-		}
-	}
-
-	return -1;
-}
-
-int BusBoss::findDriverByID(int driverID) {
-	for (int i = 0; i < drivers.size(); i++) {
-		if (drivers[i].ID == driverID) {
-			return i;
-		}
-	}
-
-	return -1;
 }
 
 vector<int> BusBoss::findLinesinStop(string stopname) {
@@ -1830,7 +1810,7 @@ BusBoss::distance BusBoss::calculateStopsForEachDirection(string startStop, stri
 
 	return outputdist;
 }
-
+//To scrap? (see above)
 int BusBoss::calculateDriversNeeded(const vector<int>& travelTimes, int frequency, int shiftsize) {
 
 	//Note: To simplify internal calculations everything is done in minutes

@@ -93,10 +93,6 @@ private:
 	//Internal class data handling - searches for ID and whatnot
 	//Searches for a certain stop, by name. Returns the vector of all the lines it belongs to
 	vector<line> findStopinLines(string stopname);
-	//Searches for a line by its ID, returns the index of the line in the "lines" vector. If not found returns -1
-	int findLineByID(int lineID);
-	//Searches for a driver by its ID, returns the index of the driver in the "drivers" vector. If not found returns -1
-	int findDriverByID(int driverID);
 	//Searches for a certain stop in all of the lines and returns a vector of line IDs to which the given stop belongs
 	vector<int> findLinesinStop(string stopname);
 	//Generating schedules
