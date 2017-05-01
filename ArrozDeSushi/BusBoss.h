@@ -71,40 +71,10 @@ private:
 		short int direction; //direction of the shortest distance, -1 for negative and 1 for positive
 		unsigned int nStops; //number of stops to go through
 	};
-	//Describing a shift
-	struct shift {
-		unsigned int startHour; //hour at which the shift starts
-		unsigned int startMinute; //minute at which the shift starts
-		unsigned int endHour; //hour at which the shift ends
-		unsigned int endMinute; //minute at which the shift ends
-		unsigned int weekday; //day of week, starts at monday and is [0,6] with 0 being monday and 6 sunday
-		unsigned int lineID; //ID of the line to which the driver was assigned
-	};
 	//Vector to give a string that represents the week day from the weekday variable in a shift
 	const vector<string> weekdays = { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo" };
-	//Describing a driver
-	struct driver {
-		int ID; //the driver's unique ID
-		string name; //the driver's name
-		int shiftsize; //shift size - number of hours the driver can work per day
-		int weeklyhourlimit; //number of hours the driver can work per week
-		int minresttime; //minimum rest time between shifts (hours)
-		vector<shift> shifts; //list of shifts the driver was assigned to do
-		bool available; //true if the driver is available, false if not
-	};
-	//Describing a line
-	struct line {
-		int ID; //line ID
-		int frequency; //frequency of buses in the line (minutes)
-		vector<string> stops; //list of stop names
-		vector<int> delaybetweenstops; //times (in minutes) of travel between stops
-									   //Note about indexes of delaysbetweenstops: This vector is 1 index smaller than the stops vector because this one is between stops, a sort of delta
-									   //So, delaybetweenstops[0] is the time of travel between stops[0] and stops[1], delaybetweenstops[1] is the time of travel between stops[1] and stops[2], and so on and so forth
-	};
-	vector<driver> drivers; //vector of all the drivers
-	vector<line> lines; //vector of all the lines
-						//Schedule constants
-						//Service starts at 8:00
+	//Schedule constants
+	//Service starts at 8:00
 	const unsigned int BUS_START_TIME_HOUR = 8;
 	const unsigned int BUS_START_TIME_MINUTE = 00;
 	//Service ends at 20:00

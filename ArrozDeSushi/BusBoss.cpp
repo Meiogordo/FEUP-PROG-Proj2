@@ -1563,7 +1563,7 @@ bool BusBoss::showLineSchedule() {
 
 	return true;
 }
-
+//To scrap?
 bool BusBoss::getDriversNeeded() {
 	unsigned int lineID = 0;
 
@@ -1621,9 +1621,9 @@ bool BusBoss::getDriversNeeded() {
 
 void BusBoss::Reset() {
 	//Deleting drivers
-	drivers.erase(drivers.begin(), drivers.end());
+	drivers.clear();
 	//Deleting lines
-	lines.erase(lines.begin(), lines.end());
+	lines.clear();
 
 	//If more internal data is added, update this
 }
