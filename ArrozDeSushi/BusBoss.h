@@ -90,12 +90,6 @@ private:
 	//Resets internal class data
 	void Reset();
 
-	//Input data treatment
-	//Generate driver from a line of text
-	driver createDriverFromString(string rawline);
-	//Generate line from a line of text
-	line createLineFromString(string rawline);
-
 	//Internal class data handling - searches for ID and whatnot
 	//Searches for a certain stop, by name. Returns the vector of all the lines it belongs to
 	vector<line> findStopinLines(string stopname);

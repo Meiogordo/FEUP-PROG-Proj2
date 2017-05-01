@@ -3,6 +3,7 @@
 #include <string>
 #include <vector>
 
+#include "Utilities.h"
 #include "Shift.h"
 
 using namespace std;
@@ -10,8 +11,11 @@ using namespace std;
 class Driver {
 public:
 	
+	//Constructors
 
-	Driver(unsigned int ID, string name, unsigned int shiftsize, unsigned int weeklyhourlimit, unsigned int minresttime, vector<Shift> shifts);
+	//Constructor that can take in a raw line from a text file
+	Driver(string rawline);
+	Driver(unsigned int ID, string name, unsigned int shiftsize, unsigned int weeklyhourlimit, unsigned int minresttime, const vector<Shift> &shifts);
 	~Driver();
 
 	//setters
@@ -21,7 +25,7 @@ public:
 	void setShiftSize(unsigned int shiftsize);
 	void setWeeklyHourLimit(unsigned int weeklyhourlimit);
 	void setMinRestTime(unsigned int minresttime);
-	void setShifts(vector<Shift> shifts);
+	void setShifts(const vector<Shift> &shifts);
 
 
 	//getters
@@ -35,7 +39,7 @@ public:
 
 	//other methods
 
-	void addShift(Shift newShift);
+	void addShift(const Shift &newShift);
 
 private:
 	unsigned int ID; //the driver's unique ID

@@ -3,19 +3,24 @@
 #include <vector>
 #include <string>
 
+#include "Utilities.h"
+
 using namespace std;
 
 class Line {
 public:
+	//Constructors
+	
+	Line::Line(string rawline);
 	Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<unsigned int> travelTimesBetweenStops);
 	~Line();
 
 	//setters
+
 	void setID(unsigned int ID);
 	void setFrequency(unsigned int frequency);
 	void setStops(vector<string> stops);
-	void setTravelTimesBetweenStops(vector<int> travelTimesBetweenStops);
-
+	void setTravelTimesBetweenStops(const vector<unsigned int> &travelTimesBetweenStops);
 
 
 	//getters
