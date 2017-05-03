@@ -1,8 +1,9 @@
 #include "Bus.h"
 
-Bus::Bus(unsigned int ID, unsigned int driverID, unsigned int lineID)
-	: ID(ID), driverID(driverID), lineID(lineID) 
-{}
+Bus::Bus(unsigned int driverID, unsigned int lineID, unsigned int orderInLine, const vector<Shift> &shift)
+	: driverID(driverID), lineID(lineID), orderInLine(orderInLine), schedule(shift) {
+	ID = ++totalBuses;
+}
 
 Bus::~Bus() {}
 
@@ -20,6 +21,11 @@ unsigned int Bus::getLineID() const {
 
 vector<Shift> Bus::getSchedule() const {
 	return schedule;
+}
+
+int Bus::getTotalBuses()
+{
+	return totalBuses;
 }
 
 void Bus::setDriverID(unsigned int driverID) {
