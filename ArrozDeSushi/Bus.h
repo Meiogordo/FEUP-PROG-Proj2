@@ -25,9 +25,11 @@ public:
 	unsigned int getLineID() const;
 	vector<Shift> getSchedule() const;
 	static int getTotalBuses();
+	bool getIsWorking();
 	//setters
 	void setDriverID(unsigned int driverID);
 	void setLineID(unsigned int lineID);
+	bool setIsWorking(bool isWorking);
 	// other methods
 private:
 	unsigned int ID;
@@ -36,5 +38,6 @@ private:
 	unsigned int lineID;
 	vector<Shift> schedule;
 	static unsigned int totalBuses;
+	bool isWorking;
 
 };

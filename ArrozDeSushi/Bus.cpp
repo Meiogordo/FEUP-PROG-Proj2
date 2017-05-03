@@ -2,7 +2,7 @@
 
 Bus::Bus(unsigned int driverID, unsigned int lineID, unsigned int orderInLine, const vector<Shift> &shift)
 	: driverID(driverID), lineID(lineID), orderInLine(orderInLine), schedule(shift) {
-	ID = ++totalBuses;
+	ID = totalBuses++;
 }
 
 Bus::~Bus() {}
@@ -28,9 +28,19 @@ int Bus::getTotalBuses()
 	return totalBuses;
 }
 
+bool Bus::getIsWorking()
+{
+	return isWorking;
+}
+
 void Bus::setDriverID(unsigned int driverID) {
 	this->driverID = driverID;
 }
 void Bus::setLineID(unsigned int lineID) {
 	this->lineID = lineID;
+}
+
+bool Bus::setIsWorking(bool isWorking)
+{
+	this->isWorking = isWorking;
 }

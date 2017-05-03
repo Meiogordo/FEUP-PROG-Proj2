@@ -14,7 +14,7 @@ public:
 	
 	unsigned int getBusLineId() const;
 	unsigned int getDriverId() const;
-	unsigned int getBusOrderNumber() const; // order of the bus within the bus line
+	unsigned int getBusID() const; // order of the bus within the bus line
 	unsigned int getStartTime() const;
 	unsigned int getEndTime() const;
 	
@@ -23,7 +23,7 @@ public:
 	
 	void setBusLineId(unsigned int busLineID);
 	void setDriverId(unsigned int driverID);
-	void setBusOrderNumber(unsigned int busOrderNumber);
+	void setBusID(unsigned int busOrderNumber);
 	void setStartTime(unsigned int startTime);
 	void setEndTime(unsigned int endTime);
 	
@@ -32,8 +32,7 @@ public:
 private:
 	unsigned int busLineID;
 	unsigned int driverID;
-	unsigned int busOrderNumber; //TODO: Understand what this is
-	//TODO: Switch to the upcoming date/time class
+	unsigned int busID;
 	unsigned int startTime;
 	unsigned int endTime;
 };
