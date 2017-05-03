@@ -9,11 +9,11 @@ Shift::Shift(unsigned int busLineID, unsigned int driverID, unsigned int busID, 
 Shift::~Shift()
 {}
 
-unsigned int Shift::getBusLineId() const {
+unsigned int Shift::getBusLineID() const {
 	return busLineID;
 }
 
-unsigned int Shift::getDriverId() const {
+unsigned int Shift::getDriverID() const {
 	return driverID;
 }
 
@@ -28,10 +28,10 @@ unsigned int Shift::getEndTime() const {
 	return endTime;
 }
 
-void Shift::setBusLineId(unsigned int busLineID){
+void Shift::setBusLineID(unsigned int busLineID){
 	this->busLineID = busLineID;
 }
-void Shift::setDriverId(unsigned int driverID){
+void Shift::setDriverID(unsigned int driverID){
 	this->driverID = driverID;
 }
 void Shift::setBusID(unsigned int busID){

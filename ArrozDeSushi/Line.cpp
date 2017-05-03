@@ -48,7 +48,7 @@ Line::Line(string rawline) {
 	this->travelTimesBetweenStops = travelTimesBetweenStops;
 }
 
-Line::Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<unsigned int> travelTimesBetweenStops)
+Line::Line(unsigned int ID, unsigned int frequency, const vector<string> &stops, const vector<unsigned int> &travelTimesBetweenStops)
 	: ID(ID), frequency(frequency), stops(stops), travelTimesBetweenStops(travelTimesBetweenStops)
 {}
 
@@ -78,7 +78,7 @@ void Line::setFrequency(unsigned int frequency) {
 	this->frequency = frequency;
 }
 
-void Line::setStops(vector<string> stops) {
+void Line::setStops(const vector<string> &stops) {
 	this->stops = stops;
 }
 

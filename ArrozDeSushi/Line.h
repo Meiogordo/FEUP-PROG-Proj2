@@ -12,14 +12,14 @@ public:
 	//Constructors
 	
 	Line::Line(string rawline);
-	Line(unsigned int ID, unsigned int frequency, vector<string> stops, vector<unsigned int> travelTimesBetweenStops);
+	Line(unsigned int ID, unsigned int frequency, const vector<string> &stops, const vector<unsigned int> &travelTimesBetweenStops);
 	~Line();
 
 	//setters
 
 	void setID(unsigned int ID);
 	void setFrequency(unsigned int frequency);
-	void setStops(vector<string> stops);
+	void setStops(const vector<string> &stops);
 	void setTravelTimesBetweenStops(const vector<unsigned int> &travelTimesBetweenStops);
 
 

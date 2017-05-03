@@ -12,17 +12,16 @@ public:
 
 	//getters
 	
-	unsigned int getBusLineId() const;
-	unsigned int getDriverId() const;
+	unsigned int getBusLineID() const;
+	unsigned int getDriverID() const;
 	unsigned int getBusID() const; // order of the bus within the bus line
 	unsigned int getStartTime() const;
 	unsigned int getEndTime() const;
 	
-
 	//setters
 	
-	void setBusLineId(unsigned int busLineID);
-	void setDriverId(unsigned int driverID);
+	void setBusLineID(unsigned int busLineID);
+	void setDriverID(unsigned int driverID);
 	void setBusID(unsigned int busOrderNumber);
 	void setStartTime(unsigned int startTime);
 	void setEndTime(unsigned int endTime);

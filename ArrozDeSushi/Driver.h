@@ -27,7 +27,6 @@ public:
 	void setMinRestTime(unsigned int minresttime);
 	void setShifts(const vector<Shift> &shifts);
 
-
 	//getters
 
 	unsigned int getID() const;

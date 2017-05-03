@@ -89,8 +89,8 @@ private:
 	const unsigned int BUS_END_TIME_MINUTE = 0;
 	//Bus fleet
 	//Constant that defines the bus fleet size
-	const unsigned int BUS_FLEET_SIZE;
-	//Vector of buses, predefined because of having a sequential ID
+	const unsigned int BUS_FLEET_SIZE = 100;
+	//Vector of buses, a vector is used because the buses have an internal sequential ID
 	vector<Bus> busFleet;
 	//Define busFleet as a vector of empty buses, of size BUS_FLEET_SIZE
 	void initBusFleet();
