@@ -10,6 +10,11 @@
 
 using namespace std;
 
+//Overloading insertion operator: (Outside of class because the operands are of different types)
+ostream& operator <<(ostream &os, const Line &l);
+ostream& operator <<(ostream &os, const Driver &d);
+ostream& operator <<(ostream &os, const Shift &s);
+
 class BusBoss {
 public:
 	BusBoss();
@@ -91,8 +96,6 @@ private:
 	void Reset();
 
 	//Internal class data handling - searches for ID and whatnot
-	//Searches for a certain stop, by name. Returns the vector of all the lines it belongs to
-	vector<line> findStopinLines(string stopname);
 	//Searches for a certain stop in all of the lines and returns a vector of line IDs to which the given stop belongs
 	vector<int> findLinesinStop(string stopname);
 	//Generating schedules

@@ -2,7 +2,7 @@
 #include <string>
 #include <clocale>
 #include "Menu.h"
-#include "BusManager.h"
+#include "BusBoss.h"
 #include "Utilities.h"
 using namespace std;
 
@@ -14,8 +14,8 @@ using namespace std;
 #endif
 
 //Prototypes
-int menuRunner(BusManager &bm);
-bool callFunctions(string &id, BusManager &bm);
+int menuRunner(BusBoss &bb);
+bool callFunctions(string &id, BusBoss &bb);
 
 int main() {
 
@@ -27,11 +27,11 @@ int main() {
 	//Tests here
 
 	//Init
-	BusManager bm;
-	bm.Load();
+	BusBoss bb;
+	bb.Load();
 
 	//Main menu running
-	int menureturn = menuRunner(bm);
+	int menureturn = menuRunner(bb);
 
 	if (menureturn == 0)
 		// menu exited successfully with no errors
@@ -42,7 +42,7 @@ int main() {
 }
 
 //Most menu stuff
-int menuRunner(BusManager &bm) {
+int menuRunner(BusBoss &bb) {
 
 	string currentselection = ""; //current selection holds the menu state
 	unsigned int tempinput; //temporary input holder - unsigned int to make sure that only numbers are inputted
@@ -80,7 +80,7 @@ int menuRunner(BusManager &bm) {
 			//This means we are at the main menu and the exit option was selected so we can exit the program by exiting the loop
 
 			//But first, checking if there are unsaved changes
-			if (bm.getIfHasUnsavedChanges()) {
+			if (bb.getIfHasUnsavedChanges()) {
 				string option;
 				cout << "Tem alterações não gravadas, deseja mesmo assim sair do programa? (S/N)" << endl;
 				cout << ">> ";
@@ -131,7 +131,7 @@ int menuRunner(BusManager &bm) {
 				}
 			}
 
-			if (callFunctions(currentselection, bm)) {
+			if (callFunctions(currentselection, bb)) {
 				//do something based on failed state maybe
 			}
 
@@ -143,7 +143,7 @@ int menuRunner(BusManager &bm) {
 }
 
 //Function to call functions based on hardcoded ID (only way to do this), returns true if function found, false if not found
-bool callFunctions(string &id, BusManager &bm) {
+bool callFunctions(string &id, BusBoss &bb) {
 
 	//before running any function, the screen is cleared
 	Utilities::clearScreen();
@@ -166,7 +166,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.showStopSchedule();
+		bb.showStopSchedule();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -177,7 +177,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.showLineSchedule();
+		bb.showLineSchedule();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -189,7 +189,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.printDriverShifts();
+		bb.printDriverShifts();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -201,7 +201,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.findLinesinStop();
+		bb.findLinesinStop();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -213,7 +213,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.displayDrivers(true);
+		bb.displayDrivers(true);
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -225,7 +225,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.routeBetweenTwoStops();
+		bb.routeBetweenTwoStops();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -237,7 +237,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.getDriversNeeded();
+		bb.getDriversNeeded();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -249,7 +249,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.displayLines();
+		bb.displayLines();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -261,7 +261,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.createNewLine();
+		bb.createNewLine();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -273,7 +273,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.modifyLine();
+		bb.modifyLine();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -285,7 +285,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.deleteLine();
+		bb.deleteLine();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -297,7 +297,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.printLine();
+		bb.printLine();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -309,7 +309,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.displayDrivers();
+		bb.displayDrivers();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -321,7 +321,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.createNewDriver();
+		bb.createNewDriver();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -333,7 +333,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.modifyDriver();
+		bb.modifyDriver();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -345,7 +345,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.deleteDriver();
+		bb.deleteDriver();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -357,7 +357,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.printDriver();
+		bb.printDriver();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -369,7 +369,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.Load();
+		bb.Load();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true
@@ -381,7 +381,7 @@ bool callFunctions(string &id, BusManager &bm) {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
-		bm.Save();
+		bb.Save();
 		//pause to see output
 		Utilities::pause();
 		//function was found, return true

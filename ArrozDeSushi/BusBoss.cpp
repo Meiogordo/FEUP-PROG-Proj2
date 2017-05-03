@@ -850,23 +850,13 @@ bool BusBoss::printDriverShifts() {
 	//Process concluded successfully
 	return true;
 }
-//TODO - decide if using overloaded <<
+
 void BusBoss::printDriver(unsigned int IDtoprint) {
-
-	cout << "ID: " << drivers[pos].ID << "\nNome: " << drivers[pos].name;
-	cout << "\nTamanho de turno: " << drivers[pos].shiftsize << "\nLimite de horas de trabalho semanal: " << drivers[pos].weeklyhourlimit;
-	cout << "\nTempo mínimo de descanso: " << drivers[pos].minresttime << endl;
-
+	cout << drivers[IDtoprint];
 }
-//TODO - decide if using overloaded <<
+
 void BusBoss::printLine(unsigned int IDtoprint) {
-
-	cout << "ID: " << lines[pos].ID << "\nFrequência de passagem de autocarros: " << lines[pos].frequency;
-	cout << "\nParagens desta linha:\n";
-	Utilities::printVector(lines[pos].stops);
-	cout << "Tempos de viagem entre estas paragens:\n";
-	Utilities::printVector(lines[pos].delaybetweenstops);
-
+	cout << lines[IDtoprint];
 }
 
 bool BusBoss::Load() {
@@ -1964,4 +1954,30 @@ void BusBoss::saveLinestoFile(ostream &file) {
 	}
 
 	//Lines file updated.
+}
+
+ostream & operator<<(ostream &os, const Line &l) {
+	os << "ID: " << l.getID() << "\nFrequência de passagem de autocarros: " << l.getFrequency();
+	os << "\nParagens desta linha:\n";
+	Utilities::printVector(l.getStops());
+	os << "Tempos de viagem entre estas paragens:\n";
+	Utilities::printVector(l.getTravelTimesBetweenStops());
+
+	return os;
+}
+
+ostream & operator<<(ostream &os, const Driver &d) {
+	cout << "ID: " << d.getID() << "\nNome: " << d.getName();
+	cout << "\nTamanho de turno: " << d.getShiftSize() << "\nLimite de horas de trabalho semanal: " << d.getWeeklyHourLimit();
+	cout << "\nTempo mínimo de descanso: " << d.getMinRestTime() << endl;
+
+	return os;
+}
+//TODO - mudar print de tempo para aquela func nova
+ostream & operator<<(ostream &os, const Shift &s) {
+	os << "ID da linha: " << s.getBusLineId() << "\nID do condutor: " << s.getDriverId();
+	os << "\nID do autocarro: " << s.getBusID() << "\nTempo de início(WIP): " << s.getStartTime();
+	os << "\nTempo de fim(WIP): " << s.getEndTime() << endl;
+	
+	return os;
 }
