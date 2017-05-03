@@ -17,6 +17,7 @@ using namespace std;
 
 class Bus {
 public:
+	Bus();
 	Bus(unsigned int driverID, unsigned int lineID, unsigned int orderInLine, const vector<Shift> &shift);
 	~Bus();
 	//getters

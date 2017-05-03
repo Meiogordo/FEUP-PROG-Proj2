@@ -7,6 +7,8 @@
 #include "Utilities.h"
 #include "Line.h"
 #include "Driver.h"
+#include "Shift.h"
+#include "Bus.h"
 
 using namespace std;
 
@@ -85,6 +87,13 @@ private:
 	//Service ends at 20:00
 	const unsigned int BUS_END_TIME_HOUR = 20;
 	const unsigned int BUS_END_TIME_MINUTE = 0;
+	//Bus fleet
+	//Constant that defines the bus fleet size
+	const unsigned int BUS_FLEET_SIZE;
+	//Vector of buses, predefined because of having a sequential ID
+	vector<Bus> busFleet;
+	//Define busFleet as a vector of empty buses, of size BUS_FLEET_SIZE
+	void initBusFleet();
 	//To better describe a stop schedule
 	struct schedule {
 		int lineID; //The id of the line that the schedule is for
