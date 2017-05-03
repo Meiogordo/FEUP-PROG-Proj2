@@ -93,11 +93,10 @@ bool BusBoss::createNewLine() {
 		delaybetweenstops.push_back(tempdelay);
 	}
 
-	//Creating the line we will add
-	Line newLine(newID, frequency, stops, delaybetweenstops);
 
-	//Adding the line to the lines map
-	lines.emplace(newID, newLine);
+	//Using emplace to avoid unnecessary copy or move operations by calling the constructor in place (where the element will be inserted)
+	//Arguments are forwarded to the object constructor
+	lines.emplace(newID, newID, frequency, stops, delaybetweenstops);
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
@@ -195,12 +194,10 @@ bool BusBoss::createNewDriver() {
 	}
 
 
-	//Creating the driver we will add - shifts vector is added as empty
-	Driver newDriver(newID, name, shiftsize, weeklyhourlimit, minresttime, vector<Shift>());
-
-
-	//Adding the newly created driver into the drivers map
-	drivers.emplace(newID, newDriver);
+	//Using emplace to avoid unnecessary copy or move operations by calling the constructor in place (where the element will be inserted)
+	//Arguments are forwarded to the object constructor
+	//shifts vector is added as empty
+	drivers.emplace(newID, newID, name, shiftsize, weeklyhourlimit, minresttime, vector<Shift>());
 
 	//Updating hasUnsavedChanges
 	hasUnsavedChanges = true;
