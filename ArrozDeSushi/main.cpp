@@ -232,18 +232,6 @@ bool callFunctions(string &id, BusBoss &bb) {
 		return true;
 	}
 
-	//Calculate drivers needed for a certain line
-	if (id == "1.7") {
-		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
-		id = id.substr(0, id.find_last_of('.'));
-		//calls function based on hardcoded id
-		bb.getDriversNeeded();
-		//pause to see output
-		Utilities::pause();
-		//function was found, return true
-		return true;
-	}
-
 	//Displaying lines
 	if (id == "2.1.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
@@ -256,44 +244,8 @@ bool callFunctions(string &id, BusBoss &bb) {
 		return true;
 	}
 
-	//Adding lines
-	if (id == "2.1.2") {
-		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
-		id = id.substr(0, id.find_last_of('.'));
-		//calls function based on hardcoded id
-		bb.createNewLine();
-		//pause to see output
-		Utilities::pause();
-		//function was found, return true
-		return true;
-	}
-
-	//Modifying lines
-	if (id == "2.1.3") {
-		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
-		id = id.substr(0, id.find_last_of('.'));
-		//calls function based on hardcoded id
-		bb.modifyLine();
-		//pause to see output
-		Utilities::pause();
-		//function was found, return true
-		return true;
-	}
-
-	//Deleting lines
-	if (id == "2.1.4") {
-		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
-		id = id.substr(0, id.find_last_of('.'));
-		//calls function based on hardcoded id
-		bb.deleteLine();
-		//pause to see output
-		Utilities::pause();
-		//function was found, return true
-		return true;
-	}
-
 	//Printing detailed info about a line
-	if (id == "2.1.5") {
+	if (id == "2.1.2") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
@@ -389,7 +341,7 @@ bool callFunctions(string &id, BusBoss &bb) {
 	}
 
 	//Not yet implemented stuff
-	if (id == "unimplemented option ID") {
+	if (id == "unimplemented option ID" || id == "2.3.1" || id == "2.3.2" || id == "1.7" || id == "1.8") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
