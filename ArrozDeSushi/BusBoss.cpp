@@ -580,7 +580,7 @@ bool BusBoss::printLine() {
 	//Process concluded successfully
 	return true;
 }
-//TODO - overload << for shift using this code or similar
+
 bool BusBoss::printDriverShifts() {
 	unsigned int IDtoprint = 0;
 
@@ -599,27 +599,32 @@ bool BusBoss::printDriverShifts() {
 		}
 	}
 
-	//Finding the position of the driver in the drivers vector
-	unsigned int foundpos = findDriverByID(IDtoprint);
-	//If foundpos is -1 it is because the given ID did not match any stored driver
-	if (foundpos == -1) {
+	//Checking if a driver with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool driverExists = (drivers.count(IDtoprint) > 0);
+	if (!driverExists) {
 		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de impressão de informação detalhada de um condutor..." << endl;
-		return false; //returning false since the process was not concluded successfully
+		return false;
 	}
 
+	//Clearing screen for output
+	Utilities::clearScreen();
+
 	//Driver found, printing shifts
+
+	//Getting shifts vector
+	vector<Shift> shifts = drivers[IDtoprint].getShifts();
+
 	cout << "\n";
-	if (drivers[foundpos].shifts.empty()) {
+	if (shifts.empty()) {
 		cout << "O condutor em questão não tem trabalho atribuído." << endl;
 		return true;
 	}
 	else {
-		cout << "O condutor tem " << drivers[foundpos].shifts.size() << " turnos atribuídos." << endl;
-		for (int i = 0; i < drivers[foundpos].shifts.size(); i++) {
-			cout << "O turno nº " << i << " decorrerá ao " << weekdays.at(drivers[foundpos].shifts[i].weekday);
-			cout << " começará às " << setw(2) << drivers[foundpos].shifts[i].startHour << ":" << setw(2) << drivers[foundpos].shifts[i].startMinute;
-			cout << " e terminará às " << setw(2) << drivers[foundpos].shifts[i].endHour << ":" << setw(2) << drivers[foundpos].shifts[i].endMinute;
-			cout << ", sendo que o condutor irá trabalhar na linha " << drivers[foundpos].shifts[i].lineID << "." << endl;
+		cout << "O condutor tem " << shifts.size() << " turnos atribuídos." << endl;
+		for (int i = 0; i < shifts.size(); i++) {
+			cout << "Turno nº " << i + 1 << ":\n";
+			cout << shifts[i] << endl;
 		}
 	}
 
@@ -1789,7 +1794,7 @@ ostream & operator<<(ostream &os, const Driver &d) {
 }
 //TODO - mudar print de tempo para aquela func nova
 ostream & operator<<(ostream &os, const Shift &s) {
-	os << "ID da linha: " << s.getBusLineId() << "\nID do condutor: " << s.getDriverId();
+	os << "ID da linha: " << s.getBusLineID() << "\nID do condutor: " << s.getDriverID();
 	os << "\nID do autocarro: " << s.getBusID() << "\nTempo de início(WIP): " << s.getStartTime();
 	os << "\nTempo de fim(WIP): " << s.getEndTime() << endl;
 	
