@@ -481,18 +481,21 @@ bool BusBoss::deleteDriver() {
 
 void BusBoss::displayDrivers() {
 
-	//for to go through all elements of map aka all drivers
+	//for that goes through all elements of map aka all drivers
 	for (auto const &it : drivers) {
 		//.second gets data, .first is key
 		cout << "ID: " << it.second.getID() << " Nome: " << it.second.getName() << endl;
 	}
 
 }
-//TODO - waiting for .isAvailable
+
 void BusBoss::displayDrivers(bool availability) {
-	for (int i = 0; i < drivers.size(); i++) {
-		if (drivers[i].available == availability) //If the driver has the same availability as the one given as parameters, print him
-			cout << "ID: " << drivers[i].ID << " Nome: " << drivers[i].name << endl;
+	//Using range based for loop to iterate throught the drivers map
+	for (auto const &it : drivers) {
+		//If the driver has the same availability as the one given as parameters, then print
+		if (it.second.isAvailable() == availability) {
+			cout << "ID: " << it.second.getID() << " Nome: " << it.second.getName() << endl;
+		}
 	}
 }
 
