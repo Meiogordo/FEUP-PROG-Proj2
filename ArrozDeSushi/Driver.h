@@ -39,6 +39,7 @@ public:
 	//other methods
 
 	void addShift(const Shift &newShift);
+	bool isAvailable() const;
 
 private:
 	unsigned int ID; //the driver's unique ID

@@ -86,7 +86,12 @@ void Driver::setMinRestTime(unsigned int minresttime) {
 void Driver::setShifts(const vector<Shift> &shifts) {
 	this->shifts = shifts;
 }
-//TODO : Actually add a shift from user input
+//TODO : Actually add a shift from user input or at least test if the added one can be added with recourse to internal data, returning an unsigned int to tell the caller if the function was successful
 void Driver::addShift(const Shift &newShift) {
 	shifts.push_back(newShift);
+}
+
+bool Driver::isAvailable() const {
+	//If the shifts vector is empty, the driver is available, otherwise it is not
+	return shifts.empty();
 }
