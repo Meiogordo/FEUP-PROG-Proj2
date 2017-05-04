@@ -21,17 +21,12 @@ class BusBoss {
 public:
 	BusBoss();
 	~BusBoss();
+
 	//Data alteration - public so that the functions can be called from outside the class
-	//Adds a new line, returns false if the line already exists (same ID)
-	bool createNewLine();
 	//Adds a new driver, returns false if the line already exists (same ID)
 	bool createNewDriver();
-	//Modifies a certain line, returns false if the line is not found
-	bool modifyLine();
 	//Modifies a certain driver, returns false if the driver is not found
 	bool modifyDriver();
-	//Deletes a line based on a given ID - returns true if successful, false if the ID returned no matches
-	bool deleteLine();
 	//Deletes a driver based on a given ID - returns true if successful, false if the ID returned no matches
 	bool deleteDriver();
 
@@ -80,6 +75,12 @@ private:
 	};
 	//Vector to give a string that represents the week day from the weekday variable in a shift
 	const vector<string> weekdays = { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo" };
+	//Map of all the drivers, the key is the ID
+	map<int, Driver> drivers;
+	//Map of all the lines, the key is the ID
+	map<int, Line> lines;
+	//Company name
+	string name;
 	//Schedule constants
 	//Service starts at 8:00
 	const unsigned int BUS_START_TIME_HOUR = 8;
@@ -146,9 +147,5 @@ private:
 	//Also for data output but more of a Quality of Life tweak
 	//Registers if the user has unsaved changes: to warn when opening a new file or exiting the program without saving before
 	bool hasUnsavedChanges = false;
-private:
-	string name;
-	map<int, Driver> drivers;
-	map<int, Line> lines;
 };
 
