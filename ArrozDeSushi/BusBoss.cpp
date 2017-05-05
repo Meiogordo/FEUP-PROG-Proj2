@@ -1063,7 +1063,7 @@ bool BusBoss::routeBetweenTwoStops() {
 }
 
 bool BusBoss::getIfHasUnsavedChanges() { return this->hasUnsavedChanges; }
-
+//Refactored but need to improve the display quality really badly...
 bool BusBoss::showStopSchedule() {
 	string stop;
 
@@ -1076,7 +1076,7 @@ bool BusBoss::showStopSchedule() {
 	cout << "Qual a paragem cujo horário se irá imprimir?" << endl;
 	getline(cin, stop); //getline is used because the stop name can have spaces in it
 
-						//Checking to which lines the given stop belongs
+	//Checking to which lines the given stop belongs
 	vector<int> foundLinesStop = findLinesinStop(stop);
 
 	//Checking if the stop is in no line
@@ -1093,6 +1093,7 @@ bool BusBoss::showStopSchedule() {
 	string direction;
 	string fulldirection;
 	int spaces, spacesdiv4, middlespace, spacediff;
+	vector<string> tempstopsforloop;
 
 	cout << "\n\n\n";
 
@@ -1107,8 +1108,11 @@ bool BusBoss::showStopSchedule() {
 
 		if (!schedules[i].positiveBusTimes.empty()) {
 
+			//Getting the stops vector temporarilly to get the direction from the stops
+			tempstopsforloop = lines[schedules[i].lineID].getStops();
+
 			//Gets the last stop name for the direction
-			direction = lines[findLineByID(schedules[i].lineID)].stops[lines[findLineByID(schedules[i].lineID)].stops.size() - 1];
+			direction = tempstopsforloop[tempstopsforloop.size() - 1];
 
 			fulldirection = "Sentido em direção a " + direction;
 
@@ -1155,8 +1159,11 @@ bool BusBoss::showStopSchedule() {
 		//So, only display it if the schedule isn't empty
 
 		if (!schedules[i].negativeBusTimes.empty()) {
+			//Getting the stops vector temporarilly to get the direction from the stops
+			tempstopsforloop = lines[schedules[i].lineID].getStops();
+
 			//Gets the first stop name for the direction
-			direction = lines[findLineByID(schedules[i].lineID)].stops[0];
+			direction = tempstopsforloop[0];
 
 			fulldirection = "Sentido em direção a " + direction;
 
@@ -1202,7 +1209,7 @@ bool BusBoss::showStopSchedule() {
 
 	return true;
 }
-
+//(Same as above) Refactored but need to improve the display quality really badly...
 bool BusBoss::showLineSchedule() {
 	int lineIDtoprint;
 
@@ -1221,11 +1228,10 @@ bool BusBoss::showLineSchedule() {
 		}
 	}
 
-	//Getting the index in the lines vector from the ID
-	int lineIndex = findLineByID(lineIDtoprint);
-
-	//If the result from findLineByID is -1 it is because the given ID did not match any stored line
-	if (lineIndex == -1) {
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(lineIDtoprint) > 0);
+	if (!lineExists) {
 		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão do horário de uma linha..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
@@ -1233,9 +1239,12 @@ bool BusBoss::showLineSchedule() {
 	//Getting schedules for each stop - each index will be the schedule for the stop in the same index as the stops vector
 	vector<schedule> schedules;
 
+	//Getting stops vector to pass each stop into the generateStopSchedules function
+	vector<string> stops = lines[lineIDtoprint].getStops();
+
 	//Filling the schedules vector
-	for (int i = 0; i < lines[lineIndex].stops.size(); i++) {
-		schedules.push_back(generateStopSchedules(lines[lineIndex].stops[i], lineIDtoprint));
+	for (int i = 0; i < stops.size(); i++) {
+		schedules.push_back(generateStopSchedules(stops[i], lineIDtoprint));
 	}
 
 	cout << "\n\n\n";
@@ -1243,8 +1252,8 @@ bool BusBoss::showLineSchedule() {
 	//Printing schedules
 
 	//Because this is always the same line, the directions are always the same
-	string positivedirection = lines[lineIndex].stops[lines[lineIndex].stops.size() - 1]; //Last stop is the positive direction
-	string negativedirection = lines[lineIndex].stops[0]; //First stop is the negative direction
+	string positivedirection = stops[stops.size() - 1]; //Last stop is the positive direction
+	string negativedirection = stops[0]; //First stop is the negative direction
 	string positivefulldirection = "Sentido em direção a " + positivedirection;
 	string negativefulldirection = "Sentido em direção a " + negativedirection;
 	// to use inside the loop - preventing redeclaring
@@ -1397,17 +1406,18 @@ vector<BusBoss::schedule> BusBoss::generateStopSchedules(string stop, vector<int
 
 	return output;
 }
-
+//TODO: Change utilities time function later on
 BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
 	//Function note: to simplify the math here everything is done as minutes and in the end it is converted to strings
 
 	schedule output;
 
-	//Get access to line from the line id
-	int lineIndex = findLineByID(lineID);
+	//Store the frequency to not have to keep getting the frequency
+	int frequency = lines[lineID].getFrequency();
 
-	//Store the frequency to not have to keep accessing array memory
-	int frequency = lines[lineIndex].frequency;
+	//Same for stops and travel times
+	vector<string> stops = lines[lineID].getStops();
+	vector<unsigned int> times = lines[lineID].getTravelTimesBetweenStops();
 
 	//Get start and end times in minutes
 	unsigned int startTime = BUS_START_TIME_HOUR * 60 + BUS_START_TIME_MINUTE;
@@ -1415,39 +1425,32 @@ BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
 
 	//Get travel duration to the given stop from the start and from end
 	unsigned int travelTimeFromStart = 0;
-	for (int i = 0; i < lines[lineIndex].stops.size(); i++) {
-		if (lines[lineIndex].stops[i] == stop) {
+	for (int i = 0; i < stops.size(); i++) {
+		if (stops[i] == stop) {
 			//The stop was found
 			break;
 		}
 		else {
 			//Add travel time from this stop to the next one because this is not the one we want
-			travelTimeFromStart += lines[lineIndex].delaybetweenstops[i];
+			travelTimeFromStart += times[i];
 			//There is no problem with getting out of bounds because at most the loop will break at stops.size which is one more than delaybetweenstops.size
 		}
 	}
 
 	unsigned int travelTimeFromEnd = 0;
-	for (int i = lines[lineIndex].stops.size() - 1; i >= 0; i--) {
-		if (lines[lineIndex].stops[i] == stop) {
+	for (int i = stops.size() - 1; i >= 0; i--) {
+		if (stops[i] == stop) {
 			//The stop was found
 			break;
 		}
 		else {
 			//Add travel time from this stop to the next one because this is not the one we want
-			travelTimeFromEnd += lines[lineIndex].delaybetweenstops[i - 1]; //-1 because delays have 1 less index than stops
+			travelTimeFromEnd += times[i - 1]; //-1 because delays have 1 less index than stops
 		}
 	}
 
-	//Complete travel time for the whole line - used to know if a bus will depart (has to arrive at one of the line endings before the endTime)
-	unsigned int fullTravelTime = 0;
-
-	for (int i = 0; i < lines[lineIndex].delaybetweenstops.size(); i++) {
-		fullTravelTime += lines[lineIndex].delaybetweenstops[i];
-	}
-
 	//Times at which the buses start the line (direction does not matter for this because we are considering that buses depart from start and end simultaneously)
-	vector<int> busDepartures;
+	vector<unsigned int> busDepartures;
 
 	//Filling the vector 
 	// Discarded: the stop condition is if the bus cannot make it to one of the endings of the line, he does not depart
@@ -1460,32 +1463,32 @@ BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
 	vector<int> positiveBusPassagesAtStop; //In the positive direction (start to finish)
 	vector<int> negativeBusPassagesAtStop; //In the negative direction (finish to start)
 
-										   //Filling bus passages at the stop vector
+	//Filling vector of bus passages at the given stop
 	for (int i = 0; i < busDepartures.size(); i++) {
 		positiveBusPassagesAtStop.push_back(busDepartures[i] + travelTimeFromStart);
 		negativeBusPassagesAtStop.push_back(busDepartures[i] + travelTimeFromEnd);
 	}
 
 	//Setting output schedule values
+
+	//Line ID for printing stop schedule
 	output.lineID = lineID;
 
 	//Dealing with the stop being the end or the beginning of the line
 
 	//If the stop is the end, it makes no sense to show the positive timetable
 
-	if (stop == lines[lineIndex].stops[lines[lineIndex].stops.size() - 1])
+	if (stop == stops[stops.size() - 1])
 		output.positiveBusTimes = vector<string>();
 	else
 		output.positiveBusTimes = Utilities::minutesToHHMM(positiveBusPassagesAtStop);
 
 	//Likewise, if the stop is the beginning, it makes no sense to show the negative timetable
 
-	if (stop == lines[lineIndex].stops[0])
+	if (stop == stops[0])
 		output.negativeBusTimes = vector<string>();
 	else
 		output.negativeBusTimes = Utilities::minutesToHHMM(negativeBusPassagesAtStop);
-
-	//TODO remove from calculation if it is meaningless as well
 
 	return output;
 }
