@@ -1659,7 +1659,7 @@ ostream & operator<<(ostream &os, const Driver &d) {
 
 	return os;
 }
-//TODO - mudar print de tempo para aquela func nova
+//TODO - mudar print de tempo para aquela func nova quando estiver feita
 ostream & operator<<(ostream &os, const Shift &s) {
 	os << "ID da linha: " << s.getBusLineID() << "\nID do condutor: " << s.getDriverID();
 	os << "\nID do autocarro: " << s.getBusID() << "\nTempo de início(WIP): " << s.getStartTime();
