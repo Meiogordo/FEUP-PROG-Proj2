@@ -81,4 +81,13 @@ namespace Utilities {
 	vector<string> minutesToHHMM(const vector<int> &minutes);
 	//Rounds double to nearest integer (works with negative values)
 	int roundToInt(double input);
+
+	//Converts minutes to a struct of an int (weekday) and a string in the HH:MM format
+	struct time {
+		int weekday;
+		string hourAndMinutes;
+	};
+	time minutesToTime(int minutes);
+	//Overload of the above for vectors
+	vector<time> minutesToTime(const vector<int> &minutes);
 }

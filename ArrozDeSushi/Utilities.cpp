@@ -143,4 +143,46 @@ namespace Utilities {
 	int roundToInt(double input) {
 		return (input > 0.0) ? (input + 0.5) : (input - 0.5);
 	}
+
+	time minutesToTime(int minutes){
+		time temptime;
+		if (minutes >= 10080){
+			temptime.weekday = 6;
+			temptime.hourAndMinutes = "23:59";
+			return temptime;
+		}
+
+		//Final time
+		int hours = 0;
+		int days = 0;
+		
+
+		while (minutes >= 60) {
+			minutes -= 60;
+			hours++;
+		}
+
+		while (hours >= 24) {
+			hours -= 60;
+			days++;
+		}
+
+		stringstream ss;
+		ss << setfill('0') << setw(2) << hours << ":" << setw(2) << minutes;
+
+		temptime.weekday = days;
+		temptime.hourAndMinutes = ss.str();
+
+		return temptime;
+	}
+	vector<time> minutesToTime(const vector<int>& minutes)
+	{
+		vector<time> output;
+
+		for (int i = 0; i < minutes.size(); i++) {
+			output.push_back(minutesToTime(minutes[i]));
+		}
+
+		return output;
+	}
 }
