@@ -29,6 +29,8 @@ public:
 	unsigned int getFrequency() const;
 	vector<string> getStops() const;
 	vector<unsigned int> getTravelTimesBetweenStops() const;
+	string getFirstStop() const;
+	string getLastStop() const;
 
 	//other methods
 	bool hasStop(string stopname) const;

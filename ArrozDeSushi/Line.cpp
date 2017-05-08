@@ -70,6 +70,14 @@ vector<unsigned int> Line::getTravelTimesBetweenStops() const {
 	return travelTimesBetweenStops;
 }
 
+string Line::getFirstStop() const {
+	return stops[0];
+}
+
+string Line::getLastStop() const {
+	return stops[stops.size() - 1];
+}
+
 void Line::setID(unsigned int ID) {
 	this->ID = ID;
 }
