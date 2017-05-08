@@ -1659,11 +1659,16 @@ ostream & operator<<(ostream &os, const Driver &d) {
 
 	return os;
 }
-//TODO - mudar print de tempo para aquela func nova quando estiver feita
+
 ostream & operator<<(ostream &os, const Shift &s) {
 	os << "ID da linha: " << s.getBusLineID() << "\nID do condutor: " << s.getDriverID();
-	os << "\nID do autocarro: " << s.getBusID() << "\nTempo de início(WIP): " << s.getStartTime();
-	os << "\nTempo de fim(WIP): " << s.getEndTime() << endl;
+	os << "\nID do autocarro: " << s.getBusID() << endl;
+	os << "Tempo de início(WIP): ";
+	auto starttime = Utilities::minutesToTime(s.getStartTime());
+	os << Utilities::weekdays[starttime.weekday] << ", " << starttime.hourAndMinutes << endl;
+	os << "\nTempo de fim(WIP): ";
+	auto endtime = Utilities::minutesToTime(s.getEndTime());
+	os << Utilities::weekdays[endtime.weekday] << ", " << endtime.hourAndMinutes << endl;
 	
 	return os;
 }

@@ -71,8 +71,6 @@ private:
 		short int direction; //direction of the shortest distance, -1 for negative and 1 for positive
 		unsigned int nStops; //number of stops to go through
 	};
-	//Vector to give a string that represents the week day from the weekday variable in a shift
-	const vector<string> weekdays = { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo" };
 	//Map of all the drivers, the key is the ID
 	map<int, Driver> drivers;
 	//Map of all the lines, the key is the ID

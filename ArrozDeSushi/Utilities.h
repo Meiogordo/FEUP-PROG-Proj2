@@ -90,4 +90,6 @@ namespace Utilities {
 	time minutesToTime(int minutes);
 	//Overload of the above for vectors
 	vector<time> minutesToTime(const vector<int> &minutes);
+	//Vector to give a string that represents the week day from the weekday variable in a shift
+	const vector<string> weekdays = { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo" };
 }
