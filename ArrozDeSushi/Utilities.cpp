@@ -163,7 +163,7 @@ namespace Utilities {
 		}
 
 		while (hours >= 24) {
-			hours -= 60;
+			hours -= 24;
 			days++;
 		}
 
