@@ -978,7 +978,7 @@ void BusBoss::findLinesinStop() {
 bool BusBoss::routeBetweenTwoStops() {
 	//CASES:
 	//0: One of them has no lines
-	//1: No common lines - impossible with what we know at least for now
+	//1: No common lines - we consider only one line change for now, otherwise it is impossible
 	//2: One common line - check best direction in the line
 	//3: Several common lines - check best direction in each line.. 
 	//Ideas - function to check best direction in line
@@ -995,7 +995,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	getline(cin, stop1); //getline is used because the stop name can have spaces in it
 
 	//Checking to which lines stop1 belongs
-	vector<int> foundLinesStop1 = findLinesinStop(stop1);
+	vector<unsigned int> foundLinesStop1 = findLinesinStop(stop1);
 
 	//Case 0.1
 	if (foundLinesStop1.empty()) {
@@ -1007,7 +1007,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	getline(cin, stop2); //getline is used because the stop name can have spaces in it
 
 	//Searching for the stop in lines using findLinesinStop
-	vector<int> foundLinesStop2 = findLinesinStop(stop2);
+	vector<unsigned int> foundLinesStop2 = findLinesinStop(stop2);
 
 	//Case 0.2
 	if (foundLinesStop2.empty()) {
@@ -1016,47 +1016,50 @@ bool BusBoss::routeBetweenTwoStops() {
 	}
 
 	//Check lines in common between the two stops
-	vector<int> intersection = Utilities::intersectVectors(foundLinesStop1, foundLinesStop2);
+	vector<unsigned int> intersection = Utilities::intersectVectors(foundLinesStop1, foundLinesStop2);
 
 	//Case 1
-	if (intersection.empty()) {
-		cout << "As duas paragens dadas não têm nenhuma linha em comum.\nAbortando o processo de cálculo de percurso entre duas paragens..." << endl;
-		return false;
-	}
+	//---
 
 	//Case 2 & 3 - can be handled together due to how things were structured
 
-	//Distances holds the distances in stops and best direction between stop1 and stop2 for each line in intersection
-	vector<distance> distances = calculateStopsForEachDirection(stop1, stop2, intersection);
+	//Calculating the routes that use the same line
+	vector<route> routes = calculateRouteSameLine(stop1, stop2, intersection);
 
-	//Determining the smallest distance
-	int smallestDistIndex = 0;
-	for (int i = 0; i < distances.size(); i++) {
-		//if the distance at this index is smaller then that is the new index for the smallest distance
-		if (distances[i].nStops < distances[smallestDistIndex].nStops)
-			smallestDistIndex = i;
+	//Sorting results
+	////////sort stuff
+
+	//Printing results
+
+	//Clearing screen
+	Utilities::clearScreen();
+
+	//"Header"
+	cout << "Ponto de Partida: " << stop1 << endl;
+	cout << "Destino: " << stop2 << endl;
+	cout << "\nCaminhos possíveis:";
+
+	//Printing results (all available routes)
+	for (int i = 0; i < routes.size(); i++) {
+		cout << "\n" << i + 1 << ":\n";
+
+		//If there is a line switch we have to print the information differently
+		if (routes[i].switchesline) {
+			cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
+			cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
+			cout << "Trocar para a linha " << routes[i].lineIDs.second << " em direção a " << getDirection(routes[i].lineIDs.second, routes[i].directions.second);
+			cout << ", durante " << routes[i].nStops.second << " paragens." << endl;
+
+			cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
+		}
+		else {
+			cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
+			cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
+
+			cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
+		}
 	}
 
-	//Getting direction for the smallest distance
-
-	string direction;
-
-	//getting the stops list for the line in which we can go the smallest distance
-	vector<string> stopsforsmallestdistline = lines[distances[smallestDistIndex].lineID].getStops();
-
-	if (distances[smallestDistIndex][0] == 1) {
-		//Positive direction - direction given by last stop in the stops vector
-		direction = stopsforsmallestdistline[stopsforsmallestdistline.size() - 1];
-	}
-	else {
-		//Negative direction - direction given by first stop in the stops vector
-		direction = stopsforsmallestdistline[0];
-	}
-
-	//The smallest distance was found
-	cout << "Para percorrer o menor número de paragens entre " << stop1 << " e " << stop2 << ", deve-se apanhar a linha " << intersection[smallestDistIndex] << ", com direção a ";
-	cout << direction << ", andando " << distances[smallestDistIndex].nStops << " paragens.";
-	cout << endl;
 
 	//Process was successful
 	return true;
@@ -1381,8 +1384,8 @@ void BusBoss::Reset() {
 	//If more internal data is added, update this
 }
 
-vector<int> BusBoss::findLinesinStop(string stopname) {
-	vector<int> output;
+vector<unsigned int> BusBoss::findLinesinStop(string stopname) {
+	vector<unsigned int> output;
 
 	//loop goes through all the lines in the map
 	//(works like a for each in which each it is an iterator but can be used to directly access the map element, kind of)
@@ -1406,7 +1409,7 @@ vector<BusBoss::schedule> BusBoss::generateStopSchedules(string stop, vector<int
 
 	return output;
 }
-//TODO: Change utilities time function later on
+
 BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
 	//Function note: to simplify the math here everything is done as minutes and in the end it is converted to strings
 
@@ -1493,23 +1496,26 @@ BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
 	return output;
 }
 
-vector<BusBoss::distance> BusBoss::calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines) {
+vector<BusBoss::route> BusBoss::calculateRouteSameLine(string startStop, string endStop, vector<unsigned int> commonLines) {
 	//vector of distances, distance has the ID for the line, the direction and the number of stops to go through (to compare each line)
-	vector<distance> output(commonLines.size());
+	vector<route> output(commonLines.size());
 
 	for (int i = 0; i < commonLines.size(); i++) {
 		//output was already with the correct dimensions so there is no need to use push_back
-		output[i] = calculateStopsForEachDirection(startStop, endStop, commonLines[i]);
+		output[i] = calculateRouteSameLine(startStop, endStop, commonLines[i]);
 	}
 
 	return output;
 }
 
-BusBoss::distance BusBoss::calculateStopsForEachDirection(string startStop, string endStop, int commonLineID) {
-	distance outputdist;
+BusBoss::route BusBoss::calculateRouteSameLine(string startStop, string endStop, unsigned int commonLineID) {
+	route r;
+
+	//This is in the same line so there are no switches
+	r.switchesline = false;
 
 	//Setting line ID to be able to know which line we are referring to in the future
-	outputdist.lineID = commonLineID;
+	r.lineIDs.first = commonLineID;
 
 	//Getting the stops vector for this line
 	vector<string> stops = lines[commonLineID].getStops();
@@ -1532,16 +1538,42 @@ BusBoss::distance BusBoss::calculateStopsForEachDirection(string startStop, stri
 
 	//start is left of end - positive direction
 	if (startpos < endpos) {
-		outputdist.direction = 1;
-		outputdist.nStops = endpos - startpos;
+		r.directions.first = 1;
+		r.nStops.first = endpos - startpos;
 	}
 	else {
 		//start is right of end - negative direction
-		outputdist.direction = -1;
-		outputdist.nStops = startpos - endpos;
+		r.directions.first = -1;
+		r.nStops.first = startpos - endpos;
 	}
 
-	return outputdist;
+	//Getting the total time for comparison with other routes
+	vector<unsigned int> times = lines[commonLineID].getTravelTimesBetweenStops();
+	unsigned int totalTime = 0;
+
+	for (int i = startpos; i < endpos; i += r.directions.first) {
+		totalTime += times[i];
+	}
+
+	r.totalTimeinMinutes = totalTime;
+
+	return r;
+}
+
+string BusBoss::getDirection(unsigned int lineID, short int direction) {
+
+	string output;
+
+	//Positive direction
+	if (direction == 1) {
+		output = lines[lineID].getLastStop();
+	}
+	//Negative direction
+	else {
+		output = lines[lineID].getFirstStop();
+	}
+
+	return output;
 }
 
 void BusBoss::saveDriverstoFile(ostream &file) {
@@ -1551,7 +1583,7 @@ void BusBoss::saveDriverstoFile(ostream &file) {
 	// (With a new line between each line)
 
 	//Getting an iterator to access all the elements in the drivers map (constant because there is no need to change)
-	map<int,Driver>::const_iterator driverit = drivers.begin();
+	map<int, Driver>::const_iterator driverit = drivers.begin();
 
 	//First item done outside so that the newline can be appended before to cause for no newline at the end or start of the file
 	//(Also the reason to not use a range based for loop - accessing first item separately)
@@ -1560,7 +1592,7 @@ void BusBoss::saveDriverstoFile(ostream &file) {
 
 	//For loop with the iterator, incremented at the start because the first element was already saved
 	//Note: ++it avoids extra copy operation (see code generated by pre-increment vs post-increment for iterators) 
-	for (++driverit ; driverit != prev(drivers.end()); ++driverit) {
+	for (++driverit; driverit != prev(drivers.end()); ++driverit) {
 		file << "\n" << driverit->second.getID() << " ; " << driverit->second.getName() << " ; "
 			<< driverit->second.getShiftSize() << " ; " << driverit->second.getWeeklyHourLimit() << " ; " << driverit->second.getMinRestTime();
 	}
@@ -1669,6 +1701,6 @@ ostream & operator<<(ostream &os, const Shift &s) {
 	os << "\nTempo de fim(WIP): ";
 	auto endtime = Utilities::minutesToTime(s.getEndTime());
 	os << Utilities::weekdays[endtime.weekday] << ", " << endtime.hourAndMinutes << endl;
-	
+
 	return os;
 }

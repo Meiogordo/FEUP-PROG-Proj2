@@ -66,10 +66,15 @@ public:
 private:
 	//Internal class data
 	//Describing a distance - using a struct instead of an int vector because when nested it would be confusing
-	struct distance {
-		int lineID; //ID of the line that is being taken
-		short int direction; //direction of the shortest distance, -1 for negative and 1 for positive
-		unsigned int nStops; //number of stops to go through
+	struct route {
+		bool switchesline; //defines if the route has a line switch
+
+		//Data
+		pair<unsigned int, unsigned int> lineIDs; //IDs of the lines that are being taken
+		pair<short int, short int> directions; //direction of each of the routes to take, -1 for negative and 1 for positive
+		pair<unsigned int, unsigned int> nStops; //number of stops to go through for each of the lines
+
+		unsigned int totalTimeinMinutes; //total time in minutes that this route takes, used for sorting routes as well
 	};
 	//Map of all the drivers, the key is the ID
 	map<int, Driver> drivers;
@@ -103,7 +108,7 @@ private:
 
 	//Internal class data handling - searches for ID and whatnot
 	//Searches for a certain stop in all of the lines and returns a vector of line IDs to which the given stop belongs
-	vector<int> findLinesinStop(string stopname);
+	vector<unsigned int> findLinesinStop(string stopname);
 	//Generating schedules
 	//Generates the schedule for a stop for the specified lines
 	vector<schedule> generateStopSchedules(string stop, vector<int> lineIDs);
@@ -120,14 +125,18 @@ private:
 	bool modifyLine(unsigned int choice, int pos);
 	//Modify driver helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
 	bool modifyDriver(unsigned int choice, int pos);
+
 	//Prints the driver with the given position in its vector onto the screen
 	void printDriver(unsigned int pos);
 	//Prints the line with the given position in its vector onto the screen
 	void printLine(unsigned int pos);
+
 	//Calculates the number of stops between two stops for each direction for a vector of lines
-	vector<distance> calculateStopsForEachDirection(string startStop, string endStop, vector<int> commonLines);
+	vector<route> calculateRouteSameLine(string startStop, string endStop, vector<unsigned int> commonLines);
 	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
-	distance calculateStopsForEachDirection(string startStop, string endStop, int commonLine);
+	route calculateRouteSameLine(string startStop, string endStop, unsigned int commonLine);
+	//Gets the last or first stop of certain line (direction)
+	string getDirection(unsigned int lineID, short int direction);
 
 	//Data ouput helpers - private because they only need to be accessed by Save()
 	//Path from where the drivers were loaded - used to save
