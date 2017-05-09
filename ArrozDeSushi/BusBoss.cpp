@@ -1015,19 +1015,19 @@ bool BusBoss::routeBetweenTwoStops() {
 		return false;
 	}
 
-	//Check lines in common between the two stops
-	vector<unsigned int> intersection = Utilities::intersectVectors(foundLinesStop1, foundLinesStop2);
-
 	//Case 1
 	//---
 
 	//Case 2 & 3 - can be handled together due to how things were structured
 
+	//Check lines in common between the two stops
+	vector<unsigned int> intersection = Utilities::intersectVectors(foundLinesStop1, foundLinesStop2);
+
 	//Calculating the routes that use the same line
 	vector<route> routes = calculateRouteSameLine(stop1, stop2, intersection);
 
 	//Sorting results
-	////////sort stuff
+	sort(routes.begin(), routes.end(), compareRoutes);
 
 	//Printing results
 
@@ -1558,6 +1558,10 @@ BusBoss::route BusBoss::calculateRouteSameLine(string startStop, string endStop,
 	r.totalTimeinMinutes = totalTime;
 
 	return r;
+}
+
+bool BusBoss::compareRoutes(const route & r1, const route & r2) {
+	return r1.totalTimeinMinutes < r2.totalTimeinMinutes;
 }
 
 string BusBoss::getDirection(unsigned int lineID, short int direction) {

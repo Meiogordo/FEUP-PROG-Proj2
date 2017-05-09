@@ -3,6 +3,7 @@
 #include <iostream>
 #include <string>
 #include <map>
+#include <algorithm>
 
 #include "Utilities.h"
 #include "Line.h"
@@ -118,7 +119,7 @@ private:
 
 	//Other (TODO: Later on sort these into other categories if possible)
 
-	//These seven are private because there is no need to access them externally
+	//Many of these are private because there is no need to access them externally
 
 	//Modify and print without parameters should be used for modification and printing and nothing else
 	//Modify line helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
@@ -135,6 +136,8 @@ private:
 	vector<route> calculateRouteSameLine(string startStop, string endStop, vector<unsigned int> commonLines);
 	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
 	route calculateRouteSameLine(string startStop, string endStop, unsigned int commonLine);
+	//Defining comparison for routes, to use with std::sort
+	bool compareRoutes(const route &r1, const route &r2);
 	//Gets the last or first stop of certain line (direction)
 	string getDirection(unsigned int lineID, short int direction);
 
