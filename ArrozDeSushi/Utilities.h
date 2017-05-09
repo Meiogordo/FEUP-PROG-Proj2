@@ -92,4 +92,18 @@ namespace Utilities {
 	vector<time> minutesToTime(const vector<int> &minutes);
 	//Vector to give a string that represents the week day from the weekday variable in a shift
 	const vector<string> weekdays = { "Segunda-feira", "Terça-feira", "Quarta-feira", "Quinta-feira", "Sexta-feira", "Sábado", "Domingo" };
+
+	//Joins the elements of vectors of the same type (not deleting potential duplicates)
+	template<typename T>
+	vector<T> joinVectors(const vector<T> &v1, const vector<T> &v2) {
+		//Creating output vector and preallocating memory
+		vector<T> output(v1.size() + v2.size());
+
+		//Inserting the elements
+		output.insert(output.end(), v1.begin(), v1.end());
+		output.insert(output.end(), v2.begin(), v2.end());
+
+		//Returning the result
+		return output;
+	}
 }
