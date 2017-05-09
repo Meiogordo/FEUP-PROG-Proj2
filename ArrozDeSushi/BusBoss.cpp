@@ -1016,7 +1016,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	}
 
 	//Case 1
-	//---
+	vector<route> routesSwitch = calculateRouteSwitch(stop1, stop2, foundLinesStop1, foundLinesStop2);
 
 	//Case 2 & 3 - can be handled together due to how things were structured
 
@@ -1024,7 +1024,10 @@ bool BusBoss::routeBetweenTwoStops() {
 	vector<unsigned int> intersection = Utilities::intersectVectors(foundLinesStop1, foundLinesStop2);
 
 	//Calculating the routes that use the same line
-	vector<route> routes = calculateRouteSameLine(stop1, stop2, intersection);
+	vector<route> routesSame = calculateRouteSameLine(stop1, stop2, intersection);
+
+	//Joining the routes using same line and 1 line switch
+	vector<route> routes = Utilities::joinVectors(routesSwitch, routesSame);
 
 	//Sorting results
 	sort(routes.begin(), routes.end(), compareRoutes);

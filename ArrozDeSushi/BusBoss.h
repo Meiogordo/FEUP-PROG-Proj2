@@ -136,6 +136,11 @@ private:
 	vector<route> calculateRouteSameLine(string startStop, string endStop, vector<unsigned int> commonLines);
 	//Calculates the number of stops in the best direction ([0] is direction - -1 or 1, [1] is length of travel)
 	route calculateRouteSameLine(string startStop, string endStop, unsigned int commonLine);
+
+	vector<route> calculateRouteSwitch(string stop1, string stop2, const vector<unsigned int> &foundLinesStop1, const vector<unsigned int> &foundLinesStop2);
+
+	route calculateRouteSwitch(string stop1, string stop2, unsigned int foundLineStop1, const vector<unsigned int> &foundLinesStop2);
+
 	//Defining comparison for routes, to use with std::sort
 	bool compareRoutes(const route &r1, const route &r2);
 	//Gets the last or first stop of certain line (direction)
