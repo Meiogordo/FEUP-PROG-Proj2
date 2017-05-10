@@ -35,7 +35,7 @@ Line::Line(string rawline) {
 		//Trimming the string for stoi
 		Utilities::trimString(tempintodelays[i]);
 	}
-	
+
 	for (int i = 0; i < tempintodelays.size(); i++) {
 		//Filling in the delay vector with stoi
 		travelTimesBetweenStops.push_back(stoi(tempintodelays[i]));
@@ -101,4 +101,14 @@ bool Line::hasStop(string stopname) const {
 		}
 	}
 	return false;
+}
+
+int Line::findStop(string stopname) const {
+
+	for (int i = 0; i < stops.size(); ++i) {
+		if (stops[i] == stopname)
+			return i;
+	}
+
+	return -1;
 }

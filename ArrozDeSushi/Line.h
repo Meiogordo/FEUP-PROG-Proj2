@@ -34,6 +34,8 @@ public:
 
 	//other methods
 	bool hasStop(string stopname) const;
+	//Finds the stop index in the stops vector, returns -1 if not found
+	int findStop(string stopname) const;
 private:
 	//Missing frequency and travel times between stops???
 	//do not understand what they want the int vector (times here, timesList there) to be...
