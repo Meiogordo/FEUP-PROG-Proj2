@@ -90,13 +90,6 @@ private:
 	//Service ends at 20:00
 	const unsigned int BUS_END_TIME_HOUR = 20;
 	const unsigned int BUS_END_TIME_MINUTE = 0;
-	//Bus fleet
-	//Constant that defines the bus fleet size
-	const unsigned int BUS_FLEET_SIZE = 100;
-	//Vector of buses, a vector is used because the buses have an internal sequential ID
-	vector<Bus> busFleet;
-	//Define busFleet as a vector of empty buses, of size BUS_FLEET_SIZE
-	void initBusFleet();
 	//To better describe a stop schedule
 	struct schedule {
 		unsigned int lineID; //The id of the line that the schedule is for

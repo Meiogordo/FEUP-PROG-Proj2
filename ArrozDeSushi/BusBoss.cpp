@@ -1349,23 +1349,11 @@ bool BusBoss::showLineSchedule() {
 	return true;
 }
 
-void BusBoss::initBusFleet() {
-	busFleet.reserve(BUS_FLEET_SIZE);
-
-	//Going through the busFleet with a range-based for loop to set each element to a Bus object called with the default constructor
-	//(only ID is initialized, setters shall set the rest)
-	for (auto &it : busFleet) {
-		it = Bus();
-	}
-}
-
 void BusBoss::Reset() {
 	//Deleting drivers
 	drivers.clear();
 	//Deleting lines
 	lines.clear();
-	//Setting the buses vector to be initialized with size BUS_FLEET_SIZE and empty Bus objects
-	initBusFleet();
 
 	//If more internal data is added, update this
 }
