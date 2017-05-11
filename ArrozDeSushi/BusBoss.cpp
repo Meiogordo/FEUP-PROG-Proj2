@@ -1524,20 +1524,10 @@ BusBoss::route BusBoss::calculateRouteSameLine(string startStop, string endStop,
 	vector<string> stops = lines[commonLineID].getStops();
 
 	//finding the startStop position in the given line
-	int startpos;
-	for (startpos = 0; startpos < stops.size(); startpos++) {
-		if (stops[startpos] == startStop) {
-			break; //if we find the stop we break the loop and now have successfully got the start position
-		}
-	}
+	int startpos = lines[commonLineID].findStop(startStop);
 
 	//finding the endStop position in the given line
-	int endpos;
-	for (endpos = 0; endpos < stops.size(); endpos++) {
-		if (stops[endpos] == endStop) {
-			break; //if we find the stop we break the loop and now have successfully got the end position
-		}
-	}
+	int endpos = lines[commonLineID].findStop(endStop);
 
 	//start is left of end - positive direction
 	if (startpos < endpos) {
@@ -1554,10 +1544,117 @@ BusBoss::route BusBoss::calculateRouteSameLine(string startStop, string endStop,
 	vector<unsigned int> times = lines[commonLineID].getTravelTimesBetweenStops();
 	unsigned int totalTime = 0;
 
+	//By adding the direction we are going through the vector in the correct direction (otherwise startpos could be bigger than endpos and just doing ++i could go wrong)
 	for (int i = startpos; i < endpos; i += r.directions.first) {
 		totalTime += times[i];
 	}
 
+	r.totalTimeinMinutes = totalTime;
+
+	return r;
+}
+
+vector<BusBoss::route> BusBoss::calculateRouteSwitch(string stop1, string stop2, const vector<unsigned int>& foundLinesStop1, const vector<unsigned int>& foundLinesStop2) {
+
+	vector<route> output;
+
+	//Vectors that hold the stops being compared
+	vector<string> outerstops;
+	vector<string> innerstops;
+
+	//For each line of stop1
+	for (unsigned int outerline : foundLinesStop1) {
+		outerstops = lines[outerline].getStops();
+
+		//Searching for each stop of the current line of stop1
+		for (string outerstop : outerstops) {
+
+			//Because we wouldn't switch the line at the first stop anyway, that would be going on the same line (I think)
+			if (outerstop == stop1)
+				continue;
+
+			//For each line of stop2, 
+			for (unsigned int innerline : foundLinesStop2) {
+				//if the line is the same, then a "switch" would be possible on every stop, thus making the system not work, so if the line is the same, we skip the line
+				if (innerline == outerline)
+					continue;
+
+				innerstops = lines[innerline].getStops();
+
+				for (string innerstop : innerstops) {
+					//If a common stop is found between the lines of stop1 and stop2, the route is generated and appended to the output
+					if (innerstop == outerstop)
+						output.push_back(calculateRouteSwitch(stop1, stop2, innerstop, outerline, innerline));
+				}
+
+			}
+
+		}
+
+	}
+
+	return output;
+}
+
+BusBoss::route BusBoss::calculateRouteSwitch(string stop1, string stop2, string commonstop, unsigned int stop1line, unsigned int stop2line) {
+	route r;
+
+	//This function only calculates routes when switching lines
+	r.switchesline = true;
+
+	//Setting the line IDs
+	r.lineIDs = { stop1line, stop2line };
+
+	//Getting position of stops in their respective lines
+	unsigned int stop1pos = lines[stop1line].findStop(stop1);
+	unsigned int commonstopline1pos = lines[stop1line].findStop(commonstop);
+	unsigned int commonstopline2pos = lines[stop2line].findStop(commonstop);
+	unsigned int stop2pos = lines[stop2line].findStop(stop2);
+
+	//Getting data depending on direction
+
+	//stop1 to commonstop
+	//stop1 is left of commonstop - positive direction
+	if (stop1pos < commonstopline1pos) {
+		r.directions.first = 1;
+		r.nStops.first = commonstopline1pos - stop1pos;
+	}
+	else {
+		//stop1 is right of commonstop - negative direction
+		r.directions.first = -1;
+		r.nStops.first = stop1pos - commonstopline1pos;
+	}
+
+	//Getting the time from stop1 to commonstop
+	vector<unsigned int> times = lines[stop1line].getTravelTimesBetweenStops();
+	unsigned int totalTime = 0;
+
+	//By adding the direction we are going through the vector in the correct direction (otherwise startpos could be bigger than endpos and just doing ++i could go wrong)
+	for (int i = stop1pos; i < commonstopline1pos; i += r.directions.first) {
+		totalTime += times[i];
+	}
+
+	//commonstop to stop2
+	//commonstop is left of stop2 - positive direction
+	if (commonstopline2pos < stop2pos) {
+		r.directions.second = 1;
+		r.nStops.second = commonstopline2pos - stop2pos;
+	}
+	else {
+		//stop1 is right of commonstop - negative direction
+		r.directions.second = -1;
+		r.nStops.second = stop2pos - commonstopline2pos;
+	}
+
+	//Adding the time from commonstop to stop2
+	times = lines[stop2line].getTravelTimesBetweenStops();
+
+	//By adding the direction we are going through the vector in the correct direction (otherwise startpos could be bigger than endpos and just doing ++i could go wrong)
+	for (int i = commonstopline2pos; i < stop2pos; i += r.directions.second) {
+		totalTime += times[i];
+	}
+
+	//Setting the total time
 	r.totalTimeinMinutes = totalTime;
 
 	return r;
