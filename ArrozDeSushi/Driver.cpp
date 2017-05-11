@@ -1,5 +1,7 @@
 #include "Driver.h"
 
+Driver::Driver() {}
+
 Driver::Driver(string rawline) {
 
 	//Splitting the information by ";" - which is the information splitter
