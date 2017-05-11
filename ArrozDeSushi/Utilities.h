@@ -97,7 +97,8 @@ namespace Utilities {
 	template<typename T>
 	vector<T> joinVectors(const vector<T> &v1, const vector<T> &v2) {
 		//Creating output vector and preallocating memory
-		vector<T> output(v1.size() + v2.size());
+		vector<T> output;
+		output.reserve(v1.size() + v2.size());
 
 		//Inserting the elements
 		output.insert(output.end(), v1.begin(), v1.end());
