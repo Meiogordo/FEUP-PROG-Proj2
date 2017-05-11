@@ -148,7 +148,6 @@
   <ItemGroup>
     <ClCompile Include="Bus.cpp" />
     <ClCompile Include="BusBoss.cpp" />
-    <ClCompile Include="BusManager.cpp" />
     <ClCompile Include="Driver.cpp" />
     <ClCompile Include="Line.cpp" />
     <ClCompile Include="main.cpp" />
@@ -159,7 +158,6 @@
   <ItemGroup>
     <ClInclude Include="Bus.h" />
     <ClInclude Include="BusBoss.h" />
-    <ClInclude Include="BusManager.h" />
     <ClInclude Include="Driver.h" />
     <ClInclude Include="Line.h" />
     <ClInclude Include="Menu.h" />
