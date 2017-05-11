@@ -795,7 +795,7 @@ bool BusBoss::Load() {
 	//Populating lines map
 	for (int i = 0; i < RawLines.size(); i++) {
 		//Getting the raw id string to use when creating the map element
-		rawtempid = RawDrivers[i].substr(0, RawDrivers[i].find(";"));
+		rawtempid = RawLines[i].substr(0, RawLines[i].find(";"));
 		//Trimming the string to remove unnecessary spaces
 		Utilities::trimString(rawtempid);
 
