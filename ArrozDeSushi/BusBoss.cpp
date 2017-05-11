@@ -500,17 +500,13 @@ void BusBoss::displayDrivers(bool availability) {
 }
 
 void BusBoss::displayLines() {
-	vector<string> stops;
 
 	//for to go through all elements of map aka all lines
 	for (auto const &it : lines) {
 		//.second gets data, .first is key
 
-		//getting the stops vector to show first and last stop
-		stops = it.second.getStops();
-
 		cout << "ID: " << it.second.getID() << " Primeira e última paragem: ";
-		cout << stops.at(0) << " ... " << stops.at(stops.size() - 1);
+		cout << it.second.getFirstStop() << " ... " << it.second.getLastStop();
 		cout << endl;
 	}
 
@@ -544,7 +540,7 @@ bool BusBoss::printDriver() {
 
 	//Driver found, printing detailed info
 	cout << "\n";
-	printDriver(IDtoprint);
+	cout << drivers[IDtoprint];
 
 	//Process concluded successfully
 	return true;
@@ -578,7 +574,7 @@ bool BusBoss::printLine() {
 
 	//Line found, printing detailed info
 	cout << "\n";
-	printLine(IDtoprint);
+	cout << lines[IDtoprint];
 
 	//Process concluded successfully
 	return true;
@@ -633,14 +629,6 @@ bool BusBoss::printDriverShifts() {
 
 	//Process concluded successfully
 	return true;
-}
-
-void BusBoss::printDriver(unsigned int IDtoprint) {
-	cout << drivers[IDtoprint];
-}
-
-void BusBoss::printLine(unsigned int IDtoprint) {
-	cout << lines[IDtoprint];
 }
 
 bool BusBoss::Load() {
@@ -1083,7 +1071,7 @@ bool BusBoss::showStopSchedule() {
 	getline(cin, stop); //getline is used because the stop name can have spaces in it
 
 	//Checking to which lines the given stop belongs
-	vector<int> foundLinesStop = findLinesinStop(stop);
+	vector<unsigned int> foundLinesStop = findLinesinStop(stop);
 
 	//Checking if the stop is in no line
 	if (foundLinesStop.empty()) {
@@ -1099,7 +1087,6 @@ bool BusBoss::showStopSchedule() {
 	string direction;
 	string fulldirection;
 	int spaces, spacesdiv4, middlespace, spacediff;
-	vector<string> tempstopsforloop;
 
 	cout << "\n\n\n";
 
@@ -1114,11 +1101,8 @@ bool BusBoss::showStopSchedule() {
 
 		if (!schedules[i].positiveBusTimes.empty()) {
 
-			//Getting the stops vector temporarilly to get the direction from the stops
-			tempstopsforloop = lines[schedules[i].lineID].getStops();
-
-			//Gets the last stop name for the direction
-			direction = tempstopsforloop[tempstopsforloop.size() - 1];
+			//Getting the direction
+			direction = getDirection(schedules[i].lineID, 1);
 
 			fulldirection = "Sentido em direção a " + direction;
 
@@ -1165,11 +1149,9 @@ bool BusBoss::showStopSchedule() {
 		//So, only display it if the schedule isn't empty
 
 		if (!schedules[i].negativeBusTimes.empty()) {
-			//Getting the stops vector temporarilly to get the direction from the stops
-			tempstopsforloop = lines[schedules[i].lineID].getStops();
-
-			//Gets the first stop name for the direction
-			direction = tempstopsforloop[0];
+			
+			//Getting the direction
+			direction = getDirection(schedules[i].lineID, -1);
 
 			fulldirection = "Sentido em direção a " + direction;
 
@@ -1217,13 +1199,13 @@ bool BusBoss::showStopSchedule() {
 }
 //(Same as above) Refactored but need to improve the display quality really badly...
 bool BusBoss::showLineSchedule() {
-	int lineIDtoprint;
+	unsigned int lineIDtoprint;
 
 	cout << "Qual o ID da linha cujo horário se irá imprimir? ";
 	while (true) {
 		cin >> lineIDtoprint;
 		if (cin.fail()) {
-			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
@@ -1260,6 +1242,7 @@ bool BusBoss::showLineSchedule() {
 	//Because this is always the same line, the directions are always the same
 	string positivedirection = stops[stops.size() - 1]; //Last stop is the positive direction
 	string negativedirection = stops[0]; //First stop is the negative direction
+	//Note: getDirection could be used as well, but since the vector was already used before, it is needed anyway, so there is no problem in using it here
 	string positivefulldirection = "Sentido em direção a " + positivedirection;
 	string negativefulldirection = "Sentido em direção a " + negativedirection;
 	// to use inside the loop - preventing redeclaring
@@ -1296,7 +1279,7 @@ bool BusBoss::showLineSchedule() {
 			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
 
 			//Stop and direction print
-			cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
+			cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + stops[i] << "|" << endl;
 			cout << "|" << setw(spaces) << positivefulldirection << "|" << endl;
 
 			cout << right;
@@ -1338,7 +1321,7 @@ bool BusBoss::showLineSchedule() {
 			cout << "|" << setfill('-') << setw(spaces + 1) << "|" << endl;
 
 			//Line and direction print
-			cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + lines[lineIndex].stops[i] << "|" << endl;
+			cout << "|" << setfill(' ') << left << setw(spaces) << "Paragem " + stops[i] << "|" << endl;
 			cout << "|" << setw(spaces) << negativefulldirection << "|" << endl;
 
 			cout << right;
@@ -1403,7 +1386,7 @@ vector<unsigned int> BusBoss::findLinesinStop(string stopname) {
 	return output;
 }
 
-vector<BusBoss::schedule> BusBoss::generateStopSchedules(string stop, vector<int> lineIDs) {
+vector<BusBoss::schedule> BusBoss::generateStopSchedules(string stop, vector<unsigned int> lineIDs) {
 	vector<schedule> output;
 
 	for (int i = 0; i < lineIDs.size(); i++) {
@@ -1413,7 +1396,7 @@ vector<BusBoss::schedule> BusBoss::generateStopSchedules(string stop, vector<int
 	return output;
 }
 
-BusBoss::schedule BusBoss::generateStopSchedules(string stop, int lineID) {
+BusBoss::schedule BusBoss::generateStopSchedules(string stop, unsigned int lineID) {
 	//Function note: to simplify the math here everything is done as minutes and in the end it is converted to strings
 
 	schedule output;

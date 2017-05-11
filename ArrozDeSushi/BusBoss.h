@@ -99,7 +99,7 @@ private:
 	void initBusFleet();
 	//To better describe a stop schedule
 	struct schedule {
-		int lineID; //The id of the line that the schedule is for
+		unsigned int lineID; //The id of the line that the schedule is for
 		//The times at which the bus from a certain line passes through the stop
 		vector<string> positiveBusTimes; //In the positive direction (start to finish)
 		vector <string> negativeBusTimes; //In the negative direction (finish to start)
@@ -112,9 +112,9 @@ private:
 	vector<unsigned int> findLinesinStop(string stopname);
 	//Generating schedules
 	//Generates the schedule for a stop for the specified lines
-	vector<schedule> generateStopSchedules(string stop, vector<int> lineIDs);
+	vector<schedule> generateStopSchedules(string stop, vector<unsigned int> lineIDs);
 	//Generates the schedule for a stop for the given lineID
-	schedule generateStopSchedules(string stop, int lineID);
+	schedule generateStopSchedules(string stop, unsigned int lineID);
 
 
 	//Other (TODO: Later on sort these into other categories if possible)
@@ -126,11 +126,6 @@ private:
 	bool modifyLine(unsigned int choice, int pos);
 	//Modify driver helper, takes in the choice and position of the line in the lines vector and modifies the selected attribute
 	bool modifyDriver(unsigned int choice, int pos);
-
-	//Prints the driver with the given position in its vector onto the screen
-	void printDriver(unsigned int pos);
-	//Prints the line with the given position in its vector onto the screen
-	void printLine(unsigned int pos);
 
 	//Calculates the number of stops between two stops for each direction for a vector of lines
 	vector<route> calculateRouteSameLine(string startStop, string endStop, vector<unsigned int> commonLines);
