@@ -10,8 +10,11 @@ using namespace std;
 class Line {
 public:
 	//Constructors
-	
-	Line::Line(string rawline);
+
+	//Default constructor so that the lines map doesn't explode
+	Line();
+	//Constructor that can take in a raw line from a text file
+	Line(string rawline);
 	Line(unsigned int ID, unsigned int frequency, const vector<string> &stops, const vector<unsigned int> &travelTimesBetweenStops);
 	~Line();
 

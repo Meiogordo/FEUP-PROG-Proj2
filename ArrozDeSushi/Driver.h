@@ -13,6 +13,8 @@ public:
 	
 	//Constructors
 
+	//Default constructor so that the drivers map doesn't explode
+	Driver();
 	//Constructor that can take in a raw line from a text file
 	Driver(string rawline);
 	Driver(unsigned int ID, string name, unsigned int shiftsize, unsigned int weeklyhourlimit, unsigned int minresttime, const vector<Shift> &shifts);

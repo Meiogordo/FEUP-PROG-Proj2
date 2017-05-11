@@ -23,8 +23,7 @@ vector<Shift> Bus::getSchedule() const {
 	return schedule;
 }
 
-int Bus::getTotalBuses()
-{
+int Bus::getTotalBuses() {
 	return totalBuses;
 }
 

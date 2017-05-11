@@ -69,18 +69,21 @@ private:
 	//Describing a distance - using a struct instead of an int vector because when nested it would be confusing
 	struct route {
 		bool switchesline; //defines if the route has a line switch
-
+		
 		//Data
 		pair<unsigned int, unsigned int> lineIDs; //IDs of the lines that are being taken
 		pair<short int, short int> directions; //direction of each of the routes to take, -1 for negative and 1 for positive
 		pair<unsigned int, unsigned int> nStops; //number of stops to go through for each of the lines
-
+		
 		unsigned int totalTimeinMinutes; //total time in minutes that this route takes, used for sorting routes as well
+
+		//Overloading less than operator for route to be able to use std::sort
+		bool operator<(const BusBoss::route &r) const;
 	};
 	//Map of all the drivers, the key is the ID
-	map<int, Driver> drivers;
+	map<unsigned int, Driver> drivers;
 	//Map of all the lines, the key is the ID
-	map<int, Line> lines;
+	map<unsigned int, Line> lines;
 	//Company name
 	string name;
 	//Schedule constants
@@ -129,8 +132,6 @@ private:
 	//Helper for vector overload, when a common stop is found creates a route representing the route found
 	route calculateRouteSwitch(string stop1, string stop2, string commonstop, unsigned int stop1line, unsigned int stop2line);
 
-	//Defining comparison for routes, to use with std::sort
-	bool compareRoutes(const route &r1, const route &r2);
 	//Gets the last or first stop of certain line (direction)
 	string getDirection(unsigned int lineID, short int direction);
 

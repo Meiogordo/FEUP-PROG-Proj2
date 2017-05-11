@@ -1,5 +1,7 @@
 #include "Line.h"
 
+Line::Line() {}
+
 Line::Line(string rawline) {
 	//Splitting the information by ";" - which is the information splitter
 	vector<string> info = Utilities::splitString(rawline, ";");
