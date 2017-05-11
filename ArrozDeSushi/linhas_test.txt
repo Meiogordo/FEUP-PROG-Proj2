@@ -2,3 +2,7 @@
 207 ; 10 ; Aliados, Carmo, Galiza, Rotunda da Boavista; 5, 20, 20
 505 ; 30 ; Matosinhos, 7 Bicas, Rotunda dos Produtos Estrela, Senhora da Hora; 40, 30, 45
 506 ; 15 ; Ribeira, Alfandega, Fluvial, Foz; 10, 25, 55
+1 ; 5 ; A, B, C, D, E, F; 1, 1, 1, 1, 1
+2 ; 5 ; 2, 3, C, 4, 1; 1, 1, 1, 1
+3 ; 5 ; P1, P2, P3, P4, P5, P6, Pfim; 1, 1, 1, 1, 1, 1
+4 ; 5 ; P2, Pfim; 1
