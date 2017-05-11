@@ -155,7 +155,7 @@ bool BusBoss::modifyLine(unsigned int choice, int IDtomodify) {
 				cin.ignore(100000, '\n');
 				//Clearing screen and reprinting with warning
 				Utilities::clearScreen();
-				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << lines[pos].stops.size() - 1 << ")." << endl;
+				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << stops.size() - 1 << ")." << endl;
 				cout << "Qual a paragem a alterar?" << endl;
 				//Printing options
 				Utilities::printVector(stops);
@@ -190,7 +190,7 @@ bool BusBoss::modifyLine(unsigned int choice, int IDtomodify) {
 		unsigned int newDelay = 0;
 
 		//Getting times vector
-		vector<int> times = lines[IDtomodify].getTravelTimesBetweenStops();
+		vector<unsigned int> times = lines[IDtomodify].getTravelTimesBetweenStops();
 		//Getting stops vector
 		vector<string> stops = lines[IDtomodify].getStops();
 
@@ -209,7 +209,7 @@ bool BusBoss::modifyLine(unsigned int choice, int IDtomodify) {
 				cin.ignore(100000, '\n');
 				//Clearing screen and reprinting with warning
 				Utilities::clearScreen();
-				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << lines[pos].delaybetweenstops.size() - 1 << ")." << endl;
+				cout << "Opção inválida, por favor introduza um número válido (inteiro positivo menor que " << times.size() - 1 << ")." << endl;
 				cout << "Qual o tempo de viagem a alterar?" << endl;
 				//Printing options
 				for (int i = 0; i < stops.size() - 1; i++) {
@@ -947,7 +947,7 @@ void BusBoss::findLinesinStop() {
 	getline(cin, stopname); //getline is used because the stop name can have spaces in it
 
 	//Searching for the stop in lines using findLinesinStop's overload
-	vector<int> foundLines = findLinesinStop(stopname);
+	vector<unsigned int> foundLines = findLinesinStop(stopname);
 
 	//Outputting result based on foundLines being empty or not
 	if (foundLines.empty()) {
@@ -1018,7 +1018,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	vector<route> routes = Utilities::joinVectors(routesSwitch, routesSame);
 
 	//Sorting results
-	sort(routes.begin(), routes.end(), compareRoutes);
+	std::sort(routes.begin(), routes.end(), compareRoutes);
 
 	//Printing results
 

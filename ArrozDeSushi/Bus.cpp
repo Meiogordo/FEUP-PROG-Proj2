@@ -28,19 +28,18 @@ int Bus::getTotalBuses()
 	return totalBuses;
 }
 
-bool Bus::getIsWorking()
-{
+bool Bus::getIsWorking() {
 	return isWorking;
 }
 
 void Bus::setDriverID(unsigned int driverID) {
 	this->driverID = driverID;
 }
+
 void Bus::setLineID(unsigned int lineID) {
 	this->lineID = lineID;
 }
 
-bool Bus::setIsWorking(bool isWorking)
-{
+void Bus::setIsWorking(bool isWorking) {
 	this->isWorking = isWorking;
 }

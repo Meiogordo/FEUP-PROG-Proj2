@@ -30,7 +30,7 @@ public:
 	//setters
 	void setDriverID(unsigned int driverID);
 	void setLineID(unsigned int lineID);
-	bool setIsWorking(bool isWorking);
+	void setIsWorking(bool isWorking);
 	// other methods
 private:
 	unsigned int ID;
