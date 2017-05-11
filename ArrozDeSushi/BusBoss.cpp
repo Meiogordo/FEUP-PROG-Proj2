@@ -962,7 +962,7 @@ void BusBoss::findLinesinStop() {
 		cout << endl;
 	}
 }
-//In pause at the moment but (heavily) refactored nonetheless - also TODO change to time instead of nr of stops
+
 bool BusBoss::routeBetweenTwoStops() {
 	//CASES:
 	//0: One of them has no lines
@@ -1017,7 +1017,7 @@ bool BusBoss::routeBetweenTwoStops() {
 	//Joining the routes using same line and 1 line switch
 	vector<route> routes = Utilities::joinVectors(routesSwitch, routesSame);
 
-	//Sorting results - comparison function is not necessary since < operator was defined for route
+	//Sorting results - comparison function/functor is not necessary since < operator was defined for route
 	sort(routes.begin(), routes.end());
 
 	//Printing results
@@ -1025,30 +1025,39 @@ bool BusBoss::routeBetweenTwoStops() {
 	//Clearing screen
 	Utilities::clearScreen();
 
-	//"Header"
-	cout << "Ponto de Partida: " << stop1 << endl;
-	cout << "Destino: " << stop2 << endl;
-	cout << "\nCaminhos possíveis:";
+	//Only print routes if the routes vector isn't empty
+	if (!routes.empty()) {
 
-	//Printing results (all available routes)
-	for (int i = 0; i < routes.size(); i++) {
-		cout << "\n" << i + 1 << ":\n";
+		//"Header"
+		cout << "Ponto de Partida: " << stop1 << endl;
+		cout << "Destino: " << stop2 << endl;
+		cout << "\nCaminhos possíveis:";
 
-		//If there is a line switch we have to print the information differently
-		if (routes[i].switchesline) {
-			cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
-			cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
-			cout << "Trocar para a linha " << routes[i].lineIDs.second << " em direção a " << getDirection(routes[i].lineIDs.second, routes[i].directions.second);
-			cout << ", durante " << routes[i].nStops.second << " paragens." << endl;
 
-			cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
+		//Printing results (all available routes)
+		for (int i = 0; i < routes.size(); i++) {
+			cout << "\n" << i + 1 << ":\n";
+
+			//If there is a line switch we have to print the information differently
+			if (routes[i].switchesline) {
+				cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
+				cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
+				cout << "Trocar para a linha " << routes[i].lineIDs.second << " em direção a " << getDirection(routes[i].lineIDs.second, routes[i].directions.second);
+				cout << ", durante " << routes[i].nStops.second << " paragens." << endl;
+
+				cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
+			}
+			else {
+				cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
+				cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
+
+				cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
+			}
 		}
-		else {
-			cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
-			cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
-
-			cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
-		}
+	}
+	//If the routes vector is empty no route was found
+	else {
+		cout << "Não foi encontrado nenhum percurso possível entre as duas paragens, considerando a possibilidade de 1 transbordo." << endl;
 	}
 
 
