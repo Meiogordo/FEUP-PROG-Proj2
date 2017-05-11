@@ -1041,15 +1041,15 @@ bool BusBoss::routeBetweenTwoStops() {
 			//If there is a line switch we have to print the information differently
 			if (routes[i].switchesline) {
 				cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
-				cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
+				cout << ", durante " << routes[i].nStops.first << (routes[i].nStops.first > 1 ? " paragens." : " paragem.") << endl;
 				cout << "Trocar para a linha " << routes[i].lineIDs.second << " em direção a " << getDirection(routes[i].lineIDs.second, routes[i].directions.second);
-				cout << ", durante " << routes[i].nStops.second << " paragens." << endl;
+				cout << ", durante " << routes[i].nStops.second << (routes[i].nStops.second > 1 ? " paragens." : " paragem.") << endl;
 
 				cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
 			}
 			else {
 				cout << "Apanhar a linha " << routes[i].lineIDs.first << " em direção a " << getDirection(routes[i].lineIDs.first, routes[i].directions.first);
-				cout << ", durante " << routes[i].nStops.first << " paragens." << endl;
+				cout << ", durante " << routes[i].nStops.first << (routes[i].nStops.first > 1 ? " paragens." : " paragem.") << endl;
 
 				cout << "Tempo total de viagem (em minutos): " << routes[i].totalTimeinMinutes << endl;
 			}
