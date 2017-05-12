@@ -66,7 +66,7 @@ public:
 
 private:
 	//Internal class data
-	//Describing a distance - using a struct instead of an int vector because when nested it would be confusing
+	//Describing a route - used for storing data of paths between two stops
 	struct route {
 		bool switchesline; //defines if the route has a line switch
 		
