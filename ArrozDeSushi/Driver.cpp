@@ -98,6 +98,6 @@ void Driver::addShift(const Shift &newShift) {
 }
 
 bool Driver::isAvailable() const {
-	//If the shifts vector is empty, the driver is available, otherwise it is not
-	return shifts.empty();
+	//If the driver hasn't hit the maximum number of weekly hours then he is available
+	return weeklyhoursdrivensofar < weeklyhourlimit;
 }
