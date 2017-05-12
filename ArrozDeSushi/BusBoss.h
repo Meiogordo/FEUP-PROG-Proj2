@@ -9,7 +9,6 @@
 #include "Line.h"
 #include "Driver.h"
 #include "Shift.h"
-#include "Bus.h"
 
 using namespace std;
 
@@ -45,6 +44,8 @@ public:
 	bool printLine();
 	//Prints a driver's assigned work
 	bool printDriverShifts();
+	//Prints a certain bus's information
+	bool printBusInfo();
 
 	//External data management - public to be accessible from outside the class
 	//Loads data from files into class - returns true if successful, false if aborted

@@ -631,6 +631,90 @@ bool BusBoss::printDriverShifts() {
 	return true;
 }
 
+bool BusBoss::printBusInfo() {
+	unsigned int lineID = 0;
+
+	cout << "Qual o ID da linha a imprimir?" << endl;
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(lineID) > 0);
+	if (!lineExists) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de informação detalhada de uma linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Line found, asking for bus order number
+
+	unsigned int busOrderNumber = 0;
+
+	cout << "\n";
+	cout << "Qual o número de ordem do autocarro a imprimir?";
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "Número de ordem inválido, por favor introduza um número de ordem válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if the bus in that order exists
+
+	//Getting bus fleet
+	vector<Bus> busFleet = lines[lineID].getBusFleet();
+
+	//Pointer to the found object - const means not that the pointer is constant and will only point to one thing but that the object it points to is constant!
+	const Bus *busToPrint = nullptr;
+
+	//for each bus in busFleet
+	for(auto const &bus : busFleet){
+		if (bus.getBusOrderInLine() == busOrderNumber) {
+			//If the bus is found then the object pointer is set and the loop is broken
+			busToPrint = &bus;
+			break;
+		}
+	}
+
+	//If the bus was found, print it, otherwise print error message
+	//(If the bus was found then the pointer was set, which means it is not nullptr
+	if (busToPrint != nullptr) {
+		cout << "Autocarro especificado com sucesso!" << endl;
+		cout << "Imprimindo informações sobre o autocarro:\n";
+
+		cout << *busToPrint;
+
+		//Process concluded successfully
+		return true;
+	}
+	else {
+		cout << "O autocarro com o número de ordem especificado não foi encontrado..." << endl;
+		cout << "Abortando o processo de impressão de informação sobre um autocarro..." << endl;
+
+		//Process was unsuccessful
+		return false;
+	}
+	
+}
+
 bool BusBoss::Load() {
 
 	//Check to see if the user has unsaved changes before loading a new file

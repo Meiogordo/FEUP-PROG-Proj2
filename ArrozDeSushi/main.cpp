@@ -316,6 +316,18 @@ bool callFunctions(string &id, BusBoss &bb) {
 		return true;
 	}
 
+	//Printing bus detailed info
+	if (id == "2.3.2") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bb.printBusInfo();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
 	//load
 	if (id == "3.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
@@ -341,7 +353,7 @@ bool callFunctions(string &id, BusBoss &bb) {
 	}
 
 	//Not yet implemented stuff
-	if (id == "unimplemented option ID" || id == "2.3.1" || id == "2.3.2" || id == "1.7" || id == "1.8") {
+	if (id == "unimplemented option ID" || id == "2.3.1" || id == "1.7" || id == "1.8") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
