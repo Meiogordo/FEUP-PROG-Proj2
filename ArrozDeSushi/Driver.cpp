@@ -2,7 +2,7 @@
 
 Driver::Driver() {}
 
-Driver::Driver(string rawline) {
+Driver::Driver(string rawline) : weeklyhoursdrivensofar(0) {
 
 	//Splitting the information by ";" - which is the information splitter
 	vector<string> info = Utilities::splitString(rawline, ";");
@@ -36,7 +36,7 @@ Driver::Driver(string rawline) {
 }
 
 Driver::Driver(unsigned int ID, string name, unsigned int shiftsize, unsigned int weeklyhourlimit, unsigned int minresttime, const vector<Shift> &shifts)
-	: ID(ID), name(name), shiftsize(shiftsize), weeklyhourlimit(weeklyhourlimit), minresttime(minresttime), shifts(shifts)
+	: ID(ID), name(name), shiftsize(shiftsize), weeklyhourlimit(weeklyhourlimit), minresttime(minresttime), shifts(shifts), weeklyhoursdrivensofar(0)
 {}
 
 Driver::~Driver() {}
@@ -63,6 +63,10 @@ unsigned int Driver::getMinRestTime() const {
 
 vector<Shift> Driver::getShifts() const {
 	return shifts;
+}
+
+unsigned int Driver::getWeeklyHoursDrivenSoFar() const {
+	return weeklyhoursdrivensofar;
 }
 
 void Driver::setID(unsigned int ID) {

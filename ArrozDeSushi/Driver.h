@@ -37,6 +37,7 @@ public:
 	unsigned int getWeeklyHourLimit() const;
 	unsigned int getMinRestTime() const;
 	vector<Shift> getShifts() const;
+	unsigned int getWeeklyHoursDrivenSoFar() const; // no need for setter for this because it will be incremented when the shift is added (I guess)
 
 	//other methods
 
@@ -50,5 +51,6 @@ private:
 	unsigned int weeklyhourlimit; //number of hours the driver can work per week
 	unsigned int minresttime; //minimum rest time between shifts (hours)
 	vector<Shift> shifts; //list of shifts the driver was assigned to do
+	unsigned int weeklyhoursdrivensofar; //number of hours already driven in a week, used to make checking if the limit was hit easier
 };
 
