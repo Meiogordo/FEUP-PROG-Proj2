@@ -62,10 +62,10 @@ void Menu::DisplayByID(string &id) {
 		//Exit option and fancy last line for input
 		if (id == "") {
 			//If in main menu (string empty) show exit instead of back
-			cout << "0 Exit" << endl;
+			cout << "0 Sair" << endl;
 		}
 		else {
-			cout << "0 Back" << endl;
+			cout << "0 Voltar ao menu inicial" << endl;
 		}
 		cout << "\n>>> ";
 	}
