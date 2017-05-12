@@ -1858,7 +1858,7 @@ void BusBoss::saveLinestoFile(ostream &file) {
 	//Lines file updated.
 }
 
-ostream & operator<<(ostream &os, const Line &l) {
+ostream& operator<<(ostream &os, const Line &l) {
 	os << "ID: " << l.getID() << "\nFrequência de passagem de autocarros: " << l.getFrequency();
 	os << "\nParagens desta linha:\n";
 	Utilities::printVector(l.getStops());
@@ -1868,7 +1868,7 @@ ostream & operator<<(ostream &os, const Line &l) {
 	return os;
 }
 
-ostream & operator<<(ostream &os, const Driver &d) {
+ostream& operator<<(ostream &os, const Driver &d) {
 	cout << "ID: " << d.getID() << "\nNome: " << d.getName();
 	cout << "\nTamanho de turno: " << d.getShiftSize() << "\nLimite de horas de trabalho semanal: " << d.getWeeklyHourLimit();
 	cout << "\nTempo mínimo de descanso: " << d.getMinRestTime() << endl;
@@ -1876,7 +1876,7 @@ ostream & operator<<(ostream &os, const Driver &d) {
 	return os;
 }
 
-ostream & operator<<(ostream &os, const Shift &s) {
+ostream& operator<<(ostream &os, const Shift &s) {
 	os << "ID da linha: " << s.getBusLineID() << "\nID do condutor: " << s.getDriverID();
 	os << "\nID do autocarro: " << s.getBusID() << endl;
 	os << "Tempo de início(WIP): ";
