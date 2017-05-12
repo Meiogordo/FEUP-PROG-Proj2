@@ -1,4 +1,6 @@
 #include "Line.h"
+#include "Bus.h"
+
 
 Line::Line() {}
 
@@ -21,6 +23,10 @@ Line::Line(string rawline) {
 	int frequency = stoi(info[1]); //frequency of buses in the line (minutes)
 	vector<string> stops; //list of stop names
 	vector<unsigned int> travelTimesBetweenStops; //Times (in minutes) of travel between stops
+	
+	int totalTime; //Total time of one full travel (in minutes) (only A to B / not B to A)
+	int numberOfBuses; //number of Buses needed
+	vector<Bus> busFleet; //vector of Buses
 
 	//Filling in the data vectors
 
@@ -41,6 +47,20 @@ Line::Line(string rawline) {
 	for (int i = 0; i < tempintodelays.size(); i++) {
 		//Filling in the delay vector with stoi
 		travelTimesBetweenStops.push_back(stoi(tempintodelays[i]));
+	}
+
+	for (int i = 0; i < travelTimesBetweenStops.size(); i++) {
+		totalTime += travelTimesBetweenStops[i];
+	}
+
+	numberOfBuses = ceil((double)2 * totalTime / frequency);
+	
+	busFleet.reserve(numberOfBuses);
+
+	//Going through the busFleet with a range-based for loop to set each element to a Bus object called with the default constructor
+	//(only ID is initialized, setters shall set the rest)
+	for (auto &it : busFleet) {
+		it = Bus();
 	}
 
 	//Assigning values to line
