@@ -4,6 +4,7 @@
 #include <string>
 
 #include "Utilities.h"
+#include "Bus.h"
 
 using namespace std;
 
@@ -34,6 +35,7 @@ public:
 	vector<unsigned int> getTravelTimesBetweenStops() const;
 	string getFirstStop() const;
 	string getLastStop() const;
+	vector<Bus> getBusFleet() const;
 
 	//other methods
 	bool hasStop(string stopname) const;
@@ -46,5 +48,6 @@ private:
 	unsigned int frequency;
 	vector<string> stops;
 	vector<unsigned int> travelTimesBetweenStops;
+	vector<Bus> busFleet;
 };
 

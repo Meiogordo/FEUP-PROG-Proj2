@@ -68,6 +68,7 @@ Line::Line(string rawline) {
 	this->frequency = frequency;
 	this->stops = stops;
 	this->travelTimesBetweenStops = travelTimesBetweenStops;
+	this->busFleet = busFleet;
 }
 
 Line::Line(unsigned int ID, unsigned int frequency, const vector<string> &stops, const vector<unsigned int> &travelTimesBetweenStops)
@@ -98,6 +99,11 @@ string Line::getFirstStop() const {
 
 string Line::getLastStop() const {
 	return stops[stops.size() - 1];
+}
+
+vector<Bus> Line::getBusFleet() const
+{
+	return busFleet;
 }
 
 void Line::setID(unsigned int ID) {
