@@ -101,8 +101,7 @@ string Line::getLastStop() const {
 	return stops[stops.size() - 1];
 }
 
-vector<Bus> Line::getBusFleet() const
-{
+vector<Bus> Line::getBusFleet() const {
 	return busFleet;
 }
 

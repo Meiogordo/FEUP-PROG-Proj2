@@ -1,6 +1,10 @@
 #include "Bus.h"
 
-unsigned int Bus::totalBuses = 0;
+unsigned int Bus::totalBuses = 1;
+
+Bus::Bus() {
+	ID = totalBuses++;
+}
 
 Bus::Bus(unsigned int driverID, unsigned int lineID, unsigned int orderInLine, const vector<Shift> &shift)
 	: driverID(driverID), lineID(lineID), orderInLine(orderInLine), schedule(shift) {
