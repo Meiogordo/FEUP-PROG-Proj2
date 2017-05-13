@@ -48,3 +48,7 @@ void Shift::setStartTime(unsigned int startTime){
 void Shift::setEndTime(unsigned int endTime){
 	this->endTime = endTime;
 }
+
+bool Shift::operator<(const Shift &s) const {
+	return this->getStartTime() < s.getStartTime();
+}

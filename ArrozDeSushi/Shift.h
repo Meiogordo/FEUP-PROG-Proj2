@@ -27,6 +27,8 @@ public:
 	void setEndTime(unsigned int endTime);
 	
 	// other methods
+	//Overloading less than operator for Shift to be able to use std::sort - will be sorted by startTime (it is the easier way to sort)
+	bool operator<(const Shift &s) const;
 
 private:
 	unsigned int lineID;
