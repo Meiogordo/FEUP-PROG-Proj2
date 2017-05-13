@@ -24,6 +24,9 @@ Bus::Bus(unsigned int lineID, unsigned int startTime, unsigned int endTime) : li
 
 	}
 
+	//sorting the remaining work vector to make sure it is sequential in terms of start time
+	sort(remainingWork.begin(), remainingWork.end());
+
 }
 
 Bus::~Bus() {}
@@ -83,6 +86,9 @@ bool Bus::removeWork(unsigned int startTime, unsigned int endTime) {
 			}
 		}
 	}
+
+	//sorting the remaining work vector to make sure it is sequential in terms of start time
+	sort(remainingWork.begin(), remainingWork.end());
 
 	return someWorkWasRemoved;
 }
