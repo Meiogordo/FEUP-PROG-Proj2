@@ -7,7 +7,7 @@
 1.4 Que linhas passam numa determinada paragem
 1.5 Lista de condutores disponiveis
 1.6 Calcular e visualizar percurso entre duas paragens
-1.7 Lista de todos os períodos de autocarros sem condutor atribuído
+1.7 Lista de todos os períodos de autocarros sem condutor atribuído (Aviso: muitas linhas causam muitos autocarros que causa bastante ilegibilidade do output devido ao seu tamanho)
 1.8 Lista de todos os períodos de condutores sem o serviço completo atribuído (que não tenham atingido o limite máximo semanal)
 1.9 Atribuir interativamente serviço aos condutores
 2.1 Linhas
@@ -22,5 +22,7 @@
 2.3 Autocarros
 2.3.1 Listagem de autocarros
 2.3.2 Informação detalhada sobre um autocarro
+2.3.3 Períodos de autocarro sem condutor atribuído para uma certa linha
+2.3.4 Períodos de autocarro sem condutor atribuído para uma certa linha e dia da semana
 3.1 Carregar informação de ficheiros (Load)
 3.2 Escrever informação em ficheiros (Save)

@@ -232,6 +232,18 @@ bool callFunctions(string &id, BusBoss &bb) {
 		return true;
 	}
 
+	//List of all bus unassigned periods
+	if (id == "1.7") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bb.listAllBusUnassignedPeriods();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
 	//Displaying lines
 	if (id == "2.1.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
@@ -340,6 +352,30 @@ bool callFunctions(string &id, BusBoss &bb) {
 		return true;
 	}
 
+	//Printing bus unassigned periods based on line
+	if (id == "2.3.3") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bb.listBusUnassignedPeriodsByLine();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
+	//Printing bus unassigned periods based on line and week day
+	if (id == "2.3.3") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bb.listBusUnassignedPeriodsByLineAndWeekday();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
 	//load
 	if (id == "3.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
@@ -365,7 +401,7 @@ bool callFunctions(string &id, BusBoss &bb) {
 	}
 
 	//Not yet implemented stuff
-	if (id == "unimplemented option ID" || id == "1.7" || id == "1.8") {
+	if (id == "unimplemented option ID" || id == "1.8") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
