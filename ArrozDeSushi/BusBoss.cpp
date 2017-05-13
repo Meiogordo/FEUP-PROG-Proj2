@@ -653,7 +653,7 @@ bool BusBoss::printBusInfo() {
 	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
 	bool lineExists = (lines.count(lineID) > 0);
 	if (!lineExists) {
-		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de informação detalhada de uma linha..." << endl;
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de informação detalhada de um autocarro..." << endl;
 		return false; //returning false since the process was not concluded successfully
 	}
 
@@ -742,7 +742,7 @@ bool BusBoss::listBusesInLine() {
 	}
 
 	//Line found, printing info of the busFleet
-	
+
 	cout << endl;
 
 	vector<Bus> busFleet = lines[lineID].getBusFleet();
@@ -754,6 +754,136 @@ bool BusBoss::listBusesInLine() {
 		cout << busFleet[i] << endl;
 	}
 
+	return true;
+}
+
+bool BusBoss::listAllBusUnassignedPeriods() {
+
+	vector<Bus> tempBuses;
+	vector<Shift> tempBusRemainingShifts;
+
+	//for each line, we are going to be listing each bus's unassigned period
+	for (auto const &line : lines) {
+
+		tempBuses = line.second.getBusFleet();
+
+		cout << "Linha " << line.second.getID() << ":" << endl;
+
+		//for each bus in the line
+		for (auto const &bus : tempBuses) {
+			cout << "Autocarro nº " << bus.getBusOrderInLine() << " de " << tempBuses.size() << ":" << endl;
+			tempBusRemainingShifts = bus.getRemainingWork();
+
+			if (tempBusRemainingShifts.empty()) {
+				cout << "Este autocarro já tem todo o seu trabalho atribuído." << endl;
+			}
+			else {
+				cout << "Trabalho que ainda falta atribuir condutor a:" << endl;
+
+				//for each remaining shift in the bus - printing the times that are missing a driver
+				for (auto const &shift : tempBusRemainingShifts) {
+					auto startTime = Utilities::minutesToTime(shift.getStartTime());
+					auto endTime = Utilities::minutesToTime(shift.getEndTime());
+					cout << "Início do turno: " << startTime << "\t";
+					cout << "Fim do turno: " << endTime << endl;
+				}
+			}
+		}
+
+	}
+
+	cout << endl;
+
+	//Process was concluded successfully
+	return true;
+}
+
+bool BusBoss::listBusUnassignedPeriodsByLine() {
+	unsigned int lineID = 0;
+
+	cout << "Qual o ID da linha cujos períodos de trabalho disponíveis nos autocarros se irá imprimir?" << endl;
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(lineID) > 0);
+	if (!lineExists) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de períodos de trabalho disponíveis nos autocarros de uma linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Printing based on given lineID
+	listBusUnassignedPeriodsByLine(lineID);
+
+	//Process concluded successfully
+	return true;
+}
+
+bool BusBoss::listBusUnassignedPeriodsByLineAndWeekday() {
+	unsigned int lineID = 0;
+
+	cout << "Qual o ID da linha cujos períodos de trabalho disponíveis nos autocarros se irá imprimir?" << endl;
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(lineID) > 0);
+	if (!lineExists) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de períodos de trabalho disponíveis nos autocarros de uma linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	unsigned int desiredWeekday = 0; //weekdays as according to Utilities::weekdays, [0,6]
+
+	cout << "Qual o dia da semana para o qual mostrar os turnos disponíveis?" << endl;
+	Utilities::printVector(Utilities::weekdays);
+	while (true) {
+		cin >> desiredWeekday;
+		if (cin.fail() || (desiredWeekday > 6 || desiredWeekday < 0)) {
+			//Clearing screen
+			Utilities::clearScreen();
+			//Displaying error message and repeating input asking
+			cout << "Dia da semana inválido, por favor introduza um dia da semana válido (número inteiro positivo entre 0 e 6)." << endl;
+			cout << "Qual o dia da semana para o qual mostrar os turnos disponíveis?" << endl;
+			Utilities::printVector(Utilities::weekdays);
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Printing based on user input
+	listBusUnassignedPeriodsByLineAndWeekday(lineID, desiredWeekday);
+
+	//Process concluded successfully
 	return true;
 }
 
@@ -1485,11 +1615,11 @@ bool BusBoss::showLineSchedule() {
 }
 
 unsigned int BusBoss::getStartTime() {
-	return BUS_START_TIME_HOUR*60 + BUS_START_TIME_MINUTE;
+	return BUS_START_TIME_HOUR * 60 + BUS_START_TIME_MINUTE;
 }
 
 unsigned int BusBoss::getEndTime() {
-	return BUS_END_TIME_HOUR*60 + BUS_END_TIME_MINUTE;
+	return BUS_END_TIME_HOUR * 60 + BUS_END_TIME_MINUTE;
 }
 
 void BusBoss::Reset() {
@@ -1794,6 +1924,85 @@ BusBoss::route BusBoss::calculateRouteSwitch(string stop1, string stop2, string 
 	return r;
 }
 
+void BusBoss::listBusUnassignedPeriodsByLine(unsigned int lineID) {
+
+	//Getting bus fleet
+	vector<Bus> busFleet = lines[lineID].getBusFleet();
+
+	//Used to temporarily save the bus shifts
+	vector<Shift> tempShifts;
+
+	//for each bus in the line
+	for (auto const &bus : busFleet) {
+		cout << "Autocarro nº " << bus.getBusOrderInLine() << " de " << busFleet.size() << ":" << endl;
+		tempShifts = bus.getRemainingWork();
+
+		if (tempShifts.empty()) {
+			cout << "Este autocarro já tem todo o seu trabalho atribuído." << endl;
+		}
+		else {
+			cout << "Trabalho que ainda falta atribuir condutor a:" << endl;
+
+			//for each remaining shift in the bus - printing the times that are missing a driver
+			for (auto const &shift : tempShifts) {
+				auto startTime = Utilities::minutesToTime(shift.getStartTime());
+				auto endTime = Utilities::minutesToTime(shift.getEndTime());
+				cout << "Início do turno: " << startTime << "\t";
+				cout << "Fim do turno: " << endTime << endl;
+			}
+		}
+	}
+}
+
+void BusBoss::listBusUnassignedPeriodsByLineAndWeekday(unsigned int lineID, unsigned int desiredWeekday) {
+
+	//Getting bus fleet
+	vector<Bus> busFleet = lines[lineID].getBusFleet();
+
+	//Used to temporarily save the bus shifts
+	vector<Shift> tempShifts;
+
+	//for each bus in the line
+	for (auto const &bus : busFleet) {
+		cout << "Autocarro nº " << bus.getBusOrderInLine() << " de " << busFleet.size() << ":" << endl;
+		tempShifts = bus.getRemainingWork();
+
+		if (tempShifts.empty()) {
+			cout << "Este autocarro já tem todo o seu trabalho atribuído." << endl;
+		}
+		else {
+
+			//Shifts to print (that are in the requested day)
+			vector<Shift> shiftsToPrint;
+
+			//Finding shifts to print
+			for (const auto &shift : tempShifts) {
+				auto startTime = Utilities::minutesToTime(shift.getStartTime());
+				if (startTime.weekday == desiredWeekday)
+					shiftsToPrint.push_back(shift);
+			}
+
+			//Checking if there are shifts to print (if shiftsToPrint is empty there are none)
+			if (shiftsToPrint.empty()) {
+				cout << "Este autocarro não tem turnos por atribuir no dia requesitado." << endl;
+			}
+			else {
+				//else print
+
+				//for each shift to print - printing the times that are missing a driver
+				for (auto const &shift : shiftsToPrint) {
+					auto startTime = Utilities::minutesToTime(shift.getStartTime());
+					auto endTime = Utilities::minutesToTime(shift.getEndTime());
+					cout << "Início do turno: " << startTime << "\t";
+					cout << "Fim do turno: " << endTime << endl;
+				}
+			}
+		}
+
+
+	}
+}
+
 string BusBoss::getDirection(unsigned int lineID, short int direction) {
 
 	string output;
@@ -1948,6 +2157,11 @@ ostream& operator <<(ostream &os, const Bus &b) {
 
 	os << "\nHora de fim de serviço do autocarro: " << Utilities::minutesToHHMM(b.getEndTime()) << endl;
 
+	return os;
+}
+
+ostream& operator <<(ostream &os, const Utilities::time &t) {
+	os << Utilities::weekdays[t.weekday] << " " << t.hourAndMinutes;
 	return os;
 }
 

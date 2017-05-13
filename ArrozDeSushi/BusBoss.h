@@ -18,12 +18,14 @@ class Line;
 class Driver;
 class Shift;
 class Bus;
+struct Utilities::time;
 
 //Overloading insertion operator: (Outside of class because the operands are of different types)
 ostream& operator <<(ostream &os, const Line &l);
 ostream& operator <<(ostream &os, const Driver &d);
 ostream& operator <<(ostream &os, const Shift &s);
 ostream& operator <<(ostream &os, const Bus &b);
+ostream& operator <<(ostream &os, const Utilities::time &t);
 
 class BusBoss {
 public:
@@ -56,6 +58,12 @@ public:
 	bool printBusInfo();
 	//Lists the buses in a line
 	bool listBusesInLine();
+	//Lists all the unassigned periods for all buses of all lines
+	bool listAllBusUnassignedPeriods();
+	//Listing bus unassigned periods for a specific line
+	bool listBusUnassignedPeriodsByLine();
+	//Listing bus unassigned periods for a specific line and weekday
+	bool listBusUnassignedPeriodsByLineAndWeekday();
 
 	//External data management - public to be accessible from outside the class
 	//Loads data from files into class - returns true if successful, false if aborted
@@ -146,6 +154,11 @@ private:
 	vector<route> calculateRouteSwitch(string stop1, string stop2, const vector<unsigned int> &foundLinesStop1, const vector<unsigned int> &foundLinesStop2);
 	//Helper for vector overload, when a common stop is found creates a route representing the route found
 	route calculateRouteSwitch(string stop1, string stop2, string commonstop, unsigned int stop1line, unsigned int stop2line);
+
+	//Listing bus unassigned periods for a specific line - helper function with only direct printing
+	void listBusUnassignedPeriodsByLine(unsigned int lineID);
+	//Listing bus unassigned periods for a specific line and weekday - helper function with only direct printing
+	void listBusUnassignedPeriodsByLineAndWeekday(unsigned int lineID, unsigned int desiredWeekday);
 
 	//Gets the last or first stop of certain line (direction)
 	string getDirection(unsigned int lineID, short int direction);
