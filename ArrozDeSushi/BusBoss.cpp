@@ -686,7 +686,7 @@ bool BusBoss::printBusInfo() {
 	const Bus *busToPrint = nullptr;
 
 	//for each bus in busFleet
-	for(auto const &bus : busFleet){
+	for (auto const &bus : busFleet) {
 		if (bus.getBusOrderInLine() == busOrderNumber) {
 			//If the bus is found then the object pointer is set and the loop is broken
 			busToPrint = &bus;
@@ -712,7 +712,7 @@ bool BusBoss::printBusInfo() {
 		//Process was unsuccessful
 		return false;
 	}
-	
+
 }
 
 bool BusBoss::Load() {
@@ -1885,6 +1885,31 @@ ostream& operator<<(ostream &os, const Shift &s) {
 	os << "\nTempo de fim(WIP): ";
 	auto endtime = Utilities::minutesToTime(s.getEndTime());
 	os << Utilities::weekdays[endtime.weekday] << ", " << endtime.hourAndMinutes << endl;
+
+	return os;
+}
+
+ostream& operator <<(ostream &os, const Bus &b) {
+	os << "ID da linha: " << b.getLineID();
+
+	os << "\nNúmero de ordem na linha: " << b.getBusOrderInLine();
+
+	os << "\nID do condutor: "
+		//Ternary operator elements must be of the same type, thus to_string
+		<< (b.getDriverID() == 0 ? "Ainda não foi atribuído nenhum condutor a este autocarro." : to_string(b.getDriverID()));
+
+	os << "\nTurnos a realizar: ";
+	vector<Shift> shifts = b.getSchedule();
+	if (shifts.empty()) {
+		os << " Ainda não foi atribuído trabalho a este autocarro." << endl;
+	}
+	else {
+		cout << "O autocarro tem " << shifts.size() << " turnos atribuídos." << endl;
+		for (int i = 0; i < shifts.size(); i++) {
+			cout << "Turno nº " << i + 1 << ":\n";
+			cout << shifts[i] << endl;
+		}
+	}
 
 	return os;
 }

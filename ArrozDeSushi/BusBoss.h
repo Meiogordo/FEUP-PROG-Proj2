@@ -9,6 +9,7 @@
 #include "Line.h"
 #include "Driver.h"
 #include "Shift.h"
+#include "Bus.h"
 
 using namespace std;
 
@@ -16,6 +17,7 @@ using namespace std;
 ostream& operator <<(ostream &os, const Line &l);
 ostream& operator <<(ostream &os, const Driver &d);
 ostream& operator <<(ostream &os, const Shift &s);
+ostream& operator <<(ostream &os, const Bus &b);
 
 class BusBoss {
 public:
