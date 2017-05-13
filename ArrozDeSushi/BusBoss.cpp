@@ -1951,6 +1951,9 @@ void BusBoss::listBusUnassignedPeriodsByLine(unsigned int lineID) {
 				cout << "Fim do turno: " << endTime << endl;
 			}
 		}
+
+		//Spacing
+		cout << endl;
 	}
 }
 
@@ -1999,7 +2002,8 @@ void BusBoss::listBusUnassignedPeriodsByLineAndWeekday(unsigned int lineID, unsi
 			}
 		}
 
-
+		//Spacing
+		cout << endl;
 	}
 }
 

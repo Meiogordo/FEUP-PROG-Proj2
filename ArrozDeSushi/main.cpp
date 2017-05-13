@@ -365,7 +365,7 @@ bool callFunctions(string &id, BusBoss &bb) {
 	}
 
 	//Printing bus unassigned periods based on line and week day
-	if (id == "2.3.3") {
+	if (id == "2.3.4") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
 		id = id.substr(0, id.find_last_of('.'));
 		//calls function based on hardcoded id
