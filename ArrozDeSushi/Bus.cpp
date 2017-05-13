@@ -3,12 +3,17 @@
 unsigned int Bus::totalBuses = 1;
 
 Bus::Bus() {
-	ID = totalBuses++;
+	orderInLine = totalBuses++;
 }
 
-Bus::Bus(unsigned int driverID, unsigned int lineID, unsigned int orderInLine, const vector<Shift> &shift)
-	: driverID(driverID), lineID(lineID), orderInLine(orderInLine), schedule(shift) {
-	ID = totalBuses++;
+Bus::Bus(unsigned int lineID) : lineID(lineID)
+{
+	this->driverID = 0;
+}
+
+Bus::Bus(unsigned int driverID, unsigned int lineID, const vector<Shift> &shift)
+	: driverID(driverID), lineID(lineID), schedule(shift) {
+	orderInLine = totalBuses++;
 }
 
 Bus::~Bus() {}

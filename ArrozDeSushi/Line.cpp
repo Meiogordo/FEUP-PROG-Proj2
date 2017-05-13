@@ -60,7 +60,7 @@ Line::Line(string rawline) {
 	//Going through the busFleet with a range-based for loop to set each element to a Bus object called with the default constructor
 	//(only ID is initialized, setters shall set the rest)
 	for (auto &it : busFleet) {
-		it = Bus();
+		it = Bus(ID);
 	}
 
 	//Assigning values to line
@@ -73,7 +73,22 @@ Line::Line(string rawline) {
 
 Line::Line(unsigned int ID, unsigned int frequency, const vector<string> &stops, const vector<unsigned int> &travelTimesBetweenStops)
 	: ID(ID), frequency(frequency), stops(stops), travelTimesBetweenStops(travelTimesBetweenStops)
-{}
+{
+	unsigned int totalTime;
+
+	for (int i = 0; i < travelTimesBetweenStops.size(); i++) {
+		totalTime += travelTimesBetweenStops[i];
+	}
+	unsigned int numberOfBuses = ceil((double)2 * totalTime / frequency);
+
+	busFleet.reserve(numberOfBuses);
+
+	//Going through the busFleet with a range-based for loop to set each element to a Bus object called with the default constructor
+	//(only ID is initialized, setters shall set the rest)
+	for (auto &it : busFleet) {
+		it = Bus(ID);
+	}
+}
 
 Line::~Line() {}
 

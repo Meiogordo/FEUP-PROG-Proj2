@@ -19,7 +19,8 @@ class Bus {
 public:
 
 	Bus();
-	Bus(unsigned int driverID, unsigned int lineID, unsigned int orderInLine, const vector<Shift> &shift);
+	Bus(unsigned int lineID);
+	Bus(unsigned int driverID, unsigned int lineID, const vector<Shift> &shift);
 	~Bus();
 
 	//getters
@@ -38,7 +39,6 @@ public:
 	// other methods
 private:
 
-	unsigned int ID;
 	unsigned int orderInLine;
 	unsigned int driverID;
 	unsigned int lineID;
