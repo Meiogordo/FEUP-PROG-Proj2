@@ -5,6 +5,11 @@
 
 #include "Utilities.h"
 #include "Bus.h"
+#include "BusBoss.h"
+
+//Forward declarations to prevent conflicts
+class BusBoss;
+class Bus;
 
 using namespace std;
 
@@ -26,7 +31,6 @@ public:
 	void setStops(const vector<string> &stops);
 	void setTravelTimesBetweenStops(const vector<unsigned int> &travelTimesBetweenStops);
 
-
 	//getters
 
 	unsigned int getID() const;
@@ -36,18 +40,21 @@ public:
 	string getFirstStop() const;
 	string getLastStop() const;
 	vector<Bus> getBusFleet() const;
+	unsigned int getNrOfBuses() const;
 
 	//other methods
+
 	bool hasStop(string stopname) const;
 	//Finds the stop index in the stops vector, returns -1 if not found
 	int findStop(string stopname) const;
+
 private:
-	//Missing frequency and travel times between stops???
-	//do not understand what they want the int vector (times here, timesList there) to be...
+
 	unsigned int ID;
 	unsigned int frequency;
 	vector<string> stops;
 	vector<unsigned int> travelTimesBetweenStops;
 	vector<Bus> busFleet;
+	unsigned int nrOfBuses;
 };
 

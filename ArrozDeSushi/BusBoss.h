@@ -13,6 +13,12 @@
 
 using namespace std;
 
+//Forward declarations to prevent conflicts
+class Line;
+class Driver;
+class Shift;
+class Bus;
+
 //Overloading insertion operator: (Outside of class because the operands are of different types)
 ostream& operator <<(ostream &os, const Line &l);
 ostream& operator <<(ostream &os, const Driver &d);
@@ -48,6 +54,8 @@ public:
 	bool printDriverShifts();
 	//Prints a certain bus's information
 	bool printBusInfo();
+	//Lists the buses in a line
+	bool listBusesInLine();
 
 	//External data management - public to be accessible from outside the class
 	//Loads data from files into class - returns true if successful, false if aborted
@@ -66,6 +74,10 @@ public:
 	bool showStopSchedule();
 	//Shows the schedule for a certain line (all times for all stops in this certain line)
 	bool showLineSchedule();
+	//Get service start time in minutes
+	static unsigned int getStartTime();
+	//Get service end time in minutes
+	static unsigned int getEndTime();
 
 private:
 	//Internal class data
@@ -91,11 +103,11 @@ private:
 	string name;
 	//Schedule constants
 	//Service starts at 8:00
-	const unsigned int BUS_START_TIME_HOUR = 8;
-	const unsigned int BUS_START_TIME_MINUTE = 00;
+	static const unsigned int BUS_START_TIME_HOUR = 8;
+	static const unsigned int BUS_START_TIME_MINUTE = 00;
 	//Service ends at 20:00
-	const unsigned int BUS_END_TIME_HOUR = 20;
-	const unsigned int BUS_END_TIME_MINUTE = 0;
+	static const unsigned int BUS_END_TIME_HOUR = 20;
+	static const unsigned int BUS_END_TIME_MINUTE = 0;
 	//To better describe a stop schedule
 	struct schedule {
 		unsigned int lineID; //The id of the line that the schedule is for

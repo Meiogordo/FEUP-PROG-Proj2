@@ -24,7 +24,7 @@ Line::Line(string rawline) {
 	vector<string> stops; //list of stop names
 	vector<unsigned int> travelTimesBetweenStops; //Times (in minutes) of travel between stops
 	
-	int totalTime; //Total time of one full travel (in minutes) (only A to B / not B to A)
+	unsigned int totalTime = 0; //Total time of one full travel (in minutes) (only A to B / not B to A)
 	int numberOfBuses; //number of Buses needed
 	vector<Bus> busFleet; //vector of Buses
 
@@ -52,15 +52,23 @@ Line::Line(string rawline) {
 	for (int i = 0; i < travelTimesBetweenStops.size(); i++) {
 		totalTime += travelTimesBetweenStops[i];
 	}
-
+	
 	numberOfBuses = ceil((double)2 * totalTime / frequency);
 	
-	busFleet.reserve(numberOfBuses);
+	//Resetting the totalBuses because this is another line (starts at 1)
+	Bus::setTotalBuses(1);
 
-	//Going through the busFleet with a range-based for loop to set each element to a Bus object called with the default constructor
-	//(only ID is initialized, setters shall set the rest)
-	for (auto &it : busFleet) {
-		it = Bus(ID);
+	//Getting start and end times
+	unsigned int busStartTime = BusBoss::getStartTime();
+	unsigned int busEndTime = BusBoss::getEndTime();
+
+	//Adding elements to busFleet
+	for (int i = 0; i < numberOfBuses; ++i) {
+		//Bus init
+		busFleet.emplace_back(Bus(ID, busStartTime, busEndTime));
+		//Incrementing start time
+		busStartTime += frequency;
+		busEndTime += frequency;
 	}
 
 	//Assigning values to line
@@ -69,25 +77,38 @@ Line::Line(string rawline) {
 	this->stops = stops;
 	this->travelTimesBetweenStops = travelTimesBetweenStops;
 	this->busFleet = busFleet;
+	this->nrOfBuses = numberOfBuses;
 }
 
 Line::Line(unsigned int ID, unsigned int frequency, const vector<string> &stops, const vector<unsigned int> &travelTimesBetweenStops)
-	: ID(ID), frequency(frequency), stops(stops), travelTimesBetweenStops(travelTimesBetweenStops)
-{
-	unsigned int totalTime;
+	: ID(ID), frequency(frequency), stops(stops), travelTimesBetweenStops(travelTimesBetweenStops) {
+
+	unsigned int totalTime = 0;
 
 	for (int i = 0; i < travelTimesBetweenStops.size(); i++) {
 		totalTime += travelTimesBetweenStops[i];
 	}
+
 	unsigned int numberOfBuses = ceil((double)2 * totalTime / frequency);
 
-	busFleet.reserve(numberOfBuses);
+	//Resetting the totalBuses because this is another line (starts at 1)
+	Bus::setTotalBuses(1);
 
-	//Going through the busFleet with a range-based for loop to set each element to a Bus object called with the default constructor
-	//(only ID is initialized, setters shall set the rest)
-	for (auto &it : busFleet) {
-		it = Bus(ID);
+	//Getting start and end times
+	unsigned int busStartTime = BusBoss::getStartTime();
+	unsigned int busEndTime = BusBoss::getEndTime();
+
+	//Adding elements to busFleet
+	for (int i = 0; i < numberOfBuses; ++i) {
+		//Bus init
+		busFleet.emplace_back(Bus(ID, busStartTime, busEndTime));
+		//Incrementing start time
+		busStartTime += frequency;
+		busEndTime += frequency;
 	}
+
+	this->nrOfBuses = numberOfBuses;
+	this->busFleet = busFleet;
 }
 
 Line::~Line() {}
@@ -118,6 +139,10 @@ string Line::getLastStop() const {
 
 vector<Bus> Line::getBusFleet() const {
 	return busFleet;
+}
+
+unsigned int Line::getNrOfBuses() const {
+	return nrOfBuses;
 }
 
 void Line::setID(unsigned int ID) {

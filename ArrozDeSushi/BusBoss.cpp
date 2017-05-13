@@ -715,6 +715,48 @@ bool BusBoss::printBusInfo() {
 
 }
 
+bool BusBoss::listBusesInLine() {
+	unsigned int lineID = 0;
+
+	cout << "Qual o ID da linha a imprimir?" << endl;
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(lineID) > 0);
+	if (!lineExists) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de impressão de informação detalhada de uma linha..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Line found, printing info of the busFleet
+	
+	cout << endl;
+
+	vector<Bus> busFleet = lines[lineID].getBusFleet();
+
+	cout << "A frota da linha pedida tem " << busFleet.size() << " autocarros." << endl;
+
+	for (int i = 0; i < busFleet.size(); ++i) {
+		cout << "Informação do autocarro nº " << i + 1 << ":" << endl;
+		cout << busFleet[i] << endl;
+	}
+
+	return true;
+}
+
 bool BusBoss::Load() {
 
 	//Check to see if the user has unsaved changes before loading a new file
@@ -1442,6 +1484,14 @@ bool BusBoss::showLineSchedule() {
 	return true;
 }
 
+unsigned int BusBoss::getStartTime() {
+	return BUS_START_TIME_HOUR*60 + BUS_START_TIME_MINUTE;
+}
+
+unsigned int BusBoss::getEndTime() {
+	return BUS_END_TIME_HOUR*60 + BUS_END_TIME_MINUTE;
+}
+
 void BusBoss::Reset() {
 	//Deleting drivers
 	drivers.clear();
@@ -1877,8 +1927,8 @@ ostream& operator<<(ostream &os, const Driver &d) {
 }
 
 ostream& operator<<(ostream &os, const Shift &s) {
-	os << "ID da linha: " << s.getBusLineID() << "\nID do condutor: " << s.getDriverID();
-	os << "\nID do autocarro: " << s.getBusID() << endl;
+	os << "ID da linha: " << s.getLineID() << "\nID do condutor: " << s.getDriverID();
+	os << "\nNúmero de ordem do autocarro na linha: " << s.getBusOrderNumber() << endl;
 	os << "Tempo de início(WIP): ";
 	auto starttime = Utilities::minutesToTime(s.getStartTime());
 	os << Utilities::weekdays[starttime.weekday] << ", " << starttime.hourAndMinutes << endl;
@@ -1894,22 +1944,9 @@ ostream& operator <<(ostream &os, const Bus &b) {
 
 	os << "\nNúmero de ordem na linha: " << b.getBusOrderInLine();
 
-	os << "\nID do condutor: "
-		//Ternary operator elements must be of the same type, thus to_string
-		<< (b.getDriverID() == 0 ? "Ainda não foi atribuído nenhum condutor a este autocarro." : to_string(b.getDriverID()));
+	os << "\nHora de início do serviço do autocarro: " << Utilities::minutesToHHMM(b.getStartTime());
 
-	os << "\nTurnos a realizar: ";
-	vector<Shift> shifts = b.getSchedule();
-	if (shifts.empty()) {
-		os << " Ainda não foi atribuído trabalho a este autocarro." << endl;
-	}
-	else {
-		cout << "O autocarro tem " << shifts.size() << " turnos atribuídos." << endl;
-		for (int i = 0; i < shifts.size(); i++) {
-			cout << "Turno nº " << i + 1 << ":\n";
-			cout << shifts[i] << endl;
-		}
-	}
+	os << "\nHora de fim de serviço do autocarro: " << Utilities::minutesToHHMM(b.getEndTime()) << endl;
 
 	return os;
 }
