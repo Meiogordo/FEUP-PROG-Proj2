@@ -28,6 +28,7 @@ public:
 	static int getTotalBuses();
 	unsigned int getStartTime() const;
 	unsigned int getEndTime() const;
+	vector<Shift> getRemainingWork() const;
 
 	//setters
 	void setLineID(unsigned int lineID);
@@ -35,6 +36,8 @@ public:
 	void setEndTime(unsigned int endTime);
 	//Used to reset total buses between lines
 	static void setTotalBuses(unsigned int totalBuses);
+	//When work is assigned to the bus, it needs to be removed from the list of remaining work
+	bool removeWork(unsigned int startTime, unsigned int endTime);
 
 	// other methods
 private:
@@ -45,4 +48,5 @@ private:
 	//Start and end times in minutes
 	unsigned int startTime;
 	unsigned int endTime;
+	vector<Shift> remainingWork;
 };
