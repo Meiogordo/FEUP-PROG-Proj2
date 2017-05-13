@@ -19,31 +19,30 @@ class Bus {
 public:
 
 	Bus();
-	Bus(unsigned int lineID);
-	Bus(unsigned int driverID, unsigned int lineID, const vector<Shift> &shift);
+	Bus(unsigned int lineID, unsigned int startTime, unsigned int endTime);
 	~Bus();
 
 	//getters
-	unsigned int getBusOrderInLine() const;
-	unsigned int getDriverID() const;
 	unsigned int getLineID() const;
-	vector<Shift> getSchedule() const;
+	unsigned int getBusOrderInLine() const;
 	static int getTotalBuses();
-	bool getIsWorking();
+	unsigned int getStartTime() const;
+	unsigned int getEndTime() const;
 
 	//setters
-	void setDriverID(unsigned int driverID);
 	void setLineID(unsigned int lineID);
-	void setIsWorking(bool isWorking);
+	void setStartTime(unsigned int startTime);
+	void setEndTime(unsigned int endTime);
+	//Used to reset total buses between lines
+	static void setTotalBuses(unsigned int totalBuses);
 
 	// other methods
 private:
 
-	unsigned int orderInLine;
-	unsigned int driverID;
 	unsigned int lineID;
-	vector<Shift> schedule;
+	unsigned int orderInLine;
 	static unsigned int totalBuses;
-	bool isWorking;
-
+	//Start and end times in minutes
+	unsigned int startTime;
+	unsigned int endTime;
 };
