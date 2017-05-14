@@ -76,7 +76,7 @@ namespace Utilities {
 	}
 
 	//Converts minutes to a string in the HH:MM format
-	string minutesToHHMM(int minutes);
+	string minutesToHHMM(unsigned int minutes);
 	//Overload of the above for vectors, in order to better organize code
 	vector<string> minutesToHHMM(const vector<int> &minutes);
 	//Rounds double to nearest integer (works with negative values)
@@ -107,4 +107,7 @@ namespace Utilities {
 		//Returning the result
 		return output;
 	}
+
+	//Converts string in HH:MM format to minutes
+	unsigned int HHMMtoMinutes(string hhmm);
 }

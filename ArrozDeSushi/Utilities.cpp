@@ -108,7 +108,7 @@ namespace Utilities {
 			//Ignores everything in the cin buffer
 			cin.ignore(numeric_limits<streamsize>::max(), '\n');
 		}
-		
+
 		//pause to see output
 		cout << "Pressione enter para continuar...";
 		cin.get();
@@ -144,9 +144,9 @@ namespace Utilities {
 		return (input > 0.0) ? (input + 0.5) : (input - 0.5);
 	}
 
-	time minutesToTime(int minutes){
+	time minutesToTime(int minutes) {
 		time temptime;
-		if (minutes >= 10080){
+		if (minutes >= 10080) {
 			temptime.weekday = 6;
 			temptime.hourAndMinutes = "23:59";
 			return temptime;
@@ -155,7 +155,7 @@ namespace Utilities {
 		//Final time
 		int hours = 0;
 		int days = 0;
-		
+
 
 		while (minutes >= 60) {
 			minutes -= 60;
@@ -185,5 +185,17 @@ namespace Utilities {
 		}
 
 		return output;
+	}
+	unsigned int HHMMtoMinutes(string hhmm) {
+
+		//considering that the string is in the HH:MM format
+
+		//getting hours string
+		string hours = hhmm.substr(0, hhmm.find(":"));
+		//hhmm is now only MM (after ':' )
+		hhmm.substr(hhmm.find(":") + 1);
+
+		//hours converted to int * 60 (converting to minutes) + hhmm converted to int which now was only MM
+		return stoi(hours)*60 + stoi(hhmm);
 	}
 }
