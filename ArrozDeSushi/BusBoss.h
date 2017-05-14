@@ -89,6 +89,9 @@ public:
 	//Get service end time in minutes
 	static unsigned int getEndTime();
 
+	//Checking if a given time interval can fit in an ordered vector of shifts - static since it does not depend on internal data and might be useful to use outside of the bb object or internally (same reason that it is public)
+	static bool canFitInShiftInterval(unsigned int startTime, unsigned int endTime, const vector<Shift> &possibleShifts);
+
 private:
 	//Internal class data
 	//Describing a route - used for storing data of paths between two stops
@@ -161,6 +164,8 @@ private:
 	void listBusUnassignedPeriodsByLine(unsigned int lineID);
 	//Listing bus unassigned periods for a specific line and weekday - helper function with only direct printing
 	void listBusUnassignedPeriodsByLineAndWeekday(unsigned int lineID, unsigned int desiredWeekday);
+	//Listing bus unassigned periods for a specific line and weekday - helper function with direct printing and that returns the possible shifts to attribute for input checking
+	vector<Shift> listBusUnassignedPeriodsByLineWeekdayAndBusOrderNumber(unsigned int lineID, unsigned int desiredWeekday, unsigned int busOrderNumber);
 
 	//Gets the last or first stop of certain line (direction)
 	string getDirection(unsigned int lineID, short int direction);

@@ -479,6 +479,200 @@ bool BusBoss::deleteDriver() {
 	return true;
 }
 
+bool BusBoss::assignShift() {
+	unsigned int lineID = 0;
+
+	cout << "Qual o ID da linha para a qual quer efetuar atribuição de serviço?" << endl;
+	while (true) {
+		cin >> lineID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro positivo)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if a line with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool lineExists = (lines.count(lineID) > 0);
+	if (!lineExists) {
+		cout << "O ID dado não corresponde a nenhuma das linhas guardadas.\nAbortando o processo de atribuição interativa de serviço aos condutores..." << endl;
+		return false; //returning false since the process was not concluded successfully
+	}
+
+	//Printing already available information
+	cout << "Turnos disponíveis para esta linha:" << endl;
+	listBusUnassignedPeriodsByLine(lineID);
+
+	//Spaces
+	cout << "\n\n";
+
+	unsigned int desiredWeekday = 0; //weekdays as according to Utilities::weekdays, [0,6]
+
+	cout << "Qual o dia da semana para o qual quer efetuar atribuição de serviço?" << endl;
+	Utilities::printVector(Utilities::weekdays);
+	while (true) {
+		cin >> desiredWeekday;
+		if (cin.fail() || (desiredWeekday > 6 || desiredWeekday < 0)) {
+			//Clearing screen
+			Utilities::clearScreen();
+			//Displaying error message and repeating input asking
+			cout << "Dia da semana inválido, por favor introduza um dia da semana válido (número inteiro positivo entre 0 e 6)." << endl;
+			cout << "Qual o dia da semana para o qual quer efetuar atribuição de serviço?" << endl;
+			Utilities::printVector(Utilities::weekdays);
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Printing available shifts with the information given
+	cout << "Turnos disponíveis para a linha " << lineID << " e " << Utilities::weekdays[desiredWeekday] << ":" << endl;
+	listBusUnassignedPeriodsByLineAndWeekday(lineID, desiredWeekday);
+
+	//Spaces
+	cout << "\n\n";
+
+	unsigned int maxOrderNumber = lines[lineID].getNrOfBuses();
+	unsigned int selectedBus = 0;
+
+	cout << "Em qual autocarro é que quer atribuir o serviço? (Número entre 1 e " << maxOrderNumber << ")" << endl;
+	while (true) {
+		cin >> selectedBus;
+		if (cin.fail() || (selectedBus < 1 || selectedBus > maxOrderNumber)) {
+			cout << "Número de ordem inválido, por favor introduza um número de ordem válido (número inteiro positivo entre 1 e " << maxOrderNumber << ")" << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Printing the available shifts once again, and getting the matching shifts from the function to make sure the user selects a valid one
+	vector<Shift> possibleShifts = listBusUnassignedPeriodsByLineWeekdayAndBusOrderNumber(lineID, desiredWeekday, selectedBus);
+
+	//If there are no possible shifts, then no work can be assigned
+	if (possibleShifts.empty()) {
+		cout << "Como tal, o processo de atribuição interativa de turnos será abortado..." << endl;
+		cout << "Abortando o processo de atribuição interativa de serviço aos condutores..." << endl;
+		return false;
+	}
+
+	//Asking for the shifts to assign (to check if they exist in the selected bus and etc)
+
+	string startTimeStr, endTimeStr;
+
+	cout << "Qual a hora de início do turno a atribuir? (Apresentar sobre o formato HH:MM)";
+	while (true) {
+		cin >> startTimeStr;
+		//If the input fails or there is not exactly one ':' in the string - other things don't matter, 
+		if (cin.fail() || Utilities::countCharInString(startTimeStr, ':') != 1) {
+			cout << "Hora num formato inválido, por favor tente novamente. (Formato : HH:MM)" << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Space
+	cout << endl;
+
+	cout << "Qual a hora de fim do turno a atribuir? (Apresentar sobre o formato HH:MM)";
+	while (true) {
+		cin >> startTimeStr;
+		//If the input fails or there is not exactly one ':' in the string - other things don't matter, 
+		if (cin.fail() || Utilities::countCharInString(startTimeStr, ':') != 1) {
+			cout << "Hora num formato inválido, por favor tente novamente. (Formato : HH:MM)" << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Converting time strings to minute ints (+weekday * 1440 because a day has 1440 minutes and we are using a linear time scale)
+	unsigned int startTimeMin = Utilities::HHMMtoMinutes(startTimeStr) + desiredWeekday * 1440;
+	unsigned int endTimeMin = Utilities::HHMMtoMinutes(endTimeStr) + desiredWeekday * 1440;
+
+	//Finding if this shift can fit in the available shifts (possibleShifts is always sorted because it is kept sorted when modified and created in Bus)
+	bool canFit = canFitInShiftInterval(startTimeMin, endTimeMin, possibleShifts);
+
+	if (!canFit) {
+		cout << "O intervalo de tempo dado não está contido no conjunto de turnos disponíveis para atribuição." << endl;
+		cout << "Abortando o processo de atribuição interativa de serviço aos condutores..." << endl;
+		return false;
+	}
+
+	//Getting the driver to which the shift will be assigned
+
+	unsigned int driverID = 0;
+
+	cout << "Qual o ID do condutor ao qual o turno será atribuído?" << endl;
+	while (true) {
+		cin >> driverID;
+		if (cin.fail()) {
+			cout << "ID inválido, por favor introduza um ID válido (número inteiro)." << endl;
+			//Clearing error flag and cin buffer
+			cin.clear();
+			cin.ignore(100000, '\n');
+		}
+		else {
+			//if cin didn't fail we have a good input so we break the loop
+			break;
+		}
+	}
+
+	//Checking if a driver with the given ID exists (number of elements bigger than 0)
+	//Because we are using a map and not multimap .count will always be either 0 or 1 but > 0 is used for clarity
+	bool driverExists = (drivers.count(driverID) > 0);
+	if (!driverExists) {
+		cout << "O ID dado não corresponde a nenhum dos condutores guardados.\nAbortando o processo de atribuição interativa de serviço aos condutores..." << endl;
+		return false;
+	}
+
+	//Clearing screen
+	Utilities::clearScreen();
+
+	cout << "Condutor encontrado, testando se o turno pedido lhe poderá ser atribuído..." << endl << endl;
+
+	//Creating shift object that will be assigned to driver (with previous testing to make sure it can be assigned
+	Shift newShift(lineID, driverID, selectedBus, startTimeMin, endTimeMin);
+	
+	//Testing if the driver can be assigned the given shift
+	unsigned int driverAssignReturn = drivers[driverID].addShift(newShift);
+
+	//addShift return values:
+	/*
+	0: Process possible, everything normal
+	1: Max weekly hours were reached or will be overcome with this shift
+	2: rest time
+	3: shift size / daily stuff (Acho q vou cagar para o daily e fica só shift size)
+
+	*/
+
+	//Process concluded successfully
+	return true;
+}
+
 void BusBoss::displayDrivers() {
 
 	//for that goes through all elements of map aka all drivers
@@ -2007,6 +2201,101 @@ void BusBoss::listBusUnassignedPeriodsByLineAndWeekday(unsigned int lineID, unsi
 	}
 }
 
+vector<Shift> BusBoss::listBusUnassignedPeriodsByLineWeekdayAndBusOrderNumber(unsigned int lineID, unsigned int desiredWeekday, unsigned int busOrderNumber) {
+
+	//Output to return
+	vector<Shift> possibleShifts;
+
+	//Getting bus fleet
+	vector<Bus> busFleet = lines[lineID].getBusFleet();
+
+	//Used to temporarily save the bus shifts
+	vector<Shift> tempShifts;
+
+	//for each bus in the line
+	for (auto const &bus : busFleet) {
+		//Only print or do anything if this is the correct bus
+		if (bus.getBusOrderInLine() == busOrderNumber) {
+			tempShifts = bus.getRemainingWork();
+			if (tempShifts.empty()) {
+				cout << "Este autocarro já tem todo o seu trabalho atribuído." << endl;
+			}
+			else {
+
+				//Finding the shifts to print (that are in the requested day)
+
+				for (const auto &shift : tempShifts) {
+					auto startTime = Utilities::minutesToTime(shift.getStartTime());
+					if (startTime.weekday == desiredWeekday)
+						possibleShifts.push_back(shift);
+				}
+
+				//Checking if there are shifts to print (if shiftsToPrint is empty there are none)
+				if (possibleShifts.empty()) {
+					cout << "Este autocarro não tem turnos por atribuir no dia requesitado." << endl;
+				}
+				else {
+					//else print
+
+					//for each shift to print - printing the times that are missing a driver
+					for (auto const &shift : possibleShifts) {
+						auto startTime = Utilities::minutesToTime(shift.getStartTime());
+						auto endTime = Utilities::minutesToTime(shift.getEndTime());
+						cout << "Início do turno: " << startTime << "\t";
+						cout << "Fim do turno: " << endTime << endl;
+					}
+				}
+			}
+		}
+	}
+
+	//Spacing
+	cout << endl;
+
+	//returning the possible shifts for input validation in other functions
+	return possibleShifts;
+}
+
+bool BusBoss::canFitInShiftInterval(unsigned int startTime, unsigned int endTime, const vector<Shift> &possibleShifts) {
+
+	//Taking the startTime and endTime and converting them to hourly intervals
+	//(this removes the possibilty of having a shift from 10:00 to 11:05 in a bus that works 09:00 to 12:00, which should be possible, but it doesn't matter because that would be much harder to implement, and time is of the essence at the moment as well)
+	vector<unsigned int> hourlyIntervals;
+
+	for (unsigned int currentTime = startTime; currentTime < endTime; currentTime += 60) {
+		hourlyIntervals.push_back(currentTime);
+	}
+
+	//Since both the startTime->endTime interval and the time interval given by the vector of shifts are sorted and continuous,
+	//we can check the hourly intervals against the start times, and if there is a match for every hourly interval, the shift can fit, otherwise it cannot
+
+	//Helper flag that defines if a time was found in the shifts vector, to allow breaking
+	bool timeFound = false;
+
+	for (unsigned int currentTime : hourlyIntervals) {
+
+		//Resetting flag in between iterations
+		timeFound = false;
+
+		for (const auto &shift : possibleShifts) {
+			//If the time was found we break the inner seach loop and set the found flag to true
+			if (shift.getStartTime() == currentTime) {
+				timeFound = true;
+				break;
+			}
+		}
+
+		//If any of the times was not found, then the function returns false, because the given time interval cannot fit in the vector of shifts
+		if (!timeFound) {
+			return false;
+		}
+
+	}
+
+	//If the loop was not broken, there was a match for every element, so the time interval can fit in the shift interval
+	return true;
+}
+
 string BusBoss::getDirection(unsigned int lineID, short int direction) {
 
 	string output;
@@ -2142,10 +2431,10 @@ ostream& operator<<(ostream &os, const Driver &d) {
 ostream& operator<<(ostream &os, const Shift &s) {
 	os << "ID da linha: " << s.getLineID() << "\nID do condutor: " << s.getDriverID();
 	os << "\nNúmero de ordem do autocarro na linha: " << s.getBusOrderNumber() << endl;
-	os << "Tempo de início(WIP): ";
+	os << "Tempo de início: ";
 	auto starttime = Utilities::minutesToTime(s.getStartTime());
 	os << Utilities::weekdays[starttime.weekday] << ", " << starttime.hourAndMinutes << endl;
-	os << "\nTempo de fim(WIP): ";
+	os << "\t\tTempo de fim: ";
 	auto endtime = Utilities::minutesToTime(s.getEndTime());
 	os << Utilities::weekdays[endtime.weekday] << ", " << endtime.hourAndMinutes << endl;
 
