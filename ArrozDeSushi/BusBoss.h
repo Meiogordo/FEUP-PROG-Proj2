@@ -169,6 +169,9 @@ private:
 	//Listing bus unassigned periods for a specific line and weekday - helper function with direct printing and that returns the possible shifts to attribute for input checking
 	vector<Shift> listBusUnassignedPeriodsByLineWeekdayAndBusOrderNumber(unsigned int lineID, unsigned int desiredWeekday, unsigned int busOrderNumber);
 
+	//Prints a driver's shifts based on its ID
+	void printDriverShifts(unsigned int driverID);
+
 	//Gets the last or first stop of certain line (direction)
 	string getDirection(unsigned int lineID, short int direction);
 

@@ -847,22 +847,10 @@ bool BusBoss::printDriverShifts() {
 	Utilities::clearScreen();
 
 	//Driver found, printing shifts
-
-	//Getting shifts vector
-	vector<Shift> shifts = drivers[IDtoprint].getShifts();
-
+	//Space
 	cout << "\n";
-	if (shifts.empty()) {
-		cout << "O condutor em questão não tem trabalho atribuído." << endl;
-		return true;
-	}
-	else {
-		cout << "O condutor tem " << shifts.size() << " turnos atribuídos." << endl;
-		for (int i = 0; i < shifts.size(); i++) {
-			cout << "Turno nº " << i + 1 << ":\n";
-			cout << shifts[i] << endl;
-		}
-	}
+	//Print
+	printDriverShifts(IDtoprint);
 
 	//Process concluded successfully
 	return true;
@@ -1119,6 +1107,27 @@ bool BusBoss::listBusUnassignedPeriodsByLineAndWeekday() {
 
 	//Printing based on user input
 	listBusUnassignedPeriodsByLineAndWeekday(lineID, desiredWeekday);
+
+	//Process concluded successfully
+	return true;
+}
+
+bool BusBoss::listDriverUnassignedPeriods() {
+	Utilities::clearScreen();
+
+	cout << "Serão impressos todos os turnos de todos os condutores disponíveis, que serão os períodos de tempo em que estes estão ocupados." << endl;
+	cout << "Durante todo o restante tempo, estes estão disponíveis." << endl;
+
+	for (const auto &driver : drivers)	{
+		//Printing only the available drivers
+		if (driver.second.isAvailable()) {
+
+			//Printing identifying info - ID and Name
+			cout << "Condutor com ID " << driver.second.getID() << " e nome " << driver.second.getName() << ":" << endl;
+			//Printing shifts
+			printDriverShifts(driver.second.getID());
+		}
+	}
 
 	//Process concluded successfully
 	return true;
@@ -2297,6 +2306,24 @@ vector<Shift> BusBoss::listBusUnassignedPeriodsByLineWeekdayAndBusOrderNumber(un
 
 	//returning the possible shifts for input validation in other functions
 	return possibleShifts;
+}
+
+void BusBoss::printDriverShifts(unsigned int driverID) {
+	//Getting shifts vector
+	vector<Shift> shifts = drivers[driverID].getShifts();
+
+
+	if (shifts.empty()) {
+		cout << "O condutor em questão não tem trabalho atribuído." << endl;
+	}
+	else {
+		cout << "O condutor tem " << shifts.size() << " turnos atribuídos." << endl;
+		for (int i = 0; i < shifts.size(); i++) {
+			cout << "Turno nº " << i + 1 << ":\n";
+			cout << shifts[i] << endl;
+		}
+	}
+
 }
 
 bool BusBoss::canFitInShiftInterval(unsigned int startTime, unsigned int endTime, const vector<Shift> &possibleShifts) {
