@@ -34,7 +34,7 @@ private:
 	unsigned int lineID;
 	unsigned int driverID;
 	unsigned int busOrderNumber;
-	//In minutes, but considering whole week - [0,8639] (?)
+	//In minutes, but considering whole week - [0,8639]
 	unsigned int startTime;
 	unsigned int endTime;
 };
