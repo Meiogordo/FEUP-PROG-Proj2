@@ -535,6 +535,9 @@ bool BusBoss::assignShift() {
 		}
 	}
 
+	//Clearing screen
+	Utilities::clearScreen();
+
 	//Printing available shifts with the information given
 	cout << "Turnos disponíveis para a linha " << lineID << " e " << Utilities::weekdays[desiredWeekday] << ":" << endl;
 	listBusUnassignedPeriodsByLineAndWeekday(lineID, desiredWeekday);
@@ -561,6 +564,7 @@ bool BusBoss::assignShift() {
 	}
 
 	//Printing the available shifts once again, and getting the matching shifts from the function to make sure the user selects a valid one
+	cout << "Turnos disponíveis para a linha " << lineID << ", " << Utilities::weekdays[desiredWeekday] << " e no autocarro nº " << selectedBus << ":" << endl << endl;
 	vector<Shift> possibleShifts = listBusUnassignedPeriodsByLineWeekdayAndBusOrderNumber(lineID, desiredWeekday, selectedBus);
 
 	//If there are no possible shifts, then no work can be assigned
@@ -574,7 +578,7 @@ bool BusBoss::assignShift() {
 
 	string startTimeStr, endTimeStr;
 
-	cout << "Qual a hora de início do turno a atribuir? (Apresentar sobre o formato HH:MM)";
+	cout << "Qual a hora de início do turno a atribuir? (Apresentar sobre o formato HH:MM)" << endl;
 	while (true) {
 		cin >> startTimeStr;
 		//If the input fails or there is not exactly one ':' in the string - other things don't matter, 
@@ -593,9 +597,9 @@ bool BusBoss::assignShift() {
 	//Space
 	cout << endl;
 
-	cout << "Qual a hora de fim do turno a atribuir? (Apresentar sobre o formato HH:MM)";
+	cout << "Qual a hora de fim do turno a atribuir? (Apresentar sobre o formato HH:MM)" << endl;
 	while (true) {
-		cin >> startTimeStr;
+		cin >> endTimeStr;
 		//If the input fails or there is not exactly one ':' in the string - other things don't matter, 
 		if (cin.fail() || Utilities::countCharInString(startTimeStr, ':') != 1) {
 			cout << "Hora num formato inválido, por favor tente novamente. (Formato : HH:MM)" << endl;
@@ -621,6 +625,9 @@ bool BusBoss::assignShift() {
 		cout << "Abortando o processo de atribuição interativa de serviço aos condutores..." << endl;
 		return false;
 	}
+
+	//Spaceee
+	cout << endl << endl;
 
 	//Getting the driver to which the shift will be assigned
 
@@ -697,7 +704,7 @@ bool BusBoss::assignShift() {
 		return false;
 	}
 	else if (driverAssignReturn == 3) {
-		cout << "O tamanho do turno é maior do que o tamanho máximo do turno para este condutor.";
+		cout << "O tamanho do turno é maior do que o tamanho máximo do turno para este condutor." << endl;
 		cout << "O turno não foi, portanto, adicionado." << endl;
 		cout << "Processo de atribuição interativa de serviço aos condutores concluído sem sucesso..." << endl;
 
@@ -1117,6 +1124,9 @@ bool BusBoss::listDriverUnassignedPeriods() {
 
 	cout << "Serão impressos todos os turnos de todos os condutores disponíveis, que serão os períodos de tempo em que estes estão ocupados." << endl;
 	cout << "Durante todo o restante tempo, estes estão disponíveis." << endl;
+
+	//Space
+	cout << "\n\n";
 
 	for (const auto &driver : drivers)	{
 		//Printing only the available drivers
@@ -2319,7 +2329,7 @@ void BusBoss::printDriverShifts(unsigned int driverID) {
 		cout << "O condutor em questão não tem trabalho atribuído." << endl;
 	}
 	else {
-		cout << "O condutor tem " << shifts.size() << " turnos atribuídos." << endl;
+		cout << "O condutor tem " << shifts.size() << (shifts.size() > 1 ? " turnos atribuídos." : " turno atribuído.") << endl;
 		for (int i = 0; i < shifts.size(); i++) {
 			cout << "Turno nº " << i + 1 << ":\n";
 			cout << shifts[i] << endl;
