@@ -656,21 +656,64 @@ bool BusBoss::assignShift() {
 
 	//Creating shift object that will be assigned to driver (with previous testing to make sure it can be assigned
 	Shift newShift(lineID, driverID, selectedBus, startTimeMin, endTimeMin);
-	
+
 	//Testing if the driver can be assigned the given shift
 	unsigned int driverAssignReturn = drivers[driverID].addShift(newShift);
 
-	//addShift return values:
+	////addShift return values:
 	/*
-	0: Process possible, everything normal
+	0: Process possible, everything normal and the shift was added to the driver
 	1: Max weekly hours were reached or will be overcome with this shift
-	2: rest time
-	3: shift size / daily stuff (Acho q vou cagar para o daily e fica só shift size)
-
+	2: Time since last shift and until the next shift is >= than the minimum rest time
+	3: Shift size is larger than the maximum shift size
+	other: unexpected behaviour (as in not coded for now and should never happen because the returns are specific values, but just in case)
 	*/
 
-	//Process concluded successfully
-	return true;
+	if (driverAssignReturn == 0) {
+
+		//Removing the now assigned work from the bus
+		lines[lineID].removeWork(selectedBus, startTimeMin, endTimeMin);
+
+		cout << "Turno atribuído com sucesso ao condutor, e turno ocupado no autocarro selecionado." << endl;
+
+		//Process concluded successfully
+		return true;
+	}
+	else if (driverAssignReturn == 1) {
+
+		cout << "O número de horas máximas de trabalho semanal para este condutor foi atingido ou será atingido com a adição deste turno." << endl;
+		cout << "O turno não foi, portanto, adicionado." << endl;
+		cout << "Processo de atribuição interativa de serviço aos condutores concluído sem sucesso..." << endl;
+
+		//Process was unsuccessful
+		return false;
+	}
+	else if (driverAssignReturn == 2) {
+		cout << "O tempo entre turnos não respeita o número mínimo de horas de descanso do condutor se este turno fosse adicionado." << endl;
+		cout << "O turno não foi, portanto, adicionado." << endl;
+		cout << "Processo de atribuição interativa de serviço aos condutores concluído sem sucesso..." << endl;
+
+		//Process was unsuccessful
+		return false;
+	}
+	else if (driverAssignReturn == 3) {
+		cout << "O tamanho do turno é maior do que o tamanho máximo do turno para este condutor.";
+		cout << "O turno não foi, portanto, adicionado." << endl;
+		cout << "Processo de atribuição interativa de serviço aos condutores concluído sem sucesso..." << endl;
+
+		//Process was unsuccessful
+		return false;
+	}
+	else {
+		cout << "Comportamento não previsto, por favor contacte o seu fornecedor de software." << endl;
+		cout << "O turno não foi, portanto, adicionado." << endl;
+		cout << "Processo de atribuição interativa de serviço aos condutores concluído sem sucesso..." << endl;
+
+		//Process was unsuccessful
+		return false;
+	}
+
+
 }
 
 void BusBoss::displayDrivers() {

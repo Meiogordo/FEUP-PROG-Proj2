@@ -2,6 +2,7 @@
 
 #include <string>
 #include <vector>
+#include <algorithm>
 
 #include "Utilities.h"
 #include "Shift.h"
@@ -47,7 +48,7 @@ public:
 private:
 	unsigned int ID; //the driver's unique ID
 	string name; //the driver's name
-	unsigned int shiftsize; //shift size - number of hours the driver can work per day
+	unsigned int shiftsize; //shift size - maximum number of hours the driver can work consecutively (a shift)
 	unsigned int weeklyhourlimit; //number of hours the driver can work per week
 	unsigned int minresttime; //minimum rest time between shifts (hours)
 	vector<Shift> shifts; //list of shifts the driver was assigned to do
