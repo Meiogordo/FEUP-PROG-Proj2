@@ -193,7 +193,7 @@ namespace Utilities {
 		//getting hours string
 		string hours = hhmm.substr(0, hhmm.find(":"));
 		//hhmm is now only MM (after ':' )
-		hhmm.substr(hhmm.find(":") + 1);
+		hhmm = hhmm.substr(hhmm.find(":") + 1);
 
 		//hours converted to int * 60 (converting to minutes) + hhmm converted to int which now was only MM
 		return stoi(hours)*60 + stoi(hhmm);
