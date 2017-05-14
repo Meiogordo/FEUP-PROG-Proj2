@@ -17,7 +17,7 @@ Bus::Bus(unsigned int lineID, unsigned int startTime, unsigned int endTime) : li
 
 		//Several Days of Week (each day is 1440 minutes, so that is added for each day)
 		for (int i = 0; i < 6; ++i) {
-			remainingWork.emplace_back(Shift(lineID, 0, orderInLine, shiftStart + 1440 * i, shiftStart + 59 + 1440 * i));
+			remainingWork.emplace_back(Shift(lineID, 0, orderInLine, shiftStart + 1440 * i, shiftStart + 60 + 1440 * i));
 		}
 
 		shiftStart += 60;
