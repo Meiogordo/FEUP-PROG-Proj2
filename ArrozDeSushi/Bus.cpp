@@ -80,9 +80,10 @@ bool Bus::removeWork(unsigned int startTime, unsigned int endTime) {
 	//For example to remove from 2 to 4, we would have to remove 2 to 3, and 3 to 4, so remove starting with 2 and 3, which is adding 1 hour to starting time while it is < than end time
 	for (unsigned int hourToDel = startTime; hourToDel < endTime; hourToDel += 60) {
 		for (int i = 0; i < remainingWork.size(); ++i) {
-			if (remainingWork[i].getStartTime() == startTime) {
+			if (remainingWork[i].getStartTime() == hourToDel) {
 				remainingWork.erase(remainingWork.begin() + i);
 				someWorkWasRemoved = true;
+				break;
 			}
 		}
 	}
