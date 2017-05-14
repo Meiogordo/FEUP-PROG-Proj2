@@ -47,6 +47,8 @@ public:
 	bool hasStop(string stopname) const;
 	//Finds the stop index in the stops vector, returns -1 if not found
 	int findStop(string stopname) const;
+	//Used to call removeWork on a specific bus, because the object properties need to be modified
+	bool removeWork(unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime);
 
 private:
 

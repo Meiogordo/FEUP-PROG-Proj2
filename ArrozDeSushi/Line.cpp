@@ -179,3 +179,12 @@ int Line::findStop(string stopname) const {
 
 	return -1;
 }
+
+bool Line::removeWork(unsigned int busOrderNumber, unsigned int startTime, unsigned int endTime) {
+	for(auto &bus : busFleet){
+		if (bus.getBusOrderInLine() == busOrderNumber)
+			return bus.removeWork(startTime, endTime);
+	}
+
+	return false;
+}
