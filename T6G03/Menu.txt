@@ -1,0 +1,28 @@
+1 Visualizar
+2 Gerir
+3 Ler e Guardar em ficheiros
+1.1 Horário de uma paragem
+1.2 Horário de uma linha
+1.3 Trabalho atribuido a um condutor
+1.4 Que linhas passam numa determinada paragem
+1.5 Lista de condutores disponiveis
+1.6 Calcular e visualizar percurso entre duas paragens
+1.7 Lista de todos os períodos de autocarros sem condutor atribuído (Aviso: muitas linhas causam muitos autocarros que causa bastante ilegibilidade do output devido ao seu tamanho, usar a opção no submenu autocarro pf)
+1.8 Lista de todos os períodos de condutores sem o serviço completo atribuído (que não tenham atingido o limite máximo semanal)
+1.9 Atribuir interativamente serviço aos condutores
+2.1 Linhas
+2.1.1 Listagem de linhas
+2.1.2 Informação detalhada sobre uma linha
+2.2 Condutores
+2.2.1 Listagem de condutores
+2.2.2 Adicionar novo condutor
+2.2.3 Alterar condutor
+2.2.4 Remover condutor
+2.2.5 Informação detalhada sobre um condutor
+2.3 Autocarros
+2.3.1 Listagem de autocarros
+2.3.2 Informação detalhada sobre um autocarro
+2.3.3 Períodos de autocarro sem condutor atribuído para uma certa linha
+2.3.4 Períodos de autocarro sem condutor atribuído para uma certa linha e dia da semana
+3.1 Carregar informação de ficheiros (Load)
+3.2 Escrever informação em ficheiros (Save)
