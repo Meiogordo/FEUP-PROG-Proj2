@@ -46,12 +46,12 @@ bool BusBoss::createNewDriver() {
 	Utilities::trimString(name); //trimming unnecessary whitespace from the driver name
 
 	unsigned int shiftsize; //the size of the driver's shift - number of hours he can work per day
-	cout << "Qual o número máximo de horas que o condutor pode trabalhar por dia?" << endl;
+	cout << "Qual o tamanho máximo de um turno horas que o condutor pode efetuar?" << endl;
 
 	while (true) {
 		cin >> shiftsize;
 		if (cin.fail()) {
-			cout << "Tamanho de turno inválido, por favor introduza um tamanho válido em horas (número inteiro)." << endl;
+			cout << "Tamanho de turno inválido, por favor introduza um tamanho válido em horas (número inteiro positivo)." << endl;
 			//Clearing error flag and cin buffer
 			cin.clear();
 			cin.ignore(100000, '\n');
