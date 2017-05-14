@@ -114,7 +114,7 @@ namespace Utilities {
 		cin.get();
 	}
 
-	string minutesToHHMM(int minutes) {
+	string minutesToHHMM(unsigned int minutes) {
 
 		//Final time
 		int hours = 0;
