@@ -92,9 +92,16 @@ void Driver::setMinRestTime(unsigned int minresttime) {
 void Driver::setShifts(const vector<Shift> &shifts) {
 	this->shifts = shifts;
 }
-//TODO : Actually add a shift from user input or at least test if the added one can be added with recourse to internal data, returning an unsigned int to tell the caller if the function was successful
-void Driver::addShift(const Shift &newShift) {
+
+unsigned int Driver::addShift(const Shift &newShift) {
+
+	//Verify if this can be added pl0x
+	cout << "lol u forgot nub";
+
+	//If possible push back, increment weeklyhoursdrivensofar and return 0
 	shifts.push_back(newShift);
+	weeklyhoursdrivensofar += newShiftSizeHours;
+	return 0;
 }
 
 bool Driver::isAvailable() const {

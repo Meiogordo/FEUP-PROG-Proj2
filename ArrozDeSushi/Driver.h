@@ -41,7 +41,7 @@ public:
 
 	//other methods
 
-	void addShift(const Shift &newShift);
+	unsigned int addShift(const Shift &newShift);
 	bool isAvailable() const;
 
 private:
