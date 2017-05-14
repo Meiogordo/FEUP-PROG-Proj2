@@ -244,6 +244,18 @@ bool callFunctions(string &id, BusBoss &bb) {
 		return true;
 	}
 
+	//Interactively assigning shifts to drivers
+	if (id == "1.9") {
+		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
+		id = id.substr(0, id.find_last_of('.'));
+		//calls function based on hardcoded id
+		bb.assignShift();
+		//pause to see output
+		Utilities::pause();
+		//function was found, return true
+		return true;
+	}
+
 	//Displaying lines
 	if (id == "2.1.1") {
 		//Finds last '.' and uses substr until it, exlcuding it, thus excluding the ".N"
