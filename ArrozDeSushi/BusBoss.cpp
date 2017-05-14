@@ -1126,6 +1126,8 @@ bool BusBoss::listDriverUnassignedPeriods() {
 			cout << "Condutor com ID " << driver.second.getID() << " e nome " << driver.second.getName() << ":" << endl;
 			//Printing shifts
 			printDriverShifts(driver.second.getID());
+			//Space between drivers
+			cout << endl;
 		}
 	}
 
