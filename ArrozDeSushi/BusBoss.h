@@ -66,6 +66,8 @@ public:
 	bool listBusUnassignedPeriodsByLine();
 	//Listing bus unassigned periods for a specific line and weekday
 	bool listBusUnassignedPeriodsByLineAndWeekday();
+	//Listing the periods in which the drivers do not have work assigned, for the available ones - just printing the shifts and saying that the remainder of the time they are free
+	bool listDriverUnassignedPeriods();
 
 	//External data management - public to be accessible from outside the class
 	//Loads data from files into class - returns true if successful, false if aborted
